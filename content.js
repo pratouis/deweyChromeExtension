@@ -1,10 +1,15 @@
 'use strict';
 
-var MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
+const MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
+
+const MutationOptions = {
+  childList: true
+};
 
 var observer = new MutationObserver(function(mutations, observer) {
-  var elements = document.getElementsByTagName('*');
-
+  console.log('observer here!!!!');
+  var elements = document.getElementsByTagName('iframe[id^=\'xdm\']');
+  console.log(elements);
   for(var i=0; i < elements.length; i++) {
     var element = elements[i];
 
@@ -24,7 +29,4 @@ var observer = new MutationObserver(function(mutations, observer) {
 });
 
 // Register the element root you want to look for changes
-observer.observe(document, {
-  subtree: true,
-  attributes: true
-});
+observer.observe(document, MutationOptions);
