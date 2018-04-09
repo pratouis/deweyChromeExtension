@@ -1,0 +1,9 @@
+.arn-blue {
+    color: transparent;
+    text-shadow: 0 0 5px rgba(0,0,0,0.5);
+}
+
+.arn-blue-hard input {
+    color: transparent;
+    text-shadow: 0 0 15px rgba(0,0,0,0.5);
+}

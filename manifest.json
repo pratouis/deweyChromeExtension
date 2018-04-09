@@ -1,0 +1,18 @@
+{
+  "name": "Blur AWS ARN",
+  "version": "1.0",
+  "description": "Blur AWS ARN",
+  "content_scripts": [{
+    "matches": [
+      "http://console.aws.amazon.com/**",
+      "https://console.aws.amazon.com/**",
+      "http://*.console.aws.amazon.com/**",
+      "https://*.console.aws.amazon.com/**",
+      "https://*.cnn.com/**"
+    ],
+    "css": ["content.css"],
+    "js": ["content.js"],
+    "run_at": "document_end"
+  }],
+  "manifest_version": 2
+}
