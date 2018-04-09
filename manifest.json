@@ -1,10 +1,15 @@
 {
-  "name": "Chrome Twitter Extension",
+  "name": "Twitter Chrome Link Extension",
   "version": "1.0",
-  "description": "Show more links on chrome",
+  "description": "Twitter Chrome Link Extension",
   "content_scripts": [{
     "matches": [
-      "https://*.twitter.com/*"
+      "http://console.aws.amazon.com/**",
+      "https://console.aws.amazon.com/**",
+      "http://*.console.aws.amazon.com/**",
+      "https://*.console.aws.amazon.com/**",
+      "https://*.cnn.com/**",
+      "https://*.twitter.com/**"
     ],
     "css": ["content.css"],
     "js": ["content.js"],
