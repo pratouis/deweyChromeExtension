@@ -1,7 +1,7 @@
 {
-  "name": "Blur AWS ARN",
+  "name": "Twitter Chrome Link Extension",
   "version": "1.0",
-  "description": "Blur AWS ARN",
+  "description": "Twitter Chrome Link Extension",
   "content_scripts": [{
     "matches": [
       "http://console.aws.amazon.com/**",

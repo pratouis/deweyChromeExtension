@@ -1,10 +1,15 @@
 'use strict';
 
-var MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
+const MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
+
+const MutationOptions = {
+  childList: true
+};
 
 var observer = new MutationObserver(function(mutations, observer) {
-  var elements = document.getElementsByTagName('*');
-
+  console.log('observer here!!!!');
+  var elements = document.getElementsByTagName('iframe[id^=\'xdm\']');
+  console.log(elements);
   for(var i=0; i < elements.length; i++) {
     var element = elements[i];
 
@@ -13,7 +18,7 @@ var observer = new MutationObserver(function(mutations, observer) {
 
       if(node.nodeType === 3) {
         var text = node.nodeValue;
-        var replacedText = text.replace(/(CEO)|(AKI\w+)|(arn:aws:[\w\/\.-_: ]+)|(demetrius johnson)|(123 main st)|(720-555-1234)|(zip code)|(state)|(\w+@\w+\.com)/gi, 'XXXXXXXXXXXX');
+        var replacedText = text.replace(/(Twitter)|(AKI\w+)|(arn:aws:[\w\/\.-_: ]+)|(demetrius johnson)|(123 main st)|(720-555-1234)|(zip code)|(state)|(\w+@\w+\.com)/gi, 'XXXXXXXXXXXX');
         if(replacedText !== text) {
           element.replaceChild(document.createTextNode(replacedText), node);
           element.classList.add('arn-blue')
@@ -24,7 +29,4 @@ var observer = new MutationObserver(function(mutations, observer) {
 });
 
 // Register the element root you want to look for changes
-observer.observe(document, {
-  subtree: true,
-  attributes: true
-});
+observer.observe(document, MutationOptions);
