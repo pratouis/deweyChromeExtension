@@ -13,7 +13,7 @@ var observer = new MutationObserver(function(mutations, observer) {
 
       if(node.nodeType === 3) {
         var text = node.nodeValue;
-        var replacedText = text.replace(/(CEO)|(AKI\w+)|(arn:aws:[\w\/\.-_: ]+)|(demetrius johnson)|(123 main st)|(720-555-1234)|(zip code)|(state)|(\w+@\w+\.com)/gi, 'XXXXXXXXXXXX');
+        var replacedText = text.replace(/(Twitter)|(AKI\w+)|(arn:aws:[\w\/\.-_: ]+)|(demetrius johnson)|(123 main st)|(720-555-1234)|(zip code)|(state)|(\w+@\w+\.com)/gi, 'XXXXXXXXXXXX');
         if(replacedText !== text) {
           element.replaceChild(document.createTextNode(replacedText), node);
           element.classList.add('arn-blue')
