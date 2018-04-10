@@ -1,14 +1,9 @@
 {
-  "name": "Blur AWS ARN",
+  "name": "News+",
   "version": "1.0",
-  "description": "Blur AWS ARN",
+  "description": "Provides other articles on the same event.",
   "content_scripts": [{
     "matches": [
-      "http://console.aws.amazon.com/**",
-      "https://console.aws.amazon.com/**",
-      "http://*.console.aws.amazon.com/**",
-      "https://*.console.aws.amazon.com/**",
-      "https://*.cnn.com/**",
       "https://*.twitter.com/**"
     ],
     "css": ["content.css"],
