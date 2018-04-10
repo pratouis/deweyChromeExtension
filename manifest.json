@@ -1,7 +1,7 @@
 {
-  "name": "News+",
+  "name": "Twitter Chrome Link Extension",
   "version": "1.0",
-  "description": "Provides other articles on the same event.",
+  "description": "Twitter Chrome Link Extension",
   "content_scripts": [{
     "matches": [
       "https://*.twitter.com/**"

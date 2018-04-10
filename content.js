@@ -1,30 +1,42 @@
 'use strict';
 
-var MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
+//We have a big problem. Our app only works on scroll. Doesn't work on initial links. Also only seems to work on home page. 
 
-var observer = new MutationObserver(function(mutations, observer) {
-  var elements = document.getElementsByTagName('*');
+const MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
+const myiFrames = {};
 
-  for(var i=0; i < elements.length; i++) {
-    var element = elements[i];
-
-    for(var j = 0; j < element.childNodes.length; j++) {
-      var node = element.childNodes[j];
-
-      if(node.nodeType === 3) {
-        var text = node.nodeValue;
-        var replacedText = text.replace(/(CEO)|(AKI\w+)|(arn:aws:[\w\/\.-_: ]+)|(demetrius johnson)|(123 main st)|(720-555-1234)|(zip code)|(state)|(\w+@\w+\.com)/gi, 'XXXXXXXXXXXX');
-        if(replacedText !== text) {
-          element.replaceChild(document.createTextNode(replacedText), node);
-          element.classList.add('arn-blue')
-        }
-      }
+const iframeOnLoad = (iframe) => () => { //Waits for iFrames to load. Targets correct iFrame.
+    const title = iframe.contentDocument.getElementsByTagName('h2')[0].innerHTML; //To grab title.
+    if(!myiFrames[iframe.id]) {
+      myiFrames[iframe.id] = iframe;
+      console.log(title);
+      // console.log(myiFrames)
+    }
+}
+const observer = new MutationObserver((mutations, observer) => { //Observes mutations in HTML while scrolling.
+  for (var i = 0; i < mutations.length; i++) {
+      const mutation = mutations[i];
+    if (mutation.type === 'childList') {
+        const listOfiFrameContainers = Array.from(mutation.addedNodes).map(node => node.getElementsByClassName('js-macaw-cards-iframe-container')[0]).filter(Boolean);
+        // console.log('listOfiFrameContainers: ', listOfiFrameContainers)
+        listOfiFrameContainers.forEach(thing => {
+          const iframe = thing.getElementsByTagName('iframe')[0]; //Looks for iFrames.
+          if (!iframe) {
+              const iframeObserver = new MutationObserver(([mutation]) => {
+                  const iframe = mutation.addedNodes[0];
+                  iframe.onload = iframeOnLoad(iframe);
+                  iframeObserver.disconnect(); //Disconnects for speed.
+              })
+              iframeObserver.observe(thing, { childList: true });
+              return;
+          }
+          iframe.onload = iframeOnLoad(iframe);
+        })
     }
   }
 });
 
 // Register the element root you want to look for changes
-observer.observe(document, {
-  subtree: true,
-  attributes: true
+observer.observe(document.getElementById('stream-items-id'), {
+  childList: true
 });
