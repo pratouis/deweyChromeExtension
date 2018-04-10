@@ -4,11 +4,6 @@
   "description": "Twitter Chrome Link Extension",
   "content_scripts": [{
     "matches": [
-      "http://console.aws.amazon.com/**",
-      "https://console.aws.amazon.com/**",
-      "http://*.console.aws.amazon.com/**",
-      "https://*.console.aws.amazon.com/**",
-      "https://*.cnn.com/**",
       "https://*.twitter.com/**"
     ],
     "css": ["content.css"],

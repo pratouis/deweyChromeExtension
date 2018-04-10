@@ -1,93 +1,42 @@
-// 'use strict';
-//
-// const MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
-//
-// const MutationOptions = {
-//   childList: true
-// };
-//
-// var observer = new MutationObserver(function(mutations, observer) {
-//   console.log('observer here!!!!');
-//   var elements2 = document.getElementsByTagName('iframe[id^=\'xdm\']');
-//   console.log(elements2);
-//   var elements = document.getElementsByTagName('*');
-//   for(var i=0; i < elements.length; i++) {
-//     var element = elements[i];
-//
-//     for(var j = 0; j < element.childNodes.length; j++) {
-//       var node = element.childNodes[j];
-//
-//       if(node.nodeType === 3) {
-//         var text = node.nodeValue;
-//         var replacedText = text.replace(/(Twitter)|(AKI\w+)|(arn:aws:[\w\/\.-_: ]+)|(demetrius johnson)|(123 main st)|(720-555-1234)|(zip code)|(state)|(\w+@\w+\.com)/gi, 'XXXXXXXXXXXX');
-//         if(replacedText !== text) {
-//           element.replaceChild(document.createTextNode(replacedText), node);
-//           element.classList.add('arn-blue')
-//         }
-//       }
-//     }
-//   }
-// });
-//
-// // Register the element root you want to look for changes
-// observer.observe(document, MutationOptions);
-
 'use strict';
 
-var MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
-var myIframes = {};
-var observer = new MutationObserver(function(mutations, observer) {
-  var myIframes = [];
-  for(var i=0; i< mutations.length; i++){
-    // console.log('i: ',i);
-    if(mutations[i].type === 'childList'){
-      var temp = mutations[i].target.querySelectorAll('iframe[id^=\'xdm\']');
-      if(temp.length > 0){
-        temp.forEach(thing => {
-          var reema = thing.contentDocument.getElementsByTagName('h2');
-          console.log('h2s: ', reema);
-          // var frank = thing.contentDocument.getElementsByClassName('TwitterCard-title');
-          var frank = thing.contentDocument.querySelectorAll('h2[class=\'TwitterCard-title\']');
-          if(!frank[0]){ console.log('undefined? ', frank, temp)}
-          else{
-            console.log('title: ',frank[0].innerHTML);
-          }
-          if(!myIframes[thing.id]){
-            myIframes[thing.id] = thing;
-            // console.log(thing);
-          }
-        })
-        // myIframes[temp.toString()] = temp;
-      }
+//We have a big problem. Our app only works on scroll. Doesn't work on initial links. Also only seems to work on home page. 
+
+const MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
+const myiFrames = {};
+
+const iframeOnLoad = (iframe) => () => { //Waits for iFrames to load. Targets correct iFrame.
+    const title = iframe.contentDocument.getElementsByTagName('h2')[0].innerHTML; //To grab title.
+    if(!myiFrames[iframe.id]) {
+      myiFrames[iframe.id] = iframe;
+      console.log(title);
+      // console.log(myiFrames)
     }
-  }
-  // if(myIframes.length){
-
-    // console.log('iframes: ', myIframes);
-  // }
-
-  var elements = document.getElementsByTagName('*');
-
-  for(var i=0; i < elements.length; i++) {
-    var element = elements[i];
-
-    for(var j = 0; j < element.childNodes.length; j++) {
-      var node = element.childNodes[j];
-
-      if(node.nodeType === 3) {
-        var text = node.nodeValue;
-        var replacedText = text.replace(/(Twitter)|(AKI\w+)|(arn:aws:[\w\/\.-_: ]+)|(demetrius johnson)|(123 main st)|(720-555-1234)|(zip code)|(state)|(\w+@\w+\.com)/gi, 'XXXXXXXXXXXX');
-        if(replacedText !== text) {
-          element.replaceChild(document.createTextNode(replacedText), node);
-          element.classList.add('arn-blue')
-        }
-      }
+}
+const observer = new MutationObserver((mutations, observer) => { //Observes mutations in HTML while scrolling.
+  for (var i = 0; i < mutations.length; i++) {
+      const mutation = mutations[i];
+    if (mutation.type === 'childList') {
+        const listOfiFrameContainers = Array.from(mutation.addedNodes).map(node => node.getElementsByClassName('js-macaw-cards-iframe-container')[0]).filter(Boolean);
+        // console.log('listOfiFrameContainers: ', listOfiFrameContainers)
+        listOfiFrameContainers.forEach(thing => {
+          const iframe = thing.getElementsByTagName('iframe')[0]; //Looks for iFrames.
+          if (!iframe) {
+              const iframeObserver = new MutationObserver(([mutation]) => {
+                  const iframe = mutation.addedNodes[0];
+                  iframe.onload = iframeOnLoad(iframe);
+                  iframeObserver.disconnect(); //Disconnects for speed.
+              })
+              iframeObserver.observe(thing, { childList: true });
+              return;
+          }
+          iframe.onload = iframeOnLoad(iframe);
+        })
     }
   }
 });
 
 // Register the element root you want to look for changes
-observer.observe(document, {
-  childList: true,
-  subtree: true
+observer.observe(document.getElementById('stream-items-id'), {
+  childList: true
 });
