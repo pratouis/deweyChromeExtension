@@ -1,6 +1,6 @@
 'use strict';
 
-//We have a big problem. Our app only works on scroll. Doesn't work on initial links. Also only seems to work on home page. 
+//We have a big problem. Our app only works on scroll. Doesn't work on initial links. Also only seems to work on home page.
 
 const MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
 const myiFrames = {};
@@ -34,6 +34,7 @@ const observer = new MutationObserver((mutations, observer) => { //Observes muta
         })
     }
   }
+  console.log(myiFrames);
 });
 
 // Register the element root you want to look for changes

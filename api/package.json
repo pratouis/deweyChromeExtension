@@ -1,0 +1,14 @@
+{
+  "name": "chrome_extension",
+  "version": "1.0.0",
+  "description": "fetch links for extension",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm index.js"
+  },
+  "author": "pratouis, frankhyin, reemaukani",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.3"
+  }
+}
