@@ -13,6 +13,9 @@ const iframeOnLoad = (iframe) => () => { //Waits for iFrames to load. Targets co
       console.log(title);
       // console.log(myiFrames)
     }
+     const parentTweet = iframe.closest('[data-tweet-id]');
+     console.log('parent tweet: ', parentTweet);
+     addPocketFunctionality(parentTweet);
 }
 
 function processiFrameContainers(listOfiFrameContainers) {
@@ -28,9 +31,6 @@ function processiFrameContainers(listOfiFrameContainers) {
           return;
       }
       iframe.onload = iframeOnLoad(iframe);
-      const parentTweet = iframe.closest('[data-tweet-id]');
-      console.log('parent tweet: ', parentTweet);
-      addPocketFunctionality(parentTweet);
     })
 }
 const init = () => processiFrameContainers(Array.from(ol.getElementsByClassName('js-macaw-cards-iframe-container'))) //Checks for initial iFrames when a new page is loaded.
