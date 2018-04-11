@@ -25,7 +25,7 @@ function appMutationHandler(mutationList) {
 }
 
 // Define Markup
-// Code for the info button. Svg is the path to the file containing the icon. Retrieved from internet.
+// Code for the info button. Svg is the path to the file containing the icon. Path retrieved from internet.
 const saveToPocketMarkup = `
 <button class="ProfileTweet-actionButton u-textUserColorHover js-actionButton"
     type="button" data-nav="share_tweet_to_pocket">
