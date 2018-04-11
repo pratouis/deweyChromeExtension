@@ -124,7 +124,8 @@ function handleNewItems() {
 function addPocketFunctionality(element) {
     const permaLink = element.getAttribute('data-permalink-path')
     const elementId = element.getAttribute('data-item-id')
-
+    console.log('@@@checking');
+    
     const buttonClone = saveToPocketButton.cloneNode(true)
     buttonClone.id = `pocketButton-${elementId}`
     buttonClone.addEventListener(

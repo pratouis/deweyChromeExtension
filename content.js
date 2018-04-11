@@ -28,6 +28,9 @@ function processiFrameContainers(listOfiFrameContainers) {
           return;
       }
       iframe.onload = iframeOnLoad(iframe);
+      const parentTweet = iframe.closest('[data-tweet-id]');
+      console.log('parent tweet: ', parentTweet);
+      addPocketFunctionality(parentTweet);
     })
 }
 const init = () => processiFrameContainers(Array.from(ol.getElementsByClassName('js-macaw-cards-iframe-container'))) //Checks for initial iFrames when a new page is loaded.
@@ -43,8 +46,7 @@ const observer = new MutationObserver((mutations, observer) => { //Observes muta
         processiFrameContainers(listOfiFrameContainers)
     }
   }
-  document.querySelectorAll('[data-tweet-id]').forEach(el => addPocketFunctionality(el))
-  console.log('here123');
+  // document.querySelectorAll('[data-tweet-id]').forEach(el => addPocketFunctionality(el))
 });
 
 // Register the element root you want to look for changes
