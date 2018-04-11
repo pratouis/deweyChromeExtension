@@ -14,6 +14,7 @@ const iframeOnLoad = (iframe) => () => { //Waits for iFrames to load. Targets co
     }
 }
 const observer = new MutationObserver((mutations, observer) => { //Observes mutations in HTML while scrolling.
+  
   for (var i = 0; i < mutations.length; i++) {
       const mutation = mutations[i];
     if (mutation.type === 'childList') {
@@ -34,6 +35,8 @@ const observer = new MutationObserver((mutations, observer) => { //Observes muta
         })
     }
   }
+  document.querySelectorAll('[data-tweet-id]').forEach(el => addPocketFunctionality(el))
+  console.log('here123');
 });
 
 // Register the element root you want to look for changes
