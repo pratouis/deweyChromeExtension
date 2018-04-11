@@ -6,8 +6,8 @@
     "matches": [
       "https://*.twitter.com/**"
     ],
-    "css": ["content.css"],
-    "js": ["content.js"],
+    "css": ["content.css", "twitter.css"],
+    "js": ["content.js", "twitter.js"],
     "run_at": "document_end"
   }],
   "manifest_version": 2
