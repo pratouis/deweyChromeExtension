@@ -4,10 +4,12 @@ const mutationConfig = {
     characterData: false,
     subtree: true
 }
-
+//These functions don't yet do anything for us. Had to call in order to make pocket code run.
 function addMessageListener(){};
 function sendMessage(){};
+
 // Set up Observer
+// Checks for scrolling and new tweets.
 const appObserver = new MutationObserver(appMutationHandler)
 function appMutationHandler(mutationList) {
     for (var mutation of mutationList) {
@@ -23,6 +25,7 @@ function appMutationHandler(mutationList) {
 }
 
 // Define Markup
+// Code for the info button. Svg is the path to the file containing the icon. Retrieved from internet.
 const saveToPocketMarkup = `
 <button class="ProfileTweet-actionButton u-textUserColorHover js-actionButton"
     type="button" data-nav="share_tweet_to_pocket">
@@ -87,6 +90,8 @@ const saveToPocketMarkup = `
     </div>
 </button>
 `
+
+//Creates a div in HTML containing the info button.
 const saveToPocketButton = document.createElement('div')
 saveToPocketButton.classList.add(
     'ProfileTweet-action',
@@ -121,11 +126,12 @@ function handleNewItems() {
     Array.from(tweetActionLists, addPocketFunctionality)
 }
 
+// Function called in content.js. Finds each element (iframe) to add info button to. Binds to each unique tweet containing iframe.
 function addPocketFunctionality(element) {
     const permaLink = element.getAttribute('data-permalink-path')
     const elementId = element.getAttribute('data-item-id')
     console.log('@@@checking');
-    
+
     const buttonClone = saveToPocketButton.cloneNode(true)
     buttonClone.id = `pocketButton-${elementId}`
     buttonClone.addEventListener(
@@ -144,6 +150,7 @@ function addPocketFunctionality(element) {
 }
 
 // Handle saving
+// This code handles saving for pocket. This function should be altered to send title to NLP. 
 function handleSave(elementId, permaLink) {
     sendMessage(
         null,
@@ -172,12 +179,6 @@ addMessageListener(handleAction)
 
 // Do we want twitter integration?
 sendMessage(null, { action: 'twitterCheck' }, resolveCheck)
-
-
-// function foobar() {
-//     console.log('here', document.querySelectorAll('[data-tweet-id]') );
-//     document.querySelectorAll('[data-tweet-id]').forEach(el => addPocketFunctionality(el))
-// };
 
 
 
