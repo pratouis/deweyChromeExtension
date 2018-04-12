@@ -1,6 +1,8 @@
 import express from 'express';
-
+import NewsAPI from 'newsapi';
 const app = express();
+
+const newsapi = new NewsAPI(process.env.NEWS_API);
 //	workflow
 //		get keyword parsed titles from dialogFlow
 //		create route to DB
@@ -10,9 +12,30 @@ const app = express();
 //		TODO investigate
 
 app.get('/createURLS/:title', async (req, res) => {
-  res.status(501).send('this route will handle requests to populate database');
+  // console.log('title: ', req.params.title);
+  // TODO: send req.params.title to dialogFlow
+  try {
+    newsapi.v2.topHeadlines({
+      q: 'bitcoin san francisco'
+    }).then(response => {
+      console.log(response);
+      res.json(response);
+    }).catch(err => res.status(500).json(err));
+    // res.json(response);
+  } catch(error) {
+    console.error(error);
+    if(typeof error !== 'object') error = { error }
+    res.status(500).json(error);
+  }
+  // res.status(200).json({title: req.params.title});
+  // res.status(501).send('this route will handle requests to populate database');
 });
 
 app.get('/fetchURLS/:title', async (req, res) => {
   res.status(501).send('this route will handle requests to get URLs from database');
-})
+});
+
+
+
+const port = process.env.PORT ? parseInt(process.env.PORT) : 3000;
+app.listen(port, () => console.log('backend express listening on port', port));
