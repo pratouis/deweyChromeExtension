@@ -15,13 +15,13 @@ app.get('/createURLS/:title', async (req, res) => {
   // console.log('title: ', req.params.title);
   // TODO: send req.params.title to dialogFlow
   try {
-    newsapi.v2.topHeadlines({
-      q: 'bitcoin san francisco'
-    }).then(response => {
-      console.log(response);
-      res.json(response);
-    }).catch(err => res.status(500).json(err));
-    // res.json(response);
+    const title = req.params.title;
+    newsapi.v2.everything({
+      q: '"national enquirer" trump',
+      language: 'en',
+      sortBy: 'relevancy'
+    }).then(response => res.json(response))
+    .catch(err => res.status(500).json(err));
   } catch(error) {
     console.error(error);
     if(typeof error !== 'object') error = { error }

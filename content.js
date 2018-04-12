@@ -13,6 +13,8 @@ const iframeOnLoad = (iframe) => () => { //Waits for iFrames to load. Targets co
       // console.log(title);
       // console.log(myiFrames)
     }
+     const parentTweet = iframe.closest('[data-tweet-id]');
+     addPocketFunctionality(parentTweet);
 }
 
 function processiFrameContainers(listOfiFrameContainers) {
@@ -30,10 +32,11 @@ function processiFrameContainers(listOfiFrameContainers) {
       iframe.onload = iframeOnLoad(iframe);
     })
 }
-(() => processiFrameContainers(Array.from(ol.getElementsByClassName('js-macaw-cards-iframe-container'))))(); //Checks for initial iFrames when a new page is loaded.
-// init();
+const init = () => processiFrameContainers(Array.from(ol.getElementsByClassName('js-macaw-cards-iframe-container'))); //Checks for initial iFrames when a new page is loaded.
+init();
 
 const observer = new MutationObserver((mutations, observer) => { //Observes mutations in HTML while scrolling.
+
   for (var i = 0; i < mutations.length; i++) {
       const mutation = mutations[i];
     if (mutation.type === 'childList') {
