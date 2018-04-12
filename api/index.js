@@ -1,39 +1,22 @@
 import express from 'express';
 import NewsAPI from 'newsapi';
-const app = express();
+import apiai from 'apiai';
+import bodyParser from 'body-parser';
+import { articleRouter } from './parseNews';
+
+if(!process.env.NEWS_API || !process.env.APIAI_CLIENT){
+  console.error('no NEWS_API or APIAI_CLIENT tokens found.  Did you source env.sh?');
+  process.exit(1);
+}
+
 
 const newsapi = new NewsAPI(process.env.NEWS_API);
-//	workflow
-//		get keyword parsed titles from dialogFlow
-//		create route to DB
-//			TODO investigate if REDIS on heroku would be fastest
-//		perform similarity comparison on titles in redis(https://www.npmjs.com/package/similarity), to check if we have archived versions of articles
-//		if not in redis, go to news api
-//		TODO investigate
+const titleAI = apiai(process.env.APIAI_CLIENT);
+const app = express();
 
-app.get('/createURLS/:title', async (req, res) => {
-  // console.log('title: ', req.params.title);
-  // TODO: send req.params.title to dialogFlow
-  try {
-    const title = req.params.title;
-    newsapi.v2.everything({
-      q: '"national enquirer" trump',
-      language: 'en',
-      sortBy: 'relevancy'
-    }).then(response => res.json(response))
-    .catch(err => res.status(500).json(err));
-  } catch(error) {
-    console.error(error);
-    if(typeof error !== 'object') error = { error }
-    res.status(500).json(error);
-  }
-  // res.status(200).json({title: req.params.title});
-  // res.status(501).send('this route will handle requests to populate database');
-});
-
-app.get('/fetchURLS/:title', async (req, res) => {
-  res.status(501).send('this route will handle requests to get URLs from database');
-});
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use('/', articleRouter(titleAI, newsapi));
 
 
 
