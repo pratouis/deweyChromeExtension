@@ -15,8 +15,8 @@ module.exports = {
   articleRouter: function (titleAI, newsapi) {
     /* middleware parsing keywords */
     router.use('/associated-articles', async (req, res, next) => {
-      console.log('in middleware');
-      console.log('body title: ', req.body.title);
+      // console.log('in middleware');
+      // console.log('body title: ', req.body.title);
       if(!req.params.title && !req.body.title){
         return res.status(400).json({success: false, message: 'no title provided'});
       }
@@ -33,13 +33,15 @@ module.exports = {
         return res.status(500).json(error);
       }
     });
+
     router.post('/associated-articles', async (req,res) => {
       try {
         console.log(`title: ${req.body.title}\nkeywords: ${req.body.keywords}`);
         const key = req.body.keywords.reduce((acc, term) => (acc ? `${acc} "${term}"` : `"${term}"`), "");
+        console.log('key: ', key);
         let { status, articles } = await newsapi.v2.everything({ q: key, language: 'en', sortBy: 'relevancy'});
-        articles.filter(article => article.source.id);
-        res.status(200).json(response);
+        articles = articles.map(article => ({name: article.source.name, url: article.url, title: article.title})).slice(0,5);
+        res.status(200).json(articles);
       } catch (error) {
         console.error('error from POST to associated-articles: ',error);
         res.status(500).json(error);
@@ -48,7 +50,6 @@ module.exports = {
 
     router.get('/associated-articles/:title', async (req, res) => {
       try {
-        // const key = req.body.keywords.reduce((acc, term) => (acc ? `${acc} "${term}"` : `"${term}"`), "");
         res.status(502).send('this route will resolve with list of URLS');
       } catch(error) {
         console.error('error from GET to associated-articles');

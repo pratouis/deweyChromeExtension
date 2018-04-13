@@ -14,7 +14,8 @@
     "body-parser": "^1.18.2",
     "express": "^4.16.3",
     "newsapi": "^2.2.2",
-    "request": "^2.85.0"
+    "request": "^2.85.0",
+    "underscore": "^1.8.3"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
