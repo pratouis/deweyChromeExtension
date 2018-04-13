@@ -10,7 +10,7 @@ const iframeOnLoad = (iframe) => () => { //Waits for iFrames to load. Targets co
     const title = iframe.contentDocument.getElementsByTagName('h2')[0].innerHTML; //To grab title.
     if(!myiFrames[iframe.id]) {
       myiFrames[iframe.id] = { title, iframe };
-      // console.log(title);
+      console.log(title);
       // console.log(myiFrames)
     }
      const parentTweet = iframe.closest('[data-tweet-id]');
