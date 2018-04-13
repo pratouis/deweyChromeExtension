@@ -11,7 +11,6 @@ const iframeOnLoad = (iframe) => () => { //Waits for iFrames to load. Targets co
     if(!myiFrames[iframe.id]) {
       myiFrames[iframe.id] = { title, iframe };
       console.log(title);
-      // console.log(myiFrames)
     }
      const parentTweet = iframe.closest('[data-tweet-id]');
      addPocketFunctionality(parentTweet);
@@ -64,3 +63,6 @@ const pcChangeObserver = new MutationObserver(mutations => {
 })
 
 pcChangeObserver.observe(pc, { childList: true, attributes: true })
+
+
+fetch("http://localhost:3000/associated-articles/byTitle?title="+encodeURIComponent("Tech in Asia - Connecting Asia's startup ecosystem")).then(response => response.json()).then(console.log)
