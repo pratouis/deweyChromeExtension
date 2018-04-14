@@ -17,10 +17,16 @@ const handleRequests = (request) => {
   });
 }
 
+/* API
+* returns success - boolean
+*         status code - 200 (OK), 400 (missing title), 500 (something went wrong in API)
+*
+*/
 module.exports = {
   articleRouter: function (titleAI, newsapi) {
     /* middleware parsing keywords */
     router.use('/associated-articles', async (req, res, next) => {
+      /* if no title is specified return 400 (user error)*/
       if(!req.query.title && !req.body.title){
         return res.status(400).json({success: false, message: 'no title provided'});
       }
@@ -45,13 +51,22 @@ module.exports = {
         const key = req.body.keywords.reduce((acc, term) => (acc ? `${acc} "${term}"` : `"${term}"`), "");
         console.log('key: ', key);
         let { status, articles } = await newsapi.v2.everything({ q: key, language: 'en', sortBy: 'relevancy'});
-        articles = articles.map(article => ({
-          name: article.source.name,
-          url: article.url,
-          title: article.title}))
-          .slice(0,5);
+        articles =
+        Object.values(
+            _.mapObject(
+              // group articles by title (not case-sensitive)
+              _.groupBy(articles, (article) => article.title.toLowerCase()),
+              // map carbon articles to first article (articles[0])
+              //  and only store source's name, article title, article URL
+              (articles, title) => ({ source: articles[0].source.name,
+                                       title: articles[0].title,
+                                         url: articles[0].url })))
+              // take first five articles
+                .slice(0,5);
+        /* set key-value to have 60*60*24 seconds to live
+           where key is a string of space separated keywords in quotes
+        */
         const saved = await db.setexAsync(key, 86400, JSON.stringify(articles));
-        console.log(saved);
         if(saved !== 'OK'){ return res.status(500).json({ success: false, message: `from REDIS got: ${saved}`}); }
         res.status(200).json({ success: true });
       } catch (error) {
@@ -66,7 +81,8 @@ module.exports = {
         console.log(`title: ${req.query.title}\nkeywords: ${req.body.keywords}`);
         const key = req.body.keywords.reduce((acc, term) => (acc ? `${acc} "${term}"` : `"${term}"`), "");
         console.log('key: ', key);
-        const data = JSON.parse(await db.smembersAsync(key));
+        /* grab URL info from redis */
+        const data = JSON.parse(await db.getAsync(`${key}`));
         res.status(200).json({ success: true, data });
       } catch(error) {
         console.error('error from GET /associated-articles/byTite: ', error);
