@@ -11,7 +11,7 @@
       "https://*.twitter.com/**"
     ],
     "css": ["content.css", "twitter.css"],
-    "js": ["content.js", "twitter.js", "content_script.js"],
+    "js": ["content.js", "twitter.js"],
     "run_at": "document_end"
   }],
   "manifest_version": 2

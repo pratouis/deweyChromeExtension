@@ -130,15 +130,25 @@ function handleNewItems() {
 function addPocketFunctionality(element) {
     const permaLink = element.getAttribute('data-permalink-path')
     const elementId = element.getAttribute('data-item-id')
-    console.log('@@@checking');
-
     const buttonClone = saveToPocketButton.cloneNode(true)
+// Insert code to add modal that opens once you click the icon button.
+    const dialog = document.createElement("dialog")
+    dialog.textContent = "This is a dialog"
+    const button = document.createElement("button")
+        button.textContent = "Close"
+    dialog.appendChild(button)
+    button.addEventListener("click", function() {
+      dialog.close()
+    })
+    document.body.appendChild(dialog)
+
     buttonClone.id = `pocketButton-${elementId}`
     buttonClone.addEventListener(
         'click',
-        handleSave.bind(this, elementId, permaLink)
+        
+        () => dialog.showModal()
     )
-
+// End code for modal.
     buttonClone.setAttribute('data-permalink-path', permaLink)
     buttonClone.setAttribute('data-item-id', elementId)
 
