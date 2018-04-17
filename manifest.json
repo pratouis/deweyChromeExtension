@@ -2,6 +2,10 @@
   "name": "Twitter Chrome Link Extension",
   "version": "1.0",
   "description": "Twitter Chrome Link Extension",
+  "permissions": [
+    "activeTab"
+  ],
+  "commands": { "showcontentdialog": { "suggested_key": { "default": "Ctrl+Shift+Y" }, "description": "show content dialog" } },
   "content_scripts": [{
     "matches": [
       "https://*.twitter.com/**"

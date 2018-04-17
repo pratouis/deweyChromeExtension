@@ -4,7 +4,6 @@ const mutationConfig = {
     characterData: false,
     subtree: true
 }
-
 //These functions don't yet do anything for us. Had to call in order to make pocket code run.
 function addMessageListener(){};
 function sendMessage(){};
@@ -92,7 +91,7 @@ const saveToPocketMarkup = `
 </button>
 `
 
-//Creates a div in HTML containing the info button.
+// Creates a div in HTML containing the info button.
 const saveToPocketButton = document.createElement('div')
 saveToPocketButton.classList.add(
     'ProfileTweet-action',
@@ -131,14 +130,25 @@ function handleNewItems() {
 function addPocketFunctionality(element) {
     const permaLink = element.getAttribute('data-permalink-path')
     const elementId = element.getAttribute('data-item-id')
-    
     const buttonClone = saveToPocketButton.cloneNode(true)
+// Insert code to add modal that opens once you click the icon button.
+    const dialog = document.createElement("dialog")
+    dialog.textContent = "This is a dialog"
+    const button = document.createElement("button")
+        button.textContent = "Close"
+    dialog.appendChild(button)
+    button.addEventListener("click", function() {
+      dialog.close()
+    })
+    document.body.appendChild(dialog)
+
     buttonClone.id = `pocketButton-${elementId}`
     buttonClone.addEventListener(
         'click',
-        handleSave.bind(this, elementId, permaLink)
-    )
 
+        () => dialog.showModal()
+    )
+// End code for modal.
     buttonClone.setAttribute('data-permalink-path', permaLink)
     buttonClone.setAttribute('data-item-id', elementId)
 
@@ -179,3 +189,17 @@ addMessageListener(handleAction)
 
 // Do we want twitter integration?
 sendMessage(null, { action: 'twitterCheck' }, resolveCheck)
+
+// Click button leads to chrome extension pop-up with news.
+// https://developer.chrome.com/extensions/content_scripts
+// chrome.browserAction.onClicked.addListener(function(tab) {
+//     chrome.tabs.executeScript(null, {file: "content_script.js"});
+//     console.log('does this function work');
+// });
+
+// chrome.commands.onCommand.addListener(function(command) {
+//   if(command.name == "showcontentdialog") {
+//     chrome.tabs.executeScript({ file: "content_script.js" })
+//     console.log('is this working');
+//   }
+// })
