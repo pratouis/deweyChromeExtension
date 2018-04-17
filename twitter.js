@@ -91,7 +91,7 @@ const saveToPocketMarkup = `
 </button>
 `
 
-//Creates a div in HTML containing the info button.
+// Creates a div in HTML containing the info button.
 const saveToPocketButton = document.createElement('div')
 saveToPocketButton.classList.add(
     'ProfileTweet-action',
@@ -180,7 +180,19 @@ addMessageListener(handleAction)
 // Do we want twitter integration?
 sendMessage(null, { action: 'twitterCheck' }, resolveCheck)
 
+// Click button leads to chrome extension pop-up with news. 
+// https://developer.chrome.com/extensions/content_scripts
+// chrome.browserAction.onClicked.addListener(function(tab) {
+//     chrome.tabs.executeScript(null, {file: "content_script.js"});
+//     console.log('does this function work');
+// });
 
+// chrome.commands.onCommand.addListener(function(command) {
+//   if(command.name == "showcontentdialog") {
+//     chrome.tabs.executeScript({ file: "content_script.js" })
+//     console.log('is this working');
+//   }
+// })
 
 
 
