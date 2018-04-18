@@ -66,6 +66,7 @@ module.exports = {
         /* set key-value to have 60*60*24 seconds to live
            where key is a string of space separated keywords in quotes
         */
+        console.log('articles: ', articles);
         const saved = await db.setexAsync(key, 86400, JSON.stringify(articles));
         if(saved !== 'OK'){ return res.status(500).json({ success: false, message: `from REDIS got: ${saved}`}); }
         res.status(200).json({ success: true });
@@ -83,6 +84,10 @@ module.exports = {
         console.log('key: ', key);
         /* grab URL info from redis */
         const data = JSON.parse(await db.getAsync(`${key}`));
+        console.log('data from byTitle: ', data);
+        if(!data){
+          return res.status(500).json({ success: false });
+        }
         res.status(200).json({ success: true, data });
       } catch(error) {
         console.error('error from GET /associated-articles/byTite: ', error);
