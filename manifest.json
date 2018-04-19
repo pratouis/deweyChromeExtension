@@ -4,11 +4,20 @@
   "description": "Twitter Chrome Link Extension",
   "content_scripts": [{
     "matches": [
-      "https://*.twitter.com/**"
+      "https://*.twitter.com/**",
+      "https://*.reddit.com/**"
     ],
-    "css": ["content.css"],
-    "js": ["content.js"],
+    "css": ["bootstrap.min.css","content.css"],
+    "js": ["jquery.min.js","bootstrap.min.js","content.js"],
     "run_at": "document_end"
   }],
+  "options_ui": {
+    "page": "options.html",
+    "chrome_style": true
+    },
+    "browser_action": {
+   "default_title": "Chrome Extension",
+   "default_popup": "options.html"
+ },
   "manifest_version": 2
 }
