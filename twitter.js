@@ -28,7 +28,8 @@ function appMutationHandler(mutationList) {
 // Code for the info button. Svg is the path to the file containing the icon. Path retrieved from internet.
 const saveToPocketMarkup = `
 <button class="ProfileTweet-actionButton u-textUserColorHover js-actionButton"
-    type="button" data-nav="share_tweet_to_pocket">
+    type="button" data-nav="share_tweet_to_pocket"
+    data-toggle="modal" data-target="#dialogModal">
     <div class="IconContainer js-tooltip" data-original-title="Is this true?">
         <span class="Icon Icon--medium Icon--saveToPocket">
             <svg class="pocketIcon" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
@@ -99,6 +100,88 @@ saveToPocketButton.classList.add(
 )
 saveToPocketButton.innerHTML = saveToPocketMarkup
 
+const dialogMarkup = `<div class="modal fade" id="dialogModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="dialogModalHeader">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="list-group" id='dialogListGroup'>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>`
+
+const dialogTry2 = document.createElement('div');
+dialogTry2.innerHTML = dialogMarkup;
+
+// const dialogBread = document.createElement('div');
+// dialogBread.classList.add('modal fade')
+// dialogBread.id = 'dialogModal';
+// dialogBread.setAttribute('tabindex',"-1");
+// dialogBread.setAttribute('role','dialog');
+//
+// const dialogMayo = document.createElement('div');
+// dialogMayo.classList.add(
+//   'modal-dialog',
+//   'modal-dialog-centered'
+// );
+// dialogMayo.setAttribute('role','document');
+//
+// const dialogCheese = document.createElement('div');
+// dialogCheese.classList.add('modal-content');
+//
+// const dialogTomato = document.createElement('div');
+// dialogTomato.classList.add('modal-header');
+//
+// const dialogHeader = document.createElement('h5');
+// dialogHeader.id = 'dialogModalHeader';
+// dialogHeader.textContent = 'Foo Header';
+// dialogTomato.append(dialogHeader);
+//
+// const dialogHeaderClose = document.createElement('button');
+// dialogHeaderClose.classList.add('close');
+// dialogHeaderClose.setAttribute('type','button');
+// dialogHeaderClose.setAttribute('data-dismiss','modal');
+// const closeIcon = document.createElement('span');
+// closeIcon.innerHTML = '&times;';
+// dialogHeaderClose.append(closeIcon);
+// dialogTomato.append(dialogHeaderClose);
+//
+// const dialogMeat = document.createElement('div');
+// dialogMeat.classList.add('modal-body');
+//
+// const dialogMeatJuice = document.createElement('div');
+// dialogMeatJuice.classList.add('list-group');
+// dialogMeatJuice.id = 'dialogListGroup';
+//
+// dialogMeat.append(dialogMeatJuice);
+//
+//
+// const dialogLettuce = document.createElement('div');
+// dialogLettuce.classList.add('modal-footer');
+//
+// const dialogMustard = document.createElement('button');
+// dialogMustard.classList.add('btn', 'btn-secondary');
+// dialogMustard.setAttribute('data-dismiss','modal');
+// dialogMustard.textContent="Close";
+// dialogLettuce.append(dialogMustard);
+//
+// dialogCheese.append(dialogLettuce);
+// dialogCheese.append(dialogMeat);
+// dialogCheese.append(dialogTomato);
+// dialogMayo.append(dialogCheese);
+// dialogBread.append(dialogMayo);
+
+document.getElementsByTagName('body')[0].append(dialogTry2);
 // Start and Stop integration
 function resolveCheck(integrate) {
     if (integrate) return startIntegration()
@@ -133,42 +216,92 @@ async function addPocketFunctionality(element, title) {
       const elementId = element.getAttribute('data-item-id')
       const buttonClone = saveToPocketButton.cloneNode(true)
       // Insert code to add modal that opens once you click the icon button.
-      const dialog = document.createElement("dialog")
-      dialog.textContent = "This is a dialog"
+      // const dialog = document.createElement("dialog")
+      // dialog.textContent = "This is a dialog"
       let response = await fetch("http://localhost:3000/associated-articles/byTitle?title="+encodeURIComponent(title))
-      let {success, error, data} = await response.json();
+      let { success, error, data } = await response.json();
       if(!success) throw error;
+      // if(data){
+      //   const ul = document.createElement('ul');
+      //   data.forEach(article => {
+      //     var li = document.createElement('li');
+      //     var a = document.createElement('a');
+      //     a.appendChild(document.createTextNode(article.title));
+      //     a.setAttribute('href',article.url);
+      //     li.append(a);
+      //     li.append(document.createTextNode(`from ${article.source}`));
+      //     // li.textContent = `${article.title} - from ${article.source}\n${article.url}`;
+      //     ul.append(li);
+      //   });
+      //   dialog.append(ul);
+      // }else {
+      //   dialog.textContent = 'nothing :(';
+      // }
+
+      // clear child nodes of list-group
+      const dialogList = document.getElementById('dialogListGroup')
+      while (dialogList.firstChild) {
+        dialogList.removeChild(dialogList.firstChild);
+      }
+      document.getElementById('dialogModalHeader').textContent = title;
       if(data){
-        const ul = document.createElement('ul');
+        // todo clear dialogList
         data.forEach(article => {
-          var li = document.createElement('li');
-          var a = document.createElement('a');
-          a.appendChild(document.createTextNode(article.title));
-          a.setAttribute('href',article.url);
-          li.append(a);
-          li.append(document.createTextNode(`from ${article.source}`));
-          // li.textContent = `${article.title} - from ${article.source}\n${article.url}`;
-          ul.append(li);
-        });
-        dialog.append(ul);
-      }else {
-        dialog.textContent = 'nothing :(';
+          const articleLink = document.createElement('a');
+          articleLink.classList.add(
+            'list-group-item',
+            'list-group-item-action',
+            'flex-column',
+            'align-items-start'
+          );
+          articleLink.setAttribute('href',article.url);
+
+          const articleHeaderInfo = document.createElement('div');
+          articleHeaderInfo.classList.add(
+            'd-flex',
+            'w-100',
+            'justify-content-between'
+          );
+          const articleHeaderH5 = document.createElement('h5');
+          articleHeaderH5.classList.add('mb-1');
+          articleHeaderH5.append(document.createTextNode(article.title));
+          articleHeaderInfo.append(articleHeaderH5);
+
+          const articleDateStamp = document.createElement('small');
+          articleDateStamp.append(document.createTextNode(new Date(article.publishedAt).toDateString()));
+          articleHeaderInfo.append(articleDateStamp);
+
+          articleLink.append(articleHeaderInfo);
+
+          const articleDescription = document.createElement('p');
+          articleDescription.classList.add('mb-1');
+          articleDescription.append(document.createTextNode(article.description));
+          articleLink.append(articleDescription);
+
+          const articleSource = document.createElement('small');
+          articleSource.append(document.createTextNode(`from ${article.source}`));
+          articleLink.append(articleSource);
+
+          dialogList.append(articleLink);
+        })
+      }else{
+        dialogMeatJuice.append(document.createTextNode('nothing found :('));
       }
       // .then(foo => console.log('got things back from byTitle: ', foo));
-      const button = document.createElement("button")
-      button.textContent = "Close"
-      dialog.appendChild(button)
-      button.addEventListener("click", function() {
-        dialog.close()
-      })
-      document.body.appendChild(dialog)
-
-      buttonClone.id = `pocketButton-${elementId}`
-      buttonClone.addEventListener(
-        'click',
-
-        () => dialog.showModal()
-      )
+      // const button = document.createElement("button")
+      // button.textContent = "Close"
+      // dialog.appendChild(button)
+      // button.addEventListener("click", function() {
+      //   dialog.close()
+      // })
+      // document.body.appendChild(dialog)
+      //
+      // buttonClone.id = `pocketButton-${elementId}`
+      // buttonClone.addEventListener(
+      //   'click',
+      //
+      //   () => dialog.showModal()
+      // )
       // End code for modal.
       buttonClone.setAttribute('data-permalink-path', permaLink)
       buttonClone.setAttribute('data-item-id', elementId)
