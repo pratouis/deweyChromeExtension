@@ -53,7 +53,7 @@ module.exports = {
         console.log(`query: ${query}, key: ${key}`);
         // check if story is already in database
         const data = JSON.parse(await db.getAsync(`${key}`));
-        console.log('data from POST: ', data, data.length);
+        console.log('data from POST: ', data);
         if(!data || data.length === 0){
           let { status, articles } = await newsapi.v2.everything({ q: query, language: 'en', sortBy: 'relevancy'});
           articles = Object.values(
