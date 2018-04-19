@@ -8,12 +8,22 @@
   "commands": { "showcontentdialog": { "suggested_key": { "default": "Ctrl+Shift+Y" }, "description": "show content dialog" } },
   "content_scripts": [{
     "matches": [
-      "https://*.twitter.com/**"
+      "https://*.twitter.com/**",
+      "https://*.reddit.com/**"
     ],
-    "css": ["content.css", "twitter.css"],
-    "js": ["content.js", "twitter.js"],
+
+    "css": ["bootstrap.min.css","content.css","twitter.css"],
+    "js": ["jquery.min.js","bootstrap.min.js","content.js","twitter.js"],
     "html": ["modal.html"],
     "run_at": "document_end"
   }],
+  "options_ui": {
+    "page": "options.html",
+    "chrome_style": true
+    },
+    "browser_action": {
+   "default_title": "Chrome Extension",
+   "default_popup": "options.html"
+ },
   "manifest_version": 2
 }
