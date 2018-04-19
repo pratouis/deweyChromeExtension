@@ -64,7 +64,9 @@ module.exports = {
               //  and only store source's name, article title, article URL
               (articles, title) => ({ source: articles[0].source.name,
                 title: articles[0].title,
-                url: articles[0].url })))
+                url: articles[0].url,
+                publishedAt: articles[0].publishedAt,
+                description: articles[0].description })))
                 // take first five articles
                 .slice(0,5);
                 /* set key-value to have 60*60*24 seconds to live
