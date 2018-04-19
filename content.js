@@ -6,15 +6,45 @@ const myiFrames = {};
 let ol = document.getElementById('stream-items-id'); //Tracking the position of the OL to track the scroll.
 const pc = document.getElementById('page-container'); //Tracking page container to track changes in React page.
 
+
 const iframeOnLoad = (iframe) => () => { //Waits for iFrames to load. Targets correct iFrame.
     const title = iframe.contentDocument.getElementsByTagName('h2')[0].innerHTML; //To grab title.
     if(!myiFrames[iframe.id]) {
-      myiFrames[iframe.id] = { title, iframe };
+      myiFrames[iframe.id] = iframe;
       console.log(title);
     }
-     const parentTweet = iframe.closest('[data-tweet-id]');
-     addPocketFunctionality(parentTweet);
+    const parentTweet = iframe.closest('[data-tweet-id]');
+    fetch("http://localhost:3000/associated-articles?title="+encodeURIComponent(title), { method: 'POST' })
+    .then(response => response.json())
+    .then(({success, error}) => {
+      if(!success) throw error;
+      addPocketFunctionality(parentTweet, title);
+    })
+    .catch(e => console.error('error from iFrameOnLoad: ', e))
 }
+
+// const iframeOnLoad = (iframe) => () => { //Waits for iFrames to load. Targets correct iFrame.
+//     const title = iframe.contentDocument.getElementsByTagName('h2')[0].innerHTML; //To grab title.
+//     try {
+//       // let response = await fetch("http://localhost:3000/associated-articles?title="+encodeURIComponent(title), {
+//       //     method: 'POST'
+//       // });
+//       // let {success, error} = await response.json();
+//       // if(!success) {
+//       //   console.log(error);
+//       //   throw error;
+//       // }
+//       const parentTweet = iframe.closest('[data-tweet-id]');
+//       const dataTweetID = parentTweet.getAttribute('data-item-id');
+//       if(!myiFrames[dataTweetID]) {
+//         myiFrames[dataTweetID] = { title, iframe };
+//         console.log(title);
+//       }
+//       addPocketFunctionality(parentTweet, title);
+//     } catch (e) {
+//       console.error(`caught error in iFrameOnLoad on ${title}: `, e);
+//     }
+// }
 
 function processiFrameContainers(listOfiFrameContainers) {
     listOfiFrameContainers.forEach(thing => {
@@ -65,4 +95,4 @@ const pcChangeObserver = new MutationObserver(mutations => {
 pcChangeObserver.observe(pc, { childList: true, attributes: true })
 
 
-fetch("http://localhost:3000/associated-articles/byTitle?title="+encodeURIComponent("Tech in Asia - Connecting Asia's startup ecosystem")).then(response => response.json()).then(console.log)
+// fetch("http://localhost:3000/associated-articles/byTitle?title="+encodeURIComponent("Tech in Asia - Connecting Asia's startup ecosystem")).then(response => response.json()).then(console.log)

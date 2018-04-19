@@ -127,35 +127,60 @@ function handleNewItems() {
 }
 
 // Function called in content.js. Finds each element (iframe) to add info button to. Binds to each unique tweet containing iframe.
-function addPocketFunctionality(element) {
-    const permaLink = element.getAttribute('data-permalink-path')
-    const elementId = element.getAttribute('data-item-id')
-    const buttonClone = saveToPocketButton.cloneNode(true)
-// Insert code to add modal that opens once you click the icon button.
-    const dialog = document.createElement("dialog")
-    dialog.textContent = "This is a dialog"
-    const button = document.createElement("button")
-        button.textContent = "Close"
-    dialog.appendChild(button)
-    button.addEventListener("click", function() {
-      dialog.close()
-    })
-    document.body.appendChild(dialog)
+async function addPocketFunctionality(element, title) {
+    try {
+      const permaLink = element.getAttribute('data-permalink-path')
+      const elementId = element.getAttribute('data-item-id')
+      const buttonClone = saveToPocketButton.cloneNode(true)
+      // Insert code to add modal that opens once you click the icon button.
+      const dialog = document.createElement("dialog")
+      dialog.textContent = "This is a dialog"
+      let response = await fetch("http://localhost:3000/associated-articles/byTitle?title="+encodeURIComponent(title))
+      let {success, error, data} = await response.json();
+      if(!success) throw error;
+      if(data){
+        const ul = document.createElement('ul');
+        data.forEach(article => {
+          var li = document.createElement('li');
+          var a = document.createElement('a');
+          a.appendChild(document.createTextNode(article.title));
+          a.setAttribute('href',article.url);
+          li.append(a);
+          li.append(document.createTextNode(`from ${article.source}`));
+          // li.textContent = `${article.title} - from ${article.source}\n${article.url}`;
+          ul.append(li);
+        });
+        dialog.append(ul);
+      }else {
+        dialog.textContent = 'nothing :(';
+      }
+      // .then(foo => console.log('got things back from byTitle: ', foo));
+      const button = document.createElement("button")
+      button.textContent = "Close"
+      dialog.appendChild(button)
+      button.addEventListener("click", function() {
+        dialog.close()
+      })
+      document.body.appendChild(dialog)
 
-    buttonClone.id = `pocketButton-${elementId}`
-    buttonClone.addEventListener(
+      buttonClone.id = `pocketButton-${elementId}`
+      buttonClone.addEventListener(
         'click',
 
         () => dialog.showModal()
-    )
-// End code for modal.
-    buttonClone.setAttribute('data-permalink-path', permaLink)
-    buttonClone.setAttribute('data-item-id', elementId)
+      )
+      // End code for modal.
+      buttonClone.setAttribute('data-permalink-path', permaLink)
+      buttonClone.setAttribute('data-item-id', elementId)
 
-    const actionList = element.querySelector('.ProfileTweet-actionList')
-    if (actionList) {
+      const actionList = element.querySelector('.ProfileTweet-actionList')
+      if (actionList) {
         actionList.appendChild(buttonClone)
         element.classList.add('PocketAdded')
+      }
+
+    } catch(e) {
+      console.error(`caught error in addPocketFunctionality on '${title}': `, e);
     }
 }
 
