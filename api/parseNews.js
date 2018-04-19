@@ -28,13 +28,13 @@ module.exports = {
     router.use('/associated-articles', async (req, res, next) => {
       /* if no title is specified return 400 (user error)*/
       if(!req.query.title && !req.body.title){
-        return res.status(400).json({success: false, message: 'no title provided'});
+        return res.status(400).json({success: false, error: 'no title provided'});
       }
       try {
         const request = titleAI.textRequest(req.query.title || req.body.title, { sessionId: 10 });
         let { status, result, sessionId } = await handleRequests(request);
         if(status.code !== 200){
-          return res.status(status.code).json({ success: false, status: status.code, message: status.errorType });
+          return res.status(status.code).json({ success: false, error: status.errorType });
         }
         req.body.keywords = result.parameters.searchterm;
         next();
@@ -48,9 +48,10 @@ module.exports = {
       console.log('inside POST /associated-articles');
       try {
         console.log(`title: ${req.body.title}\nkeywords: ${req.body.keywords}`);
-        const key = req.body.keywords.reduce((acc, term) => (acc ? `${acc} "${term}"` : `"${term}"`), "");
-        console.log('key: ', key);
-        let { status, articles } = await newsapi.v2.everything({ q: key, language: 'en', sortBy: 'relevancy'});
+        const query = req.body.keywords.reduce((acc, term) => (acc ? `${acc} "${term}"` : `"${term}"`), "");
+        const key = req.body.keywords.join("_");
+        console.log(`query: ${query}, key: ${key}`);
+        let { status, articles } = await newsapi.v2.everything({ q: query, language: 'en', sortBy: 'relevancy'});
         articles =
         Object.values(
             _.mapObject(
@@ -68,7 +69,7 @@ module.exports = {
         */
         console.log('articles: ', articles);
         const saved = await db.setexAsync(key, 86400, JSON.stringify(articles));
-        if(saved !== 'OK'){ return res.status(500).json({ success: false, message: `from REDIS got: ${saved}`}); }
+        if(saved !== 'OK'){ return res.status(500).json({ success: false, error: `from REDIS got: ${saved}`}); }
         res.status(200).json({ success: true });
       } catch (error) {
         console.error('error from POST /associated-articles: ', error);
@@ -80,18 +81,19 @@ module.exports = {
       console.log('inside GET /associated-articles/byTitle');
       try {
         console.log(`title: ${req.query.title}\nkeywords: ${req.body.keywords}`);
-        const key = req.body.keywords.reduce((acc, term) => (acc ? `${acc} "${term}"` : `"${term}"`), "");
+        // const query = req.body.keywords.reduce((acc, term) => (acc ? `${acc} "${term}"` : `"${term}"`), "");
+        const key = req.body.keywords.join('_');
         console.log('key: ', key);
         /* grab URL info from redis */
         const data = JSON.parse(await db.getAsync(`${key}`));
         console.log('data from byTitle: ', data);
         if(!data){
-          return res.status(500).json({ success: false });
+          return res.status(500).json({ success: false, error: `data is empty or null: ${data}` });
         }
         res.status(200).json({ success: true, data });
       } catch(error) {
         console.error('error from GET /associated-articles/byTite: ', error);
-        res.status(500).json({ success: false, error, message: 'error from GET /associated-articles/byTitle' });
+        res.status(500).json({ success: false, error });
       }
     });
 

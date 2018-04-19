@@ -4,6 +4,7 @@ import apiai from 'apiai';
 import bodyParser from 'body-parser';
 import { articleRouter } from './parseNews';
 import cors from 'cors';
+
 if(!process.env.NEWS_API || !process.env.APIAI_CLIENT){
   console.error('no NEWS_API or APIAI_CLIENT tokens found.  Did you source env.sh?');
   process.exit(1);
