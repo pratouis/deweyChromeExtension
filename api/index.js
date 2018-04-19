@@ -24,7 +24,7 @@ app.use(cors({
 app.use('/', articleRouter(titleAI, newsapi));
 
 /* This was for testing CORS */
-app.get('/foo', (req, res, next) => res.send('hi'))
+app.get('/foo', (req, res, next) => res.send('\"hi\"'))
 
 const port = process.env.PORT ? parseInt(process.env.PORT) : 3000;
 app.listen(port, () => console.log('backend express listening on port', port));
