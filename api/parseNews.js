@@ -47,30 +47,34 @@ module.exports = {
     router.post('/associated-articles', async (req,res) => {
       console.log('inside POST /associated-articles');
       try {
-        console.log(`title: ${req.body.title}\nkeywords: ${req.body.keywords}`);
+        console.log(`title: ${req.query.title}`);
         const query = req.body.keywords.reduce((acc, term) => (acc ? `${acc} "${term}"` : `"${term}"`), "");
         const key = req.body.keywords.join("_");
         console.log(`query: ${query}, key: ${key}`);
-        let { status, articles } = await newsapi.v2.everything({ q: query, language: 'en', sortBy: 'relevancy'});
-        articles =
-        Object.values(
+        // check if story is already in database
+        const data = JSON.parse(await db.getAsync(`${key}`));
+        console.log('data from POST: ', data, data.length);
+        if(!data || data.length === 0){
+          let { status, articles } = await newsapi.v2.everything({ q: query, language: 'en', sortBy: 'relevancy'});
+          articles = Object.values(
             _.mapObject(
               // group articles by title (not case-sensitive)
               _.groupBy(articles, (article) => article.title.toLowerCase()),
               // map carbon articles to first article (articles[0])
               //  and only store source's name, article title, article URL
               (articles, title) => ({ source: articles[0].source.name,
-                                       title: articles[0].title,
-                                         url: articles[0].url })))
-              // take first five articles
+                title: articles[0].title,
+                url: articles[0].url })))
+                // take first five articles
                 .slice(0,5);
-        /* set key-value to have 60*60*24 seconds to live
-           where key is a string of space separated keywords in quotes
-        */
-        console.log('articles: ', articles);
-        const saved = await db.setexAsync(key, 86400, JSON.stringify(articles));
-        if(saved !== 'OK'){ return res.status(500).json({ success: false, error: `from REDIS got: ${saved}`}); }
-        res.status(200).json({ success: true });
+                /* set key-value to have 60*60*24 seconds to live
+                where key is a string of space separated keywords in quotes
+                */
+          console.log('articles: ', articles);
+          const saved = await db.setexAsync(key, 86400, JSON.stringify(articles));
+          if(saved !== 'OK'){ return res.status(500).json({ success: false, error: `from REDIS got: ${saved}`}); }
+      }
+      res.status(200).json({ success: true });
       } catch (error) {
         console.error('error from POST /associated-articles: ', error);
         res.status(500).json({ success: false, error });
