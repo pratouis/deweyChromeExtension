@@ -7,3 +7,21 @@
     color: transparent;
     text-shadow: 0 0 15px rgba(0,0,0,0.5);
 }
+
+.reema-modal {
+	display: inline-block;
+	position: absolute;
+	width: 285px;
+	height: 300px;
+	z-index: 3000;
+	background-color: white;
+	box-shadow: 0 0 10px #ccc;
+	border: #333 2px solid; 
+}
+
+.closeButton {
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+

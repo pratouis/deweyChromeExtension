@@ -132,20 +132,23 @@ function addPocketFunctionality(element) {
     const elementId = element.getAttribute('data-item-id')
     const buttonClone = saveToPocketButton.cloneNode(true)
 // Insert code to add modal that opens once you click the icon button.
-    const dialog = document.createElement("dialog")
-    dialog.textContent = "This is a dialog"
+    const dialog = document.createElement("div")
+    dialog.className = "reema-modal"
+    dialog.textContent = "Related Articles"
     const button = document.createElement("button")
         button.textContent = "Close"
+    button.className = "closeButton"
     dialog.appendChild(button)
     button.addEventListener("click", function() {
       dialog.close()
     })
-    document.body.appendChild(dialog)
+    const trendsBox = document.querySelector('.module.Trends.trends');
+    // trendsBox.insertBefore(dialog);
+    console.log(trendsBox);
 
     buttonClone.id = `pocketButton-${elementId}`
     buttonClone.addEventListener(
         'click',
-        
         () => dialog.showModal()
     )
 // End code for modal.
