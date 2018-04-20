@@ -38,11 +38,10 @@ const appObserver = new MutationObserver((mutationList) => {
 // Define Markup
 // Code for the info button. Svg is the path to the file containing the icon. Path retrieved from internet.
 const saveToPocketMarkup = `
-<button class="ProfileTweet-actionButton u-textUserColorHover js-actionButton"
-    type="button" data-nav="share_tweet_to_pocket"
-    data-toggle="modal" data-target="#dialogModal">
+<button class="ProfileTweet-actionButton"
+    type="button" data-toggle="modal" data-target="#dialogModal">
     <div class="IconContainer js-tooltip" data-original-title="Is this true?">
-        <span class="Icon Icon--medium Icon--saveToPocket">
+        <span class="Icon Icon--medium">
             <svg class="pocketIcon" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
      viewBox="0 0 437.6 437.6" style="enable-background:new 0 0 437.6 437.6;" xml:space="preserve">
 <g>
@@ -95,10 +94,7 @@ const saveToPocketMarkup = `
 <g>
 </g>
 </svg>
-
-
         </span>
-        <span class="u-hiddenVisually">Save To Pocket</span>
     </div>
 </button>
 `
@@ -109,7 +105,7 @@ saveToPocketButton.classList.add(
     'ProfileTweet-action',
     'ProfileTweet-action--stp'
 )
-saveToPocketButton.innerHTML = saveToPocketMarkup
+saveToPocketButton.innerHTML = saveToPocketMarkup;
 
 const dialogMarkup = `<div class="modal fade" id="dialogModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
@@ -129,14 +125,18 @@ const dialogMarkup = `<div class="modal fade" id="dialogModal" tabindex="-1" rol
       </div>
     </div>
   </div>
-</div>`
+</div>`;
 
 const dialogTry2 = document.createElement('div');
-dialogTry2.setAttribute('style', 'display: flex; justify-content: center;');
+dialogTry2.classList.add(
+  'd-flex',
+  'justify-content-center'
+);
 dialogTry2.innerHTML = dialogMarkup;
 
 
 document.getElementsByTagName('body')[0].append(dialogTry2);
+
 // Start and Stop integration
 function resolveCheck(integrate) {
     if (integrate) return startIntegration()
@@ -144,8 +144,13 @@ function resolveCheck(integrate) {
 }
 
 function startIntegration() {
-    appObserver.observe(document, mutationConfig)
-    handleNewItems()
+    appObserver.observe(document, {
+      childList: true,
+      attributes: false,
+      characterData: false,
+      subtree: true
+    });
+    handleNewItems();
 }
 
 function stopIntegration() {
@@ -157,7 +162,7 @@ function stopIntegration() {
 // Set Injections
 function handleNewItems() {
     const tweetActionLists = document.querySelectorAll(
-        '.tweet:not(.PocketAdded)'
+        '.tweet:not(.DeweyAdded)'
     )
     if (!tweetActionLists.length) return
 
@@ -176,47 +181,56 @@ const createModalBodyHTML = (title) => {
       articlesList.classList.add('list-group');
 
       if(data){
-        data.forEach(article => {
-          const articleLink = document.createElement('a');
-          articleLink.classList.add(
-            'list-group-item',
-            'list-group-item-action',
-            'flex-column',
-            'align-items-start'
-          );
-          articleLink.setAttribute('href',article.url);
+        articlesList.innerHTML = data.map(article => (
+          `<a href="${article.url}" class="list-group-item list-group-item-action flex-column align-items-start">
+              <div class="d-flex w-100 justify-content-between">
+                <h4 class="mb-1">${article.title}</h4>
+                <small>${new Date(article.publishedAt).toDateString()}</small>
+              </div>
+              <p class="mb-1">${article.description}</p>
+              <small>from ${article.source}</small>
+          </a>`)).join('\n');
 
-          const articleHeaderInfo = document.createElement('div');
-          articleHeaderInfo.classList.add(
-            'd-flex',
-            'w-100',
-            'justify-content-between'
-          );
-
-          const articleHeaderH3 = document.createElement('h3');
-          articleHeaderH3.classList.add('mb-1');
-          articleHeaderH3.append(document.createTextNode(article.title));
-          articleHeaderInfo.append(articleHeaderH3);
-
-          const articleDateStamp = document.createElement('small');
-          articleDateStamp.append(document.createTextNode(new Date(article.publishedAt).toDateString()));
-          articleHeaderInfo.append(articleDateStamp);
-
-          articleLink.append(articleHeaderInfo);
-
-          const articleDescription = document.createElement('p');
-          articleDescription.classList.add('mb-1');
-          articleDescription.append(document.createTextNode(article.description));
-
-          articleLink.append(articleDescription);
-
-          const articleSource = document.createElement('small');
-          articleSource.append(document.createTextNode(`from ${article.source}`));
-
-          articleLink.append(articleSource);
-
-          articlesList.append(articleLink);
-        })
+        //   const articleLink = document.createElement('a');
+        //   articleLink.classList.add(
+        //     'list-group-item',
+        //     'list-group-item-action',
+        //     'flex-column',
+        //     'align-items-start'
+        //   );
+        //   articleLink.setAttribute('href',article.url);
+        //
+        //   const articleHeaderInfo = document.createElement('div');
+        //   articleHeaderInfo.classList.add(
+        //     'd-flex',
+        //     'w-100',
+        //     'justify-content-between'
+        //   );
+        //
+        //   const articleHeaderH3 = document.createElement('h3');
+        //   articleHeaderH3.classList.add('mb-1');
+        //   articleHeaderH3.append(document.createTextNode(article.title));
+        //   articleHeaderInfo.append(articleHeaderH3);
+        //
+        //   const articleDateStamp = document.createElement('small');
+        //   articleDateStamp.append(document.createTextNode(new Date(article.publishedAt).toDateString()));
+        //   articleHeaderInfo.append(articleDateStamp);
+        //
+        //   articleLink.append(articleHeaderInfo);
+        //
+        //   const articleDescription = document.createElement('p');
+        //   articleDescription.classList.add('mb-1');
+        //   articleDescription.append(document.createTextNode(article.description));
+        //
+        //   articleLink.append(articleDescription);
+        //
+        //   const articleSource = document.createElement('small');
+        //   articleSource.append(document.createTextNode(`from ${article.source}`));
+        //
+        //   articleLink.append(articleSource);
+        //
+        //   articlesList.append(articleLink);
+        // })
 
       }else{
         articlesList.append(document.createTextNode(`data is empty or null: ${data}`));
@@ -259,90 +273,22 @@ async function addPocketFunctionality(element, title) {
       //   dialog.textContent = 'nothing :(';
       // }
 
-      // clear child nodes of list-group
-      const dialogList = document.getElementById('dialogModalBody');
-      console.log('before remove dialogList children? ', dialogList);
-      while (dialogList.firstChild) {
-        dialogList.removeChild(dialogList.firstChild);
-      }
-      console.log('after remove dialogList children? ', dialogList);
-
-      document.getElementById('dialogModalHeader').textContent = title;
-      const articles = await createModalBodyHTML(title);
-      if(articles){
-        buttonClone.addEventListener('click', () => {
-          console.log('inside click, articles? ', !!articles, articles);
-          document.getElementById('dialogModalBody').append(articles);
-        })
-      }
-      //
-      // const dialogListGroup = document.createElement('div');
-      // dialogListGroup.classList.add("list-group");
-      // if(data){
-      //   data.forEach(article => {
-      //     const articleLink = document.createElement('a');
-      //     articleLink.classList.add(
-      //       'list-group-item',
-      //       'list-group-item-action',
-      //       'flex-column',
-      //       'align-items-start'
-      //     );
-      //     articleLink.setAttribute('href',article.url);
-      //
-      //     const articleHeaderInfo = document.createElement('div');
-      //     articleHeaderInfo.classList.add(
-      //       'd-flex',
-      //       'w-100',
-      //       'justify-content-between'
-      //     );
-      //     const articleHeaderH5 = document.createElement('h3');
-      //     articleHeaderH5.classList.add('mb-1');
-      //     articleHeaderH5.append(document.createTextNode(article.title));
-      //     articleHeaderInfo.append(articleHeaderH5);
-      //
-      //     const articleDateStamp = document.createElement('small');
-      //     articleDateStamp.append(document.createTextNode(new Date(article.publishedAt).toDateString()));
-      //     articleHeaderInfo.append(articleDateStamp);
-      //
-      //     articleLink.append(articleHeaderInfo);
-      //
-      //     const articleDescription = document.createElement('p');
-      //     articleDescription.classList.add('mb-1');
-      //     articleDescription.append(document.createTextNode(article.description));
-      //     articleLink.append(articleDescription);
-      //
-      //     const articleSource = document.createElement('small');
-      //     articleSource.append(document.createTextNode(`from ${article.source}`));
-      //     articleLink.append(articleSource);
-      //
-      //     dialogListGroup.append(articleLink);
-      //   })
-      // }
-
-      // buttonClone.addEventListener('click', () => dialogList.append(dialogListGroup));
-      // .then(foo => console.log('got things back from byTitle: ', foo));
-      // const button = document.createElement("button")
-      // button.textContent = "Close"
-      // dialog.appendChild(button)
-      // button.addEventListener("click", function() {
-      //   dialog.close()
-      // })
-      // document.body.appendChild(dialog)
-      //
-      // buttonClone.id = `pocketButton-${elementId}`
-      // buttonClone.addEventListener(
-      //   'click',
-      //
-      //   () => dialog.showModal()
-      // )
-      // End code for modal.
+      buttonClone.addEventListener('click', () => {
+        document.getElementById('dialogModalHeader').textContent = title;
+        const dialogBody = document.getElementById('dialogModalBody');
+        // remove children of dialogModalBody
+        while (dialogBody.firstChild) {
+          dialogBody.removeChild(dialogBody.firstChild);
+        }
+        dialogBody.append(await createModalBodyHTML(title));
+      })
       buttonClone.setAttribute('data-permalink-path', permaLink)
       buttonClone.setAttribute('data-item-id', elementId)
 
       const actionList = element.querySelector('.ProfileTweet-actionList')
       if (actionList) {
         actionList.appendChild(buttonClone)
-        element.classList.add('PocketAdded')
+        element.classList.add('DeweyAdded')
       }
 
     } catch(e) {
