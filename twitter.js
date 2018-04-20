@@ -10,19 +10,30 @@ function sendMessage(){};
 
 // Set up Observer
 // Checks for scrolling and new tweets.
-const appObserver = new MutationObserver(appMutationHandler)
-function appMutationHandler(mutationList) {
-    for (var mutation of mutationList) {
-        if (
-            mutation.type === 'childList' &&
-            (mutation.target.id === 'page-container' ||
-                mutation.target.id === 'stream-items-id' ||
-                mutation.target.id === 'permalink-overlay-body')
-        ) {
-            handleNewItems()
-        }
+const appObserver = new MutationObserver((mutationList) => {
+  for (let mutation of mutationList) {
+    if(mutation.type === 'childList' &&
+      (mutation.target.id === 'page-container' ||
+       mutation.target.id === 'stream-items-id' ||
+       mutation.target.id === 'permalink-overlay-body')
+    ) {
+      handleNewItems();
     }
-}
+  }
+});
+//
+// function appMutationHandler(mutationList) {
+//     for (var mutation of mutationList) {
+//         if (
+//             mutation.type === 'childList' &&
+//             (mutation.target.id === 'page-container' ||
+//                 mutation.target.id === 'stream-items-id' ||
+//                 mutation.target.id === 'permalink-overlay-body')
+//         ) {
+//             handleNewItems()
+//         }
+//     }
+// }
 
 // Define Markup
 // Code for the info button. Svg is the path to the file containing the icon. Path retrieved from internet.
@@ -109,7 +120,7 @@ const dialogMarkup = `<div class="modal fade" id="dialogModal" tabindex="-1" rol
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
+      <div class="modal-body" id='dialogModalBody'>
         <div class="list-group" id='dialogListGroup'>
         </div>
       </div>
@@ -121,65 +132,9 @@ const dialogMarkup = `<div class="modal fade" id="dialogModal" tabindex="-1" rol
 </div>`
 
 const dialogTry2 = document.createElement('div');
+dialogTry2.setAttribute('style', 'display: flex; justify-content: center;');
 dialogTry2.innerHTML = dialogMarkup;
 
-// const dialogBread = document.createElement('div');
-// dialogBread.classList.add('modal fade')
-// dialogBread.id = 'dialogModal';
-// dialogBread.setAttribute('tabindex',"-1");
-// dialogBread.setAttribute('role','dialog');
-//
-// const dialogMayo = document.createElement('div');
-// dialogMayo.classList.add(
-//   'modal-dialog',
-//   'modal-dialog-centered'
-// );
-// dialogMayo.setAttribute('role','document');
-//
-// const dialogCheese = document.createElement('div');
-// dialogCheese.classList.add('modal-content');
-//
-// const dialogTomato = document.createElement('div');
-// dialogTomato.classList.add('modal-header');
-//
-// const dialogHeader = document.createElement('h5');
-// dialogHeader.id = 'dialogModalHeader';
-// dialogHeader.textContent = 'Foo Header';
-// dialogTomato.append(dialogHeader);
-//
-// const dialogHeaderClose = document.createElement('button');
-// dialogHeaderClose.classList.add('close');
-// dialogHeaderClose.setAttribute('type','button');
-// dialogHeaderClose.setAttribute('data-dismiss','modal');
-// const closeIcon = document.createElement('span');
-// closeIcon.innerHTML = '&times;';
-// dialogHeaderClose.append(closeIcon);
-// dialogTomato.append(dialogHeaderClose);
-//
-// const dialogMeat = document.createElement('div');
-// dialogMeat.classList.add('modal-body');
-//
-// const dialogMeatJuice = document.createElement('div');
-// dialogMeatJuice.classList.add('list-group');
-// dialogMeatJuice.id = 'dialogListGroup';
-//
-// dialogMeat.append(dialogMeatJuice);
-//
-//
-// const dialogLettuce = document.createElement('div');
-// dialogLettuce.classList.add('modal-footer');
-//
-// const dialogMustard = document.createElement('button');
-// dialogMustard.classList.add('btn', 'btn-secondary');
-// dialogMustard.setAttribute('data-dismiss','modal');
-// dialogMustard.textContent="Close";
-// dialogLettuce.append(dialogMustard);
-//
-// dialogCheese.append(dialogLettuce);
-// dialogCheese.append(dialogMeat);
-// dialogCheese.append(dialogTomato);
-// dialogMayo.append(dialogCheese);
-// dialogBread.append(dialogMayo);
 
 document.getElementsByTagName('body')[0].append(dialogTry2);
 // Start and Stop integration
@@ -209,6 +164,72 @@ function handleNewItems() {
     Array.from(tweetActionLists, addPocketFunctionality)
 }
 
+// create modal body:
+const createModalBodyHTML = (title) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let response = await fetch("http://localhost:3000/associated-articles/byTitle?title="+encodeURIComponent(title))
+      let { success, error, data } = await response.json();
+      if(!success) throw error;
+
+      const articlesList = document.createElement('div');
+      articlesList.classList.add('list-group');
+
+      if(data){
+        data.forEach(article => {
+          const articleLink = document.createElement('a');
+          articleLink.classList.add(
+            'list-group-item',
+            'list-group-item-action',
+            'flex-column',
+            'align-items-start'
+          );
+          articleLink.setAttribute('href',article.url);
+
+          const articleHeaderInfo = document.createElement('div');
+          articleHeaderInfo.classList.add(
+            'd-flex',
+            'w-100',
+            'justify-content-between'
+          );
+
+          const articleHeaderH3 = document.createElement('h3');
+          articleHeaderH3.classList.add('mb-1');
+          articleHeaderH3.append(document.createTextNode(article.title));
+          articleHeaderInfo.append(articleHeaderH3);
+
+          const articleDateStamp = document.createElement('small');
+          articleDateStamp.append(document.createTextNode(new Date(article.publishedAt).toDateString()));
+          articleHeaderInfo.append(articleDateStamp);
+
+          articleLink.append(articleHeaderInfo);
+
+          const articleDescription = document.createElement('p');
+          articleDescription.classList.add('mb-1');
+          articleDescription.append(document.createTextNode(article.description));
+
+          articleLink.append(articleDescription);
+
+          const articleSource = document.createElement('small');
+          articleSource.append(document.createTextNode(`from ${article.source}`));
+
+          articleLink.append(articleSource);
+
+          articlesList.append(articleLink);
+        })
+
+      }else{
+        articlesList.append(document.createTextNode(`data is empty or null: ${data}`));
+      }
+      resolve(articlesList);
+    } catch(e) {
+      console.log('ERROR in creating dialogModalBody innerHTML: ', e);
+      reject(e);
+    }
+  })
+}
+
+
 // Function called in content.js. Finds each element (iframe) to add info button to. Binds to each unique tweet containing iframe.
 async function addPocketFunctionality(element, title) {
     try {
@@ -218,9 +239,9 @@ async function addPocketFunctionality(element, title) {
       // Insert code to add modal that opens once you click the icon button.
       // const dialog = document.createElement("dialog")
       // dialog.textContent = "This is a dialog"
-      let response = await fetch("http://localhost:3000/associated-articles/byTitle?title="+encodeURIComponent(title))
-      let { success, error, data } = await response.json();
-      if(!success) throw error;
+      // let response = await fetch("http://localhost:3000/associated-articles/byTitle?title="+encodeURIComponent(title))
+      // let { success, error, data } = await response.json();
+      // if(!success) throw error;
       // if(data){
       //   const ul = document.createElement('ul');
       //   data.forEach(article => {
@@ -239,54 +260,66 @@ async function addPocketFunctionality(element, title) {
       // }
 
       // clear child nodes of list-group
-      const dialogList = document.getElementById('dialogListGroup')
+      const dialogList = document.getElementById('dialogModalBody');
+      console.log('before remove dialogList children? ', dialogList);
       while (dialogList.firstChild) {
         dialogList.removeChild(dialogList.firstChild);
       }
+      console.log('after remove dialogList children? ', dialogList);
+
       document.getElementById('dialogModalHeader').textContent = title;
-      if(data){
-        // todo clear dialogList
-        data.forEach(article => {
-          const articleLink = document.createElement('a');
-          articleLink.classList.add(
-            'list-group-item',
-            'list-group-item-action',
-            'flex-column',
-            'align-items-start'
-          );
-          articleLink.setAttribute('href',article.url);
-
-          const articleHeaderInfo = document.createElement('div');
-          articleHeaderInfo.classList.add(
-            'd-flex',
-            'w-100',
-            'justify-content-between'
-          );
-          const articleHeaderH5 = document.createElement('h5');
-          articleHeaderH5.classList.add('mb-1');
-          articleHeaderH5.append(document.createTextNode(article.title));
-          articleHeaderInfo.append(articleHeaderH5);
-
-          const articleDateStamp = document.createElement('small');
-          articleDateStamp.append(document.createTextNode(new Date(article.publishedAt).toDateString()));
-          articleHeaderInfo.append(articleDateStamp);
-
-          articleLink.append(articleHeaderInfo);
-
-          const articleDescription = document.createElement('p');
-          articleDescription.classList.add('mb-1');
-          articleDescription.append(document.createTextNode(article.description));
-          articleLink.append(articleDescription);
-
-          const articleSource = document.createElement('small');
-          articleSource.append(document.createTextNode(`from ${article.source}`));
-          articleLink.append(articleSource);
-
-          dialogList.append(articleLink);
+      const articles = await createModalBodyHTML(title);
+      if(articles){
+        buttonClone.addEventListener('click', () => {
+          console.log('inside click, articles? ', !!articles, articles);
+          document.getElementById('dialogModalBody').append(articles);
         })
-      }else{
-        dialogMeatJuice.append(document.createTextNode('nothing found :('));
       }
+      //
+      // const dialogListGroup = document.createElement('div');
+      // dialogListGroup.classList.add("list-group");
+      // if(data){
+      //   data.forEach(article => {
+      //     const articleLink = document.createElement('a');
+      //     articleLink.classList.add(
+      //       'list-group-item',
+      //       'list-group-item-action',
+      //       'flex-column',
+      //       'align-items-start'
+      //     );
+      //     articleLink.setAttribute('href',article.url);
+      //
+      //     const articleHeaderInfo = document.createElement('div');
+      //     articleHeaderInfo.classList.add(
+      //       'd-flex',
+      //       'w-100',
+      //       'justify-content-between'
+      //     );
+      //     const articleHeaderH5 = document.createElement('h3');
+      //     articleHeaderH5.classList.add('mb-1');
+      //     articleHeaderH5.append(document.createTextNode(article.title));
+      //     articleHeaderInfo.append(articleHeaderH5);
+      //
+      //     const articleDateStamp = document.createElement('small');
+      //     articleDateStamp.append(document.createTextNode(new Date(article.publishedAt).toDateString()));
+      //     articleHeaderInfo.append(articleDateStamp);
+      //
+      //     articleLink.append(articleHeaderInfo);
+      //
+      //     const articleDescription = document.createElement('p');
+      //     articleDescription.classList.add('mb-1');
+      //     articleDescription.append(document.createTextNode(article.description));
+      //     articleLink.append(articleDescription);
+      //
+      //     const articleSource = document.createElement('small');
+      //     articleSource.append(document.createTextNode(`from ${article.source}`));
+      //     articleLink.append(articleSource);
+      //
+      //     dialogListGroup.append(articleLink);
+      //   })
+      // }
+
+      // buttonClone.addEventListener('click', () => dialogList.append(dialogListGroup));
       // .then(foo => console.log('got things back from byTitle: ', foo));
       // const button = document.createElement("button")
       // button.textContent = "Close"

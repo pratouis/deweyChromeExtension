@@ -11,7 +11,7 @@ const iframeOnLoad = (iframe) => () => { //Waits for iFrames to load. Targets co
     const title = iframe.contentDocument.getElementsByTagName('h2')[0].innerHTML; //To grab title.
     if(!myiFrames[iframe.id]) {
       myiFrames[iframe.id] = iframe;
-      console.log(title);
+      // console.log(title);
     }
     const parentTweet = iframe.closest('[data-tweet-id]');
     fetch("http://localhost:3000/associated-articles?title="+encodeURIComponent(title), { method: 'POST' })
@@ -20,7 +20,7 @@ const iframeOnLoad = (iframe) => () => { //Waits for iFrames to load. Targets co
       if(!success) throw error;
       addPocketFunctionality(parentTweet, title);
     })
-    .catch(e => console.error('error from iFrameOnLoad: ', e))
+    .catch(e => console.log('error from iFrameOnLoad: ', e))
 }
 
 // const iframeOnLoad = (iframe) => () => { //Waits for iFrames to load. Targets correct iFrame.
@@ -74,7 +74,7 @@ const observer = new MutationObserver((mutations, observer) => { //Observes muta
         processiFrameContainers(listOfiFrameContainers)
     }
   }
-  console.log(myiFrames);
+  // console.log(myiFrames);
 });
 
 // Register the element root you want to look for changes
