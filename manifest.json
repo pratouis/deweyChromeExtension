@@ -1,5 +1,8 @@
 {
   "name": "Twitter Chrome Link Extension",
+  "permissions": [
+          "storage"
+  ],
   "version": "1.0",
   "description": "Twitter Chrome Link Extension",
   "permissions": [
