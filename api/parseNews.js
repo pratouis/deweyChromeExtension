@@ -17,6 +17,10 @@ const handleRequests = (request) => {
   });
 }
 
+const retext = require('retext');
+const retext_keywords = require('retext-keywords');
+const nlcstToString = require('nlcst-to-string');
+
 /* API
 * returns success - boolean
 *         status code - 200 (OK), 400 (missing title), 500 (something went wrong in API)
@@ -24,6 +28,45 @@ const handleRequests = (request) => {
 */
 module.exports = {
   articleRouter: function (titleAI, newsapi) {
+
+    router.get('/newsapi', async (req, res, next) => {
+      var title = req.query.title.split('|')[0].trim();
+      // try{
+      //   var file = await retext().use(retext_keywords).process(title)
+      //   var keywords = "";
+      //   if(file.data.keyphrases.length){
+      //     keywords = file.data.keyphrases.map( (phrase) => phrase.matches[0].nodes.map(nlcstToString).join('') );
+      //   }else{
+      //     keywords = file.data.keywords.map( (keyword) => nlcstToString(keyword.matches[0].node) );
+      //   }
+      //   console.log('keyphrases: ',!!file.data.keyphrases.length);
+      //   console.log('keywords: ', keywords)
+      //   var query = keywords.reduce((acc, word) => (acc ? `${acc} "${word}"` : `"${word}"`), "");
+      //   let result = await newsapi.v2.everything({ q: query, language: 'en', sortBy: 'relevancy'});
+      //   res.json(result);
+      // }catch(err){
+      //   console.error('error from retext in /newsapi: ',err);
+      //   return res.status(500).send(err);
+      // }
+      retext().use(retext_keywords).process(title, async (err, file) => {
+        if(err){
+          console.error('error from retext in /newsapi: ',err);
+          return res.status(500).send(err);
+        }
+        var keywords = "";
+        if(file.data.keyphrases.length){
+          keywords = file.data.keyphrases.map( (phrase) => phrase.matches[0].nodes.map(nlcstToString).join('') );
+        }else{
+          keywords = file.data.keywords.map( (keyword) => nlcstToString(keyword.matches[0].node) );
+        }
+        console.log('keyphrases: ',!!file.data.keyphrases.length);
+        console.log('keywords: ', keywords)
+        var query = keywords.reduce((acc, word) => (acc ? `${acc} "${word}"` : `"${word}"`), "");
+        let result = await newsapi.v2.everything({ q: query, language: 'en', sortBy: 'relevancy'});
+        res.json(result);
+      })
+    });
+
     /* middleware parsing keywords */
     router.use('/associated-articles', async (req, res, next) => {
       /* if no title is specified return 400 (user error)*/
@@ -43,6 +86,9 @@ module.exports = {
         return res.status(500).json({ success: false, error});
       }
     });
+
+
+
 
     router.post('/associated-articles', async (req,res) => {
       console.log('inside POST /associated-articles');
