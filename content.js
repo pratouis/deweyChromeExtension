@@ -1,9 +1,9 @@
 'use strict';
 
-chrome.storage.sync.get(['options'], (result) => {
-    if (!result.options) {
+chrome.storage.sync.get(['options'], (result) => { //Checks the options popup.
+    if (!result.options) { //If there are no options checked, app will do nothing.
         return
-    } else if (result.options.TwitterOn) {
+    } else if (result.options.TwitterOn) { //If the Twitter button is on, will run the app on Twitter's site.
         const MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
         const myiFrames = {};
         let ol = document.getElementById('stream-items-id'); //Tracking the position of the OL to track the scroll.
@@ -64,7 +64,7 @@ chrome.storage.sync.get(['options'], (result) => {
 
         pcChangeObserver.observe(pc, { childList: true, attributes: true })
 
-    } else if (result.options.RedditOn) {
+    } else if (result.options.RedditOn) { //If the Reddit button is checked, will run on Reddit. 
 
     };
 })

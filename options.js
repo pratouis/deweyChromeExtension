@@ -2,16 +2,9 @@ const twitterCheckbox = document.getElementById('twitter')
 const redditCheckbox = document.getElementById('reddit')
 let options
 chrome.storage.sync.get(['options'], (result) => {
-    if (!result.options) {
-        options = {TwitterOn: true, RedditOn: true}
-        chrome.storage.sync.set({options}, () => {
-
-        })
-    } else {
-        options = result.options
-        twitterCheckbox.checked = options.TwitterOn
-        redditCheckbox.checked = options.RedditOn
-    }
+    options = result.options
+    twitterCheckbox.checked = options.TwitterOn
+    redditCheckbox.checked = options.RedditOn
     console.log('Results: ', options);
 })
 
