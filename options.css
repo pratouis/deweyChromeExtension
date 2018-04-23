@@ -9,12 +9,19 @@ body {
   display: inline-block;
   width: 30px;
   height: 17px;
+  /* transform: translateY(-30px); */
+  transform: translateX(30px);
+  margin-top: 9px;
 }
 
 .allow {
     display: inline-block;
-    margin-right: 20px;
+    padding-left: 25px;
 }
+
+/* #accordion {
+    display: inline-block;
+} */
 
 .switch input {display:none;}
 
@@ -68,4 +75,54 @@ input:checked + .slider:before {
 .flex {
     display: flex;
     align-items: center;
+}
+
+i {
+    border: solid black;
+    border-width: 0 3px 3px 0;
+    display: inline-block;
+    padding: 3px;
+}
+
+.right {
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+}
+
+.left {
+    transform: rotate(135deg);
+    -webkit-transform: rotate(135deg);
+}
+
+.up {
+    transform: rotate(-135deg);
+    -webkit-transform: rotate(-135deg);
+}
+
+.down {
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+}
+
+#Capa_1 {
+    fill: #ccc;
+    width: 20px;
+    height: 20px;
+}
+#Capa_1:hover {
+    fill: #2196F3;
+}
+
+#accordion {
+    display: inline-block;
+    padding-left: 90px;
+}
+
+.options {
+    padding-top: 15px;
+    padding-left: 20px;
+}
+
+.card-body {
+    font-size: 13px;
 }
