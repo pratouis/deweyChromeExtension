@@ -27,7 +27,7 @@ const nlcstToString = require('nlcst-to-string');
 *
 */
 module.exports = {
-  articleRouter: function (titleAI, newsapi) {
+  articleRouter: function (newsapi) {
     /* middleware parsing keywords */
     router.use('/associated-articles', async (req, res, next) => {
       /* if no title is specified return 400 (user error)*/
