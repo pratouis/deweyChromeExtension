@@ -1,19 +1,26 @@
 {
   "name": "Twitter Chrome Link Extension",
+  "permissions": [
+          "storage"
+  ],
   "version": "1.0",
   "description": "Twitter Chrome Link Extension",
-  "permissions": [
-    "activeTab"
-  ],
-  "commands": { "showcontentdialog": { "suggested_key": { "default": "Ctrl+Shift+Y" }, "description": "show content dialog" } },
   "content_scripts": [{
     "matches": [
-      "https://*.twitter.com/**"
+      "https://*.twitter.com/**",
+      "https://*.reddit.com/**"
     ],
-    "css": ["content.css", "twitter.css"],
-    "js": ["content.js", "twitter.js"],
-    "html": ["modal.html"],
+    "css": ["bootstrap.min.css","content.css","twitter.css"],
+    "js": ["twitter_faux_bootstrap.js", "content.js","twitter.js"],
     "run_at": "document_end"
   }],
+  "options_ui": {
+    "page": "options.html",
+    "chrome_style": true
+    },
+    "browser_action": {
+   "default_title": "Chrome Extension",
+   "default_popup": "options.html"
+ },
   "manifest_version": 2
 }
