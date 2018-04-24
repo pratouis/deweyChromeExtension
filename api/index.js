@@ -1,6 +1,5 @@
 import express from 'express';
 import NewsAPI from 'newsapi';
-import apiai from 'apiai';
 import bodyParser from 'body-parser';
 import { articleRouter } from './parseNews';
 import cors from 'cors';
@@ -12,7 +11,6 @@ if(!process.env.NEWS_API){
 
 
 const newsapi = new NewsAPI(process.env.NEWS_API);
-// const titleAI = apiai(process.env.APIAI_CLIENT);
 const app = express();
 
 app.use(bodyParser.json());
