@@ -146,6 +146,10 @@ i {
     font-size: 13px;
 }
 
-.remove:hover svg{
-    stroke: red !important;
+.remove:hover svg {
+    fill: red !important;
+}
+
+.exit:hover svg {
+    stroke: #2196F3 !important;
 }

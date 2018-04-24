@@ -2,6 +2,7 @@ const twitterCheckbox = document.getElementById('twitter');
 const redditCheckbox = document.getElementById('reddit');
 const subreddits = document.getElementById('subreddit');
 const remove = document.getElementsByClassName('remove');
+const exit = document.getElementById('exit')
 
 let options
 chrome.storage.sync.get(['options'], (result) => { //Shows default of Twitter and Reddit options on.
@@ -68,4 +69,8 @@ subreddits.addEventListener('change', e => { //Handles adding subreddits.
     }
     e.target.value = ""; //Resets field to empty.
     console.log("All subreddits: ", options.Subreddits);
+})
+
+$("#exit").on('click', function () {
+    window.close();
 })
