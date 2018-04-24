@@ -39,8 +39,19 @@
         <hr/>
         <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion" style="margin-top:-25px; padding-left: 4px;">
           <div class="card-body">
-            Checked Subreddits
+            <p>Checked Subreddits</p>
+              <ul class="list" id="list" style="padding: 0px; list-style-type: none;"></ul>
           </div>
+          <div class="input-group mb-3" style="padding-left: 10px; padding-right: 10px;">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="r">r/</span>
+              </div>
+              <input type="text" class="form-control" placeholder="Subreddit" aria-label="Username" aria-describedby="basic-addon1" id="subreddit">
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button">Submit</button>
+              </div>
+          </div>
+          <span class="error" id="error">Subreddit already on list.</span>
         </div>
   <script src="options.js"></script>
 </body>

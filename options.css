@@ -108,6 +108,7 @@ i {
     fill: #ccc;
     width: 20px;
     height: 20px;
+    cursor: pointer;
 }
 #Capa_1:hover {
     fill: #2196F3;
@@ -124,5 +125,27 @@ i {
 }
 
 .card-body {
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.error {
+    display: none;
+}
+
+.hasError {
+    display: block;
+    color: red;
+    padding-left: 57px;
+    margin-top: -10px;
+    padding-bottom: 5px;
+}
+
+.list {
+    font-weight: normal;
     font-size: 13px;
+}
+
+.remove:hover svg{
+    stroke: red !important;
 }

@@ -14,6 +14,8 @@
     "js": ["jquery.min.js","bootstrap.min.js","content.js"],
     "run_at": "document_end"
   }],
+  "icons": { "48": "icon48.png",
+          "128": "icon128.png" },
   "background": {
     "scripts": ["eventPage.js"],
     "persistent": false
