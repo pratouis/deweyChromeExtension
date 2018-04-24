@@ -29,8 +29,8 @@ const nlcstToString = require('nlcst-to-string');
 module.exports = {
   articleRouter: function (titleAI, newsapi) {
 
-    router.get('/newsapi', async (req, res, next) => {
-      var title = req.query.title.split('|')[0].trim();
+    // router.get('/newsapi', async (req, res, next) => {
+    //   var title = req.query.title.split('|')[0].trim();
       // try{
       //   var file = await retext().use(retext_keywords).process(title)
       //   var keywords = "";
@@ -48,24 +48,24 @@ module.exports = {
       //   console.error('error from retext in /newsapi: ',err);
       //   return res.status(500).send(err);
       // }
-      retext().use(retext_keywords).process(title, async (err, file) => {
-        if(err){
-          console.error('error from retext in /newsapi: ',err);
-          return res.status(500).send(err);
-        }
-        var keywords = "";
-        if(file.data.keyphrases.length){
-          keywords = file.data.keyphrases.map( (phrase) => phrase.matches[0].nodes.map(nlcstToString).join('') );
-        }else{
-          keywords = file.data.keywords.map( (keyword) => nlcstToString(keyword.matches[0].node) );
-        }
-        console.log('keyphrases: ',!!file.data.keyphrases.length);
-        console.log('keywords: ', keywords)
-        var query = keywords.reduce((acc, word) => (acc ? `${acc} "${word}"` : `"${word}"`), "");
-        let result = await newsapi.v2.everything({ q: query, language: 'en', sortBy: 'relevancy'});
-        res.json(result);
-      })
-    });
+      // retext().use(retext_keywords).process(title, async (err, file) => {
+      //   if(err){
+      //     console.error('error from retext in /newsapi: ',err);
+      //     return res.status(500).send(err);
+      //   }
+      //   var keywords = "";
+      //   if(file.data.keyphrases.length){
+      //     keywords = file.data.keyphrases.map( (phrase) => phrase.matches[0].nodes.map(nlcstToString).join('') );
+      //   }else{
+      //     keywords = file.data.keywords.map( (keyword) => nlcstToString(keyword.matches[0].node) );
+      //   }
+      //   console.log('keyphrases: ',!!file.data.keyphrases.length);
+      //   console.log('keywords: ', keywords)
+      //   var query = keywords.reduce((acc, word) => (acc ? `${acc} "${word}"` : `"${word}"`), "");
+      //   let result = await newsapi.v2.everything({ q: query, language: 'en', sortBy: 'relevancy'});
+      //   res.json(result);
+      // })
+    // });
 
     /* middleware parsing keywords */
     router.use('/associated-articles', async (req, res, next) => {
@@ -73,18 +73,37 @@ module.exports = {
       if(!req.query.title && !req.body.title){
         return res.status(400).json({success: false, error: 'no title provided'});
       }
+      var title = req.query.title.split('|')[0].trim();
       try {
-        const request = titleAI.textRequest(req.query.title || req.body.title, { sessionId: 10 });
-        let { status, result, sessionId } = await handleRequests(request);
-        if(status.code !== 200){
-          return res.status(status.code).json({ success: false, error: status.errorType });
-        }
-        req.body.keywords = result.parameters.searchterm;
+        const { data } = await retext().use(retext_keywords).process(title)
+        req.body.keywords = data.keyphrases.length ?
+          data.keyphrases.map( (phrase) => phrase.matches[0].nodes.map(nlcstToString).join('') ) :
+          data.keywords.map( (keyword) => nlcstToString(keyword.matches[0].node) );
         next();
-      } catch (error) {
-        console.error('error in middleware associated-articles: ', error);
-        return res.status(500).json({ success: false, error});
+        // if(file.data.keyphrases.length){
+        //   keywords = file.data.keyphrases.map( (phrase) => phrase.matches[0].nodes.map(nlcstToString).join('') );
+        // }else{
+        //   keywords = file.data.keywords.map( (keyword) => nlcstToString(keyword.matches[0].node) );
+        // }
+        // var query = keywords.reduce((acc, word) => (acc ? `${acc} "${word}"` : `"${word}"`), "");
+        // let result = await newsapi.v2.everything({ q: query, language: 'en', sortBy: 'relevancy'});
+        // res.json(result);
+      } catch(err) {
+        console.error('error from retext in /newsapi: ',err);
+        return res.status(500).send(err);
       }
+      // try {
+      //   const request = titleAI.textRequest(req.query.title || req.body.title, { sessionId: 10 });
+      //   let { status, result, sessionId } = await handleRequests(request);
+      //   if(status.code !== 200){
+      //     return res.status(status.code).json({ success: false, error: status.errorType });
+      //   }
+      //   req.body.keywords = result.parameters.searchterm;
+      //   next();
+      // } catch (error) {
+      //   console.error('error in middleware associated-articles: ', error);
+      //   return res.status(500).json({ success: false, error});
+      // }
     });
 
 
@@ -121,8 +140,9 @@ module.exports = {
           console.log('articles: ', articles);
           const saved = await db.setexAsync(key, 86400, JSON.stringify(articles));
           if(saved !== 'OK'){ return res.status(500).json({ success: false, error: `from REDIS got: ${saved}`}); }
+          return res.status(200).json({ articles });
       }
-      res.status(200).json({ success: true });
+      return res.status(200).json({ success: true });
       } catch (error) {
         console.error('error from POST /associated-articles: ', error);
         res.status(500).json({ success: false, error });

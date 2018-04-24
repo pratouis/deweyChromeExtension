@@ -82,7 +82,7 @@ dialogTry2.innerHTML = `<div class="modal fade" id="dialogModal"
 </div>`;
 
 
-document.getElementsByTagName('body')[0].append(dialogTry2);
+document.getElementById('timeline').append(dialogTry2);
 
 // Start and Stop integration
 // function resolveCheck(integrate) {
@@ -129,7 +129,7 @@ const createModalBodyHTML = (title) => {
       const articlesList = document.createElement('div');
       articlesList.classList.add('list-group');
       articlesList.innerHTML = data.map(article => (
-        `<a href="${article.url}" class="list-group-item list-group-item-action flex-column align-items-start">
+        `<a href="${article.url}" class="list-group-item list-group-item-action flex-column align-items-start" target="_blank">
             <div class="d-flex w-100 justify-content-between">
               <h4 class="mb-1">${article.title}</h4>
               <small>${new Date(article.publishedAt).toDateString()}</small>
