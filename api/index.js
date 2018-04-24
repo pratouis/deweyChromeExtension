@@ -5,14 +5,14 @@ import bodyParser from 'body-parser';
 import { articleRouter } from './parseNews';
 import cors from 'cors';
 
-if(!process.env.NEWS_API || !process.env.APIAI_CLIENT){
-  console.error('no NEWS_API or APIAI_CLIENT tokens found.  Did you source env.sh?');
+if(!process.env.NEWS_API){
+  console.error('no NEWS_API token found.  Did you source env.sh?');
   process.exit(1);
 }
 
 
 const newsapi = new NewsAPI(process.env.NEWS_API);
-const titleAI = apiai(process.env.APIAI_CLIENT);
+// const titleAI = apiai(process.env.APIAI_CLIENT);
 const app = express();
 
 app.use(bodyParser.json());
@@ -21,7 +21,7 @@ app.use(cors({
   origin: "*",
   methods: ['GET', 'POST']
 }));
-app.use('/', articleRouter(titleAI, newsapi));
+app.use('/', articleRouter(newsapi));
 
 /* This was for testing CORS */
 app.get('/foo', (req, res, next) => res.send('\"hi\"'))

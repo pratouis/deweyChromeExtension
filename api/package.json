@@ -10,12 +10,12 @@
   "author": "pratouis, frankhyin, reemaukani",
   "license": "ISC",
   "dependencies": {
-    "apiai": "^4.0.3",
     "body-parser": "^1.18.2",
     "cors": "^2.8.4",
     "express": "^4.16.3",
     "newsapi": "^2.2.2",
     "nlcst-to-string": "^2.0.1",
+    "redis": "^2.8.0",
     "request": "^2.85.0",
     "retext": "^5.0.0",
     "retext-keywords": "^4.0.1",
