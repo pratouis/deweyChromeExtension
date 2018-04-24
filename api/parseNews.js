@@ -28,45 +28,6 @@ const nlcstToString = require('nlcst-to-string');
 */
 module.exports = {
   articleRouter: function (titleAI, newsapi) {
-
-    // router.get('/newsapi', async (req, res, next) => {
-    //   var title = req.query.title.split('|')[0].trim();
-      // try{
-      //   var file = await retext().use(retext_keywords).process(title)
-      //   var keywords = "";
-      //   if(file.data.keyphrases.length){
-      //     keywords = file.data.keyphrases.map( (phrase) => phrase.matches[0].nodes.map(nlcstToString).join('') );
-      //   }else{
-      //     keywords = file.data.keywords.map( (keyword) => nlcstToString(keyword.matches[0].node) );
-      //   }
-      //   console.log('keyphrases: ',!!file.data.keyphrases.length);
-      //   console.log('keywords: ', keywords)
-      //   var query = keywords.reduce((acc, word) => (acc ? `${acc} "${word}"` : `"${word}"`), "");
-      //   let result = await newsapi.v2.everything({ q: query, language: 'en', sortBy: 'relevancy'});
-      //   res.json(result);
-      // }catch(err){
-      //   console.error('error from retext in /newsapi: ',err);
-      //   return res.status(500).send(err);
-      // }
-      // retext().use(retext_keywords).process(title, async (err, file) => {
-      //   if(err){
-      //     console.error('error from retext in /newsapi: ',err);
-      //     return res.status(500).send(err);
-      //   }
-      //   var keywords = "";
-      //   if(file.data.keyphrases.length){
-      //     keywords = file.data.keyphrases.map( (phrase) => phrase.matches[0].nodes.map(nlcstToString).join('') );
-      //   }else{
-      //     keywords = file.data.keywords.map( (keyword) => nlcstToString(keyword.matches[0].node) );
-      //   }
-      //   console.log('keyphrases: ',!!file.data.keyphrases.length);
-      //   console.log('keywords: ', keywords)
-      //   var query = keywords.reduce((acc, word) => (acc ? `${acc} "${word}"` : `"${word}"`), "");
-      //   let result = await newsapi.v2.everything({ q: query, language: 'en', sortBy: 'relevancy'});
-      //   res.json(result);
-      // })
-    // });
-
     /* middleware parsing keywords */
     router.use('/associated-articles', async (req, res, next) => {
       /* if no title is specified return 400 (user error)*/
@@ -80,14 +41,6 @@ module.exports = {
           data.keyphrases.map( (phrase) => phrase.matches[0].nodes.map(nlcstToString).join('') ) :
           data.keywords.map( (keyword) => nlcstToString(keyword.matches[0].node) );
         next();
-        // if(file.data.keyphrases.length){
-        //   keywords = file.data.keyphrases.map( (phrase) => phrase.matches[0].nodes.map(nlcstToString).join('') );
-        // }else{
-        //   keywords = file.data.keywords.map( (keyword) => nlcstToString(keyword.matches[0].node) );
-        // }
-        // var query = keywords.reduce((acc, word) => (acc ? `${acc} "${word}"` : `"${word}"`), "");
-        // let result = await newsapi.v2.everything({ q: query, language: 'en', sortBy: 'relevancy'});
-        // res.json(result);
       } catch(err) {
         console.error('error from retext in /newsapi: ',err);
         return res.status(500).send(err);
@@ -118,7 +71,6 @@ module.exports = {
         console.log(`query: ${query}, key: ${key}`);
         // check if story is already in database
         const data = JSON.parse(await db.getAsync(`${key}`));
-        console.log('data from POST: ', data);
         if(!data || data.length === 0){
           let { status, articles } = await newsapi.v2.everything({ q: query, language: 'en', sortBy: 'relevancy'});
           articles = Object.values(
@@ -140,9 +92,8 @@ module.exports = {
           console.log('articles: ', articles);
           const saved = await db.setexAsync(key, 86400, JSON.stringify(articles));
           if(saved !== 'OK'){ return res.status(500).json({ success: false, error: `from REDIS got: ${saved}`}); }
-          return res.status(200).json({ articles });
-      }
-      return res.status(200).json({ success: true });
+        }
+        res.status(200).json({ success: true });
       } catch (error) {
         console.error('error from POST /associated-articles: ', error);
         res.status(500).json({ success: false, error });
