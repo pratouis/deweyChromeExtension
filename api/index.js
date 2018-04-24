@@ -9,7 +9,6 @@ if(!process.env.NEWS_API){
   process.exit(1);
 }
 
-
 const newsapi = new NewsAPI(process.env.NEWS_API);
 const app = express();
 
@@ -21,8 +20,6 @@ app.use(cors({
 }));
 app.use('/', articleRouter(newsapi));
 
-/* This was for testing CORS */
-app.get('/foo', (req, res, next) => res.send('\"hi\"'))
 
 const port = process.env.PORT ? parseInt(process.env.PORT) : 3000;
 app.listen(port, () => console.log('backend express listening on port', port));

@@ -22,14 +22,6 @@
             }
             const parentTweet = iframe.closest('[data-tweet-id]');
             addDeweyFunctionality(parentTweet, title);
-
-            // fetch("http://localhost:3000/associated-articles?title="+encodeURIComponent(title), { method: 'POST' })
-            // .then(response => response.json())
-            // .then(({success, error}) => {
-            //   if(!success) throw error;
-            //   addDeweyFunctionality(parentTweet, title);
-            // })
-            // .catch(e => console.log('--ERROR from iFrameOnLoad: ', e))
         }
 
         function processiFrameContainers(listOfiFrameContainers) {
@@ -55,7 +47,6 @@
               const mutation = mutations[i];
             if (mutation.type === 'childList') {
                 const listOfiFrameContainers = Array.from(mutation.addedNodes).map(node => node.getElementsByClassName('js-macaw-cards-iframe-container')[0]).filter(Boolean);
-                // console.log('listOfiFrameContainers: ', listOfiFrameContainers)
                 processiFrameContainers(listOfiFrameContainers)
             }
           }
