@@ -1,4 +1,4 @@
-.pocketIcon {
+.deweyIcon {
     display: inline-block;
     fill: #666;
     height: 16px;
@@ -6,6 +6,17 @@
     width: 16px;
 }
 
-.pocketIcon:hover .saved {    
+.deweyIcon:hover .saved {
         fill: #ef4056;
+}
+
+#dialogModal {
+  z-index: 1000;
+  position: fixed;
+  top: 30px;
+  min-width: 290px;
+}
+
+.modalHide {
+  display: none;
 }

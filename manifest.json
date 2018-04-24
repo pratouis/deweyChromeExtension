@@ -12,7 +12,7 @@
     ],
 
     "css": ["bootstrap.min.css","content.css","twitter.css"],
-    "js": ["jquery.min.js","bootstrap.min.js","content.js","twitter.js"],
+    "js": ["twitter_faux_bootstrap.js", "content.js","twitter.js"],
     "run_at": "document_end"
   }],
   "options_ui": {

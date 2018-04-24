@@ -21,13 +21,15 @@
               console.log(title);
             }
             const parentTweet = iframe.closest('[data-tweet-id]');
-            fetch("http://localhost:3000/associated-articles?title="+encodeURIComponent(title), { method: 'POST' })
-            .then(response => response.json())
-            .then(({success, error}) => {
-              if(!success) throw error;
-              addDeweyFunctionality(parentTweet, title);
-            })
-            .catch(e => console.log('--ERROR from iFrameOnLoad: ', e))
+            addDeweyFunctionality(parentTweet, title);
+
+            // fetch("http://localhost:3000/associated-articles?title="+encodeURIComponent(title), { method: 'POST' })
+            // .then(response => response.json())
+            // .then(({success, error}) => {
+            //   if(!success) throw error;
+            //   addDeweyFunctionality(parentTweet, title);
+            // })
+            // .catch(e => console.log('--ERROR from iFrameOnLoad: ', e))
         }
 
         function processiFrameContainers(listOfiFrameContainers) {

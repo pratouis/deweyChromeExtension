@@ -29,7 +29,7 @@ deweyButton.innerHTML = `<button class="ProfileTweet-actionButton"
     type="button" data-toggle="modal" data-target="#dialogModal">
     <div class="IconContainer js-tooltip" data-original-title="Is this true?">
         <span class="Icon Icon--medium">
-            <svg class="pocketIcon" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+            <svg class="deweyIcon" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
      viewBox="0 0 437.6 437.6" style="enable-background:new 0 0 437.6 437.6;" xml:space="preserve">
               <g>
                   <g>
@@ -60,29 +60,31 @@ dialogTry2.classList.add(
   'd-flex',
   'justify-content-center'
 );
-dialogTry2.innerHTML = `<div class="modal fade" id="dialogModal"
+const closeModal = () => (document.getElementById('dialogModal').add('modalHide'));
+
+dialogTry2.innerHTML = `<div class="modalHide" id="dialogModal"
   tabindex="-1" role="dialog" aria-labelledby="deweyModal" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
+  <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="dialogModalHeader">Modal title</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+
+        <button type="button" class="close"
+          onClick="() => (document.getElementById('dialogModal').add('modalHide'))"
+          data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body" id='dialogModalBody'>
+        <h3 class="modal-title" id="dialogModalHeader">Modal title</h3>
         <div class="list-group" id='dialogListGroup'>
         </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
 </div>`;
 
 
-document.getElementById('timeline').append(dialogTry2);
+document.getElementById('timeline').prepend(dialogTry2);
 
 // Start and Stop integration
 // function resolveCheck(integrate) {
@@ -172,6 +174,7 @@ const addDeweyFunctionality = async (element, title) => {
           dialogBody.removeChild(dialogBody.firstChild);
         }
         dialogBody.append(articles);
+        document.getElementById('dialogModal').classList.remove('modalHide');
       })
 
       // TODO: what are the next lines doing?
@@ -195,6 +198,7 @@ const addDeweyFunctionality = async (element, title) => {
     }
 }
 
+window.foobar = 'hi';
 // Handle saving
 // This code handles saving for pocket. This function should be altered to send title to NLP.
 // function handleSave(elementId, permaLink) {
