@@ -65,20 +65,57 @@ chrome.storage.sync.get(['options'], (result) => { //Checks the options popup.
         pcChangeObserver.observe(pc, { childList: true, attributes: true })
         // console.log('fro .m twitter, what are the options: ', result.options);
 
-      } else if (result.options.RedditOn && (result.options.Subreddits.includes(window.location.pathname) || window.location.pathname === "/")) { //If the Reddit button is checked, will run on Reddit.
+      } else if (result.options.RedditOn &&
+        (result.options.Subreddits.map((subreddit) => `/${subreddit}/`).concat("/").includes(window.location.pathname)) ){ //If the Reddit button is checked, will run on Reddit.
         let links = !!document.querySelector('.thing:not(.promoted)') ?
                     document.querySelectorAll('.thing:not(.promoted)') :
                     document.querySelectorAll('.scrollerItem:not(.promoted)');
-        let redditTexts = [];
-        // check for subreddits if home page
-        // otherwise do for all links
-        links.forEach(async (link,index) => {
-          let text = link.getElementsByTagName('h2')[0].textContent
+        const printKeywords = async (redditLink) => {
+          let text = redditLink.querySelector('a.title').textContent;
           let response = await fetch("//glacial-peak-84659.herokuapp.com/associated-articles/redditTexts?title="+encodeURIComponent(text))
-          let { title, keywords } = await response.json();
-          // console.log(text);
-          console.log(`title: ${title}, keywords: ${keywords}`);
-        });
+          const { title, keywords } = await response.json();
+          const joined_kw = keywords.reduce((acc, word) => (acc ? `${acc} "${word}"` : `"${word}"`), "");
+          console.log(`keywords: ${joined_kw}`);
+        }
+
+        links.forEach((redditLink) => {
+          if(window.location.pathname === "/"){
+            const subreddit = redditLink.querySelector('.subreddit').textContent.toLowerCase();
+            if(result.options.Subreddits.includes(subreddit)) {
+              console.log(`subreddit: ${subreddit}`);
+              printKeywords(redditLink);
+              addDeweyRedditFunctionality(redditLink, "foo");
+            }
+          }else{
+            printKeywords(redditLink);
+            addDeweyRedditFunctionality(redditLink, "foo");
+
+          }
+        })
+        // if(window.location.pathname === "/"){
+        //   links.forEach((redditLink) => {
+        //     const subreddit = redditLink.querySelector('.subreddit').textContent.toLowerCase();
+        //     if(result.options.Subreddits.includes(subreddit)){
+        //       console.log(`subreddit: ${subreddit}`);
+        //       printKeywords(redditLink);
+        //     }
+        //   })
+        // }else{
+        //   // check for subreddits if home page
+        //   // otherwise do for all links
+        //   links.forEach((redditLink) => printKeywords(redditLink));
+        // }
+
+
+
         // console.log(redditTexts);
-      };
+      } else {
+        console.log('result: ', result.options);
+        var temp = result.options.Subreddits.map((subreddit) => `/${subreddit}/`).concat("/");
+        console.log('possible options: ', temp);
+        console.log(temp.includes(window.location.pathname));
+        console.log('pathname: ', window.location.pathname);
+      }
 })
+
+console.log('foobar ');

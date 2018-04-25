@@ -48,7 +48,7 @@ const listUpdate = () => { //Updates the list of subreddits that the app will ru
 
 subreddits.addEventListener('change', e => { //Handles adding subreddits.
     var found = false;
-    let r = (("/r/" + e.target.value + "/").toLowerCase());
+    let r = (("r/" + e.target.value.trim()).toLowerCase());
     for (let i = 0; i < options.Subreddits.length; i++) {
         if (r == options.Subreddits[i]) {
             found = true;
