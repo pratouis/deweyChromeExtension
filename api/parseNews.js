@@ -63,9 +63,9 @@ module.exports = {
         let data = JSON.parse(await db.getAsync(`${key}`)); // check if search already exists
         if(!data){
           const query = req.body.keywords.reduce((acc, term) => (acc ? `${acc} "${term}"` : `"${term}"`), "");
-          let { articles } = await newsapi.v2.everything({ q: query, language: 'en', sortBy: 'relevancy'});
+          let { articles } = await newsapi.v2.everything({ q: query, language: 'en', sortBy: 'relevancy' });
           // console.log('status: ', status);
-          if(!!!articles.length) throw "0 articles returned from newsapi";
+          if(!!!articles.length) res.status(200).json({ success: false, error: "0 articles returned from newsapi" });
           data = Object.values(
             _.mapObject( _.groupBy(articles, (article) => article.title.toLowerCase()), // group articles by title (not case-sensitive)
               (articles, title) => ({
