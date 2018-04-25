@@ -1,14 +1,33 @@
 {
   "name": "Twitter Chrome Link Extension",
+  "permissions": [
+          "storage"
+  ],
   "version": "1.0",
   "description": "Twitter Chrome Link Extension",
   "content_scripts": [{
     "matches": [
-      "https://*.twitter.com/**"
+      "https://*.twitter.com/**",
+      "https://*.reddit.com/**"
     ],
-    "css": ["content.css", "twitter.css"],
-    "js": ["content.js", "twitter.js"],
+
+    "css": ["bootstrap.min.css","content.css","twitter.css"],
+    "js": ["twitter_faux_bootstrap.js", "content.js","twitter.js"],
     "run_at": "document_end"
   }],
+  "icons": { "48": "icon48.png",
+          "128": "icon128.png" },
+  "background": {
+    "scripts": ["eventPage.js"],
+    "persistent": false
+  },
+  "options_ui": {
+    "page": "options.html",
+    "chrome_style": true
+    },
+    "browser_action": {
+   "default_title": "Chrome Extension",
+   "default_popup": "options.html"
+ },
   "manifest_version": 2
 }

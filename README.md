@@ -1,4 +1,9 @@
 ## Chrome Extension
+### How to run backend
+- go to api folder, run env.sh (make sure you create an API key with newsapi.org)
+- do npm test (or npm start)
+- open new terminal and run redis-cli to get keys in db
+  * if you want to clear db, type FLUSHALL into redis-cli
 
 ### Todos on 4/9/2018
 - select card upon click
