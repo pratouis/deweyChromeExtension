@@ -14,20 +14,21 @@ chrome.storage.sync.get(['options'], (result) => { //Checks the options popup.
             if(!myiFrames[iframe.id]) {
               myiFrames[iframe.id] = iframe;
               console.log(title);
-              // console.log(myiFrames)
             }
+            const parentTweet = iframe.closest('[data-tweet-id]');
+            addDeweyFunctionality(parentTweet, title);
         }
 
         function processiFrameContainers(listOfiFrameContainers) {
-            listOfiFrameContainers.forEach(thing => {
-              const iframe = thing.getElementsByTagName('iframe')[0]; //Looks for iFrames.
+            listOfiFrameContainers.forEach(element => {
+              const iframe = element.getElementsByTagName('iframe')[0]; //Looks for iFrames.
               if (!iframe) {
                   const iframeObserver = new MutationObserver(([mutation]) => {
                       const iframe = mutation.addedNodes[0];
                       iframe.onload = iframeOnLoad(iframe);
                       iframeObserver.disconnect(); //Disconnects for speed.
                   })
-                  iframeObserver.observe(thing, { childList: true });
+                  iframeObserver.observe(element, { childList: true });
                   return;
               }
               iframe.onload = iframeOnLoad(iframe);
@@ -41,7 +42,6 @@ chrome.storage.sync.get(['options'], (result) => { //Checks the options popup.
               const mutation = mutations[i];
             if (mutation.type === 'childList') {
                 const listOfiFrameContainers = Array.from(mutation.addedNodes).map(node => node.getElementsByClassName('js-macaw-cards-iframe-container')[0]).filter(Boolean);
-                // console.log('listOfiFrameContainers: ', listOfiFrameContainers)
                 processiFrameContainers(listOfiFrameContainers)
             }
           }
@@ -64,7 +64,8 @@ chrome.storage.sync.get(['options'], (result) => { //Checks the options popup.
 
         pcChangeObserver.observe(pc, { childList: true, attributes: true })
 
-    } else if (result.options.RedditOn) { //If the Reddit button is checked, will run on Reddit.
-        
-    };
+    }
+    // else if (result.options.RedditOn) { //If the Reddit button is checked, will run on Reddit.
+    //
+    // };
 })

@@ -10,8 +10,9 @@
       "https://*.twitter.com/**",
       "https://*.reddit.com/**"
     ],
-    "css": ["bootstrap.min.css","content.css"],
-    "js": ["jquery.min.js","bootstrap.min.js","content.js"],
+
+    "css": ["bootstrap.min.css","content.css","twitter.css"],
+    "js": ["twitter_faux_bootstrap.js", "content.js","twitter.js"],
     "run_at": "document_end"
   }],
   "icons": { "48": "icon48.png",
