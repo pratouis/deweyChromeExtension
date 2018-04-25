@@ -72,6 +72,8 @@ module.exports = {
                 source: articles[0].source.name,
                 title: articles[0].title,
                 url: articles[0].url,
+                urlToImage: articles[0].urlToImage,
+                author: articles[0].author,
                 publishedAt: articles[0].publishedAt,
                 description: articles[0].description })))
                 .slice(0,5);  // take first five articles
