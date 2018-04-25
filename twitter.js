@@ -1,6 +1,3 @@
-//These functions don't yet do anything for us. Had to call in order to make pocket code run.
-// function addMessageListener(){};
-// function sendMessage(){};
 
 // Set up Observer
 // Checks for scrolling and new tweets.
@@ -67,17 +64,13 @@ dialogTry2.innerHTML = `<div class="modalHide" id="dialogModal"
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-
         <button type="button" class="close"
-          onClick="() => (document.getElementById('dialogModal').add('modalHide'))"
+          id="modalCloseButton"
           data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body" id='dialogModalBody'>
-        <h3 class="modal-title" id="dialogModalHeader">Modal title</h3>
-        <div class="list-group" id='dialogListGroup'>
-        </div>
+      <div class="modal-body" style="overflow: scroll;" id='dialogModalBody'>
       </div>
     </div>
   </div>
@@ -85,28 +78,6 @@ dialogTry2.innerHTML = `<div class="modalHide" id="dialogModal"
 
 
 document.getElementById('timeline').prepend(dialogTry2);
-
-// Start and Stop integration
-// function resolveCheck(integrate) {
-//     if (integrate) return startIntegration()
-//     stopIntegration()
-// }
-//
-// function startIntegration() {
-//     appObserver.observe(document, {
-//       childList: true,
-//       attributes: false,
-//       characterData: false,
-//       subtree: true
-//     });
-//     handleNewItems();
-// }
-//
-// function stopIntegration() {
-//     appObserver.disconnect()
-//     const nodeList = document.querySelectorAll('div.ProfileTweet-action--stp')
-//     nodeList.forEach(e => e.parentNode.removeChild(e))
-// }
 
 // Set Injections
 function handleNewItems() {
@@ -124,8 +95,8 @@ const createModalBodyHTML = (title) => {
       // query backend for associated articles
       let response = await fetch("http://localhost:3000/associated-articles/byTitle?title="+encodeURIComponent(title))
       let { success, error, data } = await response.json();
-      if(!success) throw error;
-      if(!data) throw new `data is empty or null: ${data}`;
+      if(!success) reject(error);
+      if(!data || !!!data.length) reject(`data is empty or null`);
 
       /* create div bootsrap list-group */
       const articlesList = document.createElement('div');
@@ -142,12 +113,20 @@ const createModalBodyHTML = (title) => {
 
       resolve(articlesList);
     } catch(e) {
-      console.log('ERROR in creating dialogModalBody innerHTML: ', e);
       reject(e);
     }
   })
 }
 
+/** Returns h3-tag for header of modal
+* @param {string} title - title of article queried
+*/
+const createModalHeaderHTML = (title) => {
+  const articleTitle = document.createElement('h3');
+  articleTitle.style.paddingBottom = '10px';
+  articleTitle.textContent = title;
+  return articleTitle;
+}
 
 // Function called in content.js. Finds each element (iframe) to add info button to. Binds to each unique tweet containing iframe.
 /** Creates button w eventListener for each iFrame
@@ -162,18 +141,20 @@ const addDeweyFunctionality = async (element, title) => {
       const permaLink = element.getAttribute('data-permalink-path')
       const elementId = element.getAttribute('data-item-id')
 
+      const articleTitle = createModalHeaderHTML(title);
       const articles = await createModalBodyHTML(title);
+
       // on click the button will populate the modal
       buttonClone.addEventListener('click', () => {
-        // set title of modal ?
         // TODO this is cutting off right now
-        document.getElementById('dialogModalHeader').textContent = title;
+        // document.getElementById('dialogModalHeader').textContent = title;
         const dialogBody = document.getElementById('dialogModalBody');
+
         // remove children of dialogModalBody
         while (dialogBody.firstChild) {
           dialogBody.removeChild(dialogBody.firstChild);
         }
-        dialogBody.append(articles);
+        dialogBody.append(articleTitle, articles);
         document.getElementById('dialogModal').classList.remove('modalHide');
       })
 
@@ -193,53 +174,5 @@ const addDeweyFunctionality = async (element, title) => {
       console.log(`ERROR in addDeweyFunctionality on '${title}': `, e);
       // NOTE on logic: if there is an error, then we shouldn't be able to open dialog
       buttonClone.setAttribute('disabled', true);
-      // TODO: set data-original-title to indicate there was an error
-      // buttonClone.setAttribute('data-original-title', )
     }
 }
-
-window.foobar = 'hi';
-// Handle saving
-// This code handles saving for pocket. This function should be altered to send title to NLP.
-// function handleSave(elementId, permaLink) {
-//     sendMessage(
-//         null,
-//         { action: 'twitterSave', permaLink, elementId },
-//         resolveSave
-//     )
-// }
-//
-// function resolveSave(data) {
-//     const elementId = data.saveObject.elementId
-//     const tweet = document.getElementById(`pocketButton-${elementId}`)
-//     tweet.classList.add(styles.saved)
-// }
-//
-// function handleAction(action, sender, sendResponse) {
-//     if (action.type === 'twitterStop') {
-//         stopIntegration()
-//     }
-//
-//     if (action.type === 'twitterStart') {
-//         startIntegration()
-//     }
-// }
-//
-// addMessageListener(handleAction)
-//
-// // Do we want twitter integration?
-// sendMessage(null, { action: 'twitterCheck' }, resolveCheck)
-
-// Click button leads to chrome extension pop-up with news.
-// https://developer.chrome.com/extensions/content_scripts
-// chrome.browserAction.onClicked.addListener(function(tab) {
-//     chrome.tabs.executeScript(null, {file: "content_script.js"});
-//     console.log('does this function work');
-// });
-
-// chrome.commands.onCommand.addListener(function(command) {
-//   if(command.name == "showcontentdialog") {
-//     chrome.tabs.executeScript({ file: "content_script.js" })
-//     console.log('is this working');
-//   }
-// })

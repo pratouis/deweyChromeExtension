@@ -3,12 +3,10 @@
 //We have a big problem. Our app only works on scroll. Doesn't work on initial links. Also only seems to work on home page.
 
 
-// fetch("http://localhost:3000/associated-articles/byTitle?title="+encodeURIComponent("Tech in Asia - Connecting Asia's startup ecosystem")).then(response => response.json()).then(console.log)
-//
-// chrome.storage.sync.get(['options'], (result) => {
-//     if (!result.options) {
-//         return
-//     } else if (result.options.TwitterOn) {
+chrome.storage.sync.get(['options'], (result) => { //Checks the options popup.
+    if (!result.options) { //If there are no options checked, app will do nothing.
+        return
+    } else if (result.options.TwitterOn) { //If the Twitter button is on, will run the app on Twitter's site.
         const MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
         const myiFrames = {};
         let ol = document.getElementById('stream-items-id'); //Tracking the position of the OL to track the scroll.
@@ -22,14 +20,6 @@
             }
             const parentTweet = iframe.closest('[data-tweet-id]');
             addDeweyFunctionality(parentTweet, title);
-
-            // fetch("http://localhost:3000/associated-articles?title="+encodeURIComponent(title), { method: 'POST' })
-            // .then(response => response.json())
-            // .then(({success, error}) => {
-            //   if(!success) throw error;
-            //   addDeweyFunctionality(parentTweet, title);
-            // })
-            // .catch(e => console.log('--ERROR from iFrameOnLoad: ', e))
         }
 
         function processiFrameContainers(listOfiFrameContainers) {
@@ -55,7 +45,6 @@
               const mutation = mutations[i];
             if (mutation.type === 'childList') {
                 const listOfiFrameContainers = Array.from(mutation.addedNodes).map(node => node.getElementsByClassName('js-macaw-cards-iframe-container')[0]).filter(Boolean);
-                // console.log('listOfiFrameContainers: ', listOfiFrameContainers)
                 processiFrameContainers(listOfiFrameContainers)
             }
           }
@@ -78,7 +67,8 @@
 
         pcChangeObserver.observe(pc, { childList: true, attributes: true })
 
-//     } else if (result.options.RedditOn) {
-//
-//     };
-// })
+      } else if (result.options.RedditOn) { //If the Reddit button is checked, will run on Reddit.
+
+
+      };
+})

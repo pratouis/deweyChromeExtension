@@ -14,6 +14,12 @@
     "js": ["twitter_faux_bootstrap.js", "content.js","twitter.js"],
     "run_at": "document_end"
   }],
+  "icons": { "48": "icon48.png",
+          "128": "icon128.png" },
+  "background": {
+    "scripts": ["eventPage.js"],
+    "persistent": false
+  },
   "options_ui": {
     "page": "options.html",
     "chrome_style": true
