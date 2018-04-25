@@ -34,17 +34,24 @@ module.exports = {
       if(!req.query.title && !req.body.title){
         return res.status(400).json({success: false, error: 'no title provided'});
       }
+      // console.log(req.query.title);
       var title = req.query.title.split('|')[0].trim();
       try {
         const { data } = await retext().use(retext_keywords).process(title)
         req.body.keywords = data.keyphrases.length ?
           data.keyphrases.map( (phrase) => phrase.matches[0].nodes.map(nlcstToString).join('') ) :
           data.keywords.map( (keyword) => nlcstToString(keyword.matches[0].node) );
+          // console.log(req.body.keywords);
         next();
       } catch(err) {
         console.error('error from retext in /newsapi: ',err);
         return res.status(500).send(err);
       }
+    });
+
+    router.get('/associated-articles/redditTexts', async (req,res) => {
+
+      res.json({title: req.query.title, keywords: req.body.keywords});
     });
 
     router.get('/associated-articles/byTitle', async (req, res) => {
