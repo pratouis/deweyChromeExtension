@@ -17,7 +17,7 @@ const appObserver = new MutationObserver((mutationList) => {
 
 // Creates a div in HTML containing the info button.
 const deweyButton = document.createElement('div')
-deweyButton.classList.add('ProfileTweet-action','ProfileTweet-action--stp');
+
 deweyButton.innerHTML = `<button class="ProfileTweet-actionButton"
     type="button" data-toggle="modal" data-target="#dialogModal">
     <div class="IconContainer js-tooltip" data-original-title="Just Dew It.">
@@ -48,6 +48,7 @@ dialogTry2.innerHTML = `<div class="modalHide" id="dialogModal" tabindex="-1" ro
 
 if(RegExp(/(twitter.com)/g).test(window.location.host)){
   document.getElementById('timeline').prepend(dialogTry2);
+  deweyButton.classList.add('ProfileTweet-action','ProfileTweet-action--stp');
 }
 // Set Injections
 const handleNewItems =  () => {
