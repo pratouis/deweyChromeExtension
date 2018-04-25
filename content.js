@@ -64,8 +64,8 @@ chrome.storage.sync.get(['options'], (result) => { //Checks the options popup.
 
         pcChangeObserver.observe(pc, { childList: true, attributes: true })
 
-    }
-    // else if (result.options.RedditOn) { //If the Reddit button is checked, will run on Reddit.
-    //
-    // };
+      } else if (result.options.RedditOn) { //If the Reddit button is checked, will run on Reddit.
+
+
+      };
 })
