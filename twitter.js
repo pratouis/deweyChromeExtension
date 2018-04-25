@@ -40,7 +40,7 @@ dialogTry2.innerHTML = `<div class="modalHide" id="dialogModal" tabindex="-1" ro
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
-    <div class="modal-body" style="overflow: scroll;" id='dialogModalBody'>
+    <div class="modal-body" style="overflow: scroll; overflow-x: hidden;" id='dialogModalBody'>
     </div>
   </div>
   </div>
@@ -73,12 +73,13 @@ const createModalBodyHTML = (title) => {
       articlesList.classList.add('list-group');
       articlesList.innerHTML = data.map(article => (
         `<a href="${article.url}" class="list-group-item list-group-item-action flex-column align-items-start" target="_blank">
-        <div class="d-flex w-100 justify-content-between">
-          <h4 class="mb-1">${article.title}</h4>
-          <small>${new Date(article.publishedAt).toDateString()}</small>
-        </div>
-        <p class="mb-1">${article.description}</p>
-        <small>from ${article.source}</small>
+          <p style="color: #8899A6; font-size: 10px; margin-bottom: -2px;" margin-top: -3px;>${new Date(article.publishedAt).toDateString().substring(3)}</p>
+          <p style="font-weight: bold; color: #8899A6; font-size: 12px;">${article.source}</p>
+          <img src="${article.urlToImage}" style="height: 60px; padding-bottom: 6px;" ${!article.urlToImage?"hidden":""}>
+          <p class="mb-1" style="font-weight: bold;">${article.title}</p>
+          <p style="color: #8899A6; font-size: 12px; margin-bottom: -6px;" ${!article.author?"hidden":""}>By ${article.author}</p>
+          <hr/>
+          <p class="mb-1" style="font-size: 12px; margin-top: 5px;">${article.description?article.description:""}</p>
       </a>`)).join('\n');
 
       resolve(articlesList);
@@ -111,7 +112,7 @@ const addDeweyFunctionality = async (element, title) => {
     const permaLink = element.getAttribute('data-permalink-path')
     const elementId = element.getAttribute('data-item-id')
 
-    const articleTitle = createModalHeaderHTML(title);
+    // const articleTitle = createModalHeaderHTML(title);
     const articles = await createModalBodyHTML(title);
 
     // on click the button will populate the modal
@@ -124,7 +125,7 @@ const addDeweyFunctionality = async (element, title) => {
       while (dialogBody.firstChild) {
         dialogBody.removeChild(dialogBody.firstChild);
       }
-      dialogBody.append(articleTitle, articles);
+      dialogBody.append(articles);
       document.getElementById('dialogModal').classList.remove('modalHide');
     })
 
