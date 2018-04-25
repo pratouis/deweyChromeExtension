@@ -3,7 +3,7 @@
 chrome.storage.sync.get(['options'], (result) => { //Checks the options popup.
     if (!result.options) { //If there are no options checked, app will do nothing.
         return
-    } else if (result.options.TwitterOn) { //If the Twitter button is on, will run the app on Twitter's site.
+    } else if (result.options.TwitterOn && window.location.host==='twitter.com') { //If the Twitter button is on, will run the app on Twitter's site.
         const MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
         const myiFrames = {};
         let ol = document.getElementById('stream-items-id'); //Tracking the position of the OL to track the scroll.
@@ -13,10 +13,10 @@ chrome.storage.sync.get(['options'], (result) => { //Checks the options popup.
             const title = iframe.contentDocument.getElementsByTagName('h2')[0].innerHTML; //To grab title.
             if(!myiFrames[iframe.id]) {
               myiFrames[iframe.id] = iframe;
-              console.log(title);
+              // console.log(title);
+              const parentTweet = iframe.closest('[data-tweet-id]');
+              addDeweyFunctionality(parentTweet, title);
             }
-            const parentTweet = iframe.closest('[data-tweet-id]');
-            addDeweyFunctionality(parentTweet, title);
         }
 
         function processiFrameContainers(listOfiFrameContainers) {
@@ -63,9 +63,22 @@ chrome.storage.sync.get(['options'], (result) => { //Checks the options popup.
         })
 
         pcChangeObserver.observe(pc, { childList: true, attributes: true })
+        // console.log('fro .m twitter, what are the options: ', result.options);
 
-      } else if (result.options.RedditOn) { //If the Reddit button is checked, will run on Reddit.
-
-
+      } else if (result.options.RedditOn && (result.options.Subreddits.includes(window.location.pathname) || window.location.pathname === "/")) { //If the Reddit button is checked, will run on Reddit.
+        let links = !!document.querySelector('.thing:not(.promoted)') ?
+                    document.querySelectorAll('.thing:not(.promoted)') :
+                    document.querySelectorAll('.scrollerItem:not(.promoted)');
+        let redditTexts = [];
+        // check for subreddits if home page
+        // otherwise do for all links
+        links.forEach(async (link,index) => {
+          let text = link.getElementsByTagName('h2')[0].textContent
+          let response = await fetch("//glacial-peak-84659.herokuapp.com/associated-articles/redditTexts?title="+encodeURIComponent(text))
+          let { title, keywords } = await response.json();
+          // console.log(text);
+          console.log(`title: ${title}, keywords: ${keywords}`);
+        });
+        // console.log(redditTexts);
       };
 })
