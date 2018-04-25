@@ -74,7 +74,7 @@ chrome.storage.sync.get(['options'], (result) => { //Checks the options popup.
         // otherwise do for all links
         links.forEach(async (link,index) => {
           let text = link.getElementsByTagName('h2')[0].textContent
-          let response = await fetch("http://localhost:3000/associated-articles/redditTexts?title="+encodeURIComponent(text))
+          let response = await fetch("//glacial-peak-84659.herokuapp.com/associated-articles/redditTexts?title="+encodeURIComponent(text))
           let { title, keywords } = await response.json();
           // console.log(text);
           console.log(`title: ${title}, keywords: ${keywords}`);

@@ -63,7 +63,7 @@ const createModalBodyHTML = (title) => {
   return new Promise(async (resolve, reject) => {
     try {
       // query backend for associated articles
-      let response = await fetch("http://localhost:3000/associated-articles/byTitle?title="+encodeURIComponent(title))
+      let response = await fetch("//glacial-peak-84659.herokuapp.com/associated-articles/byTitle?title="+encodeURIComponent(title))
       let { success, error, data } = await response.json();
       if(!success) reject(error);
       if(!data || !!!data.length) reject(`data is empty or null`);
