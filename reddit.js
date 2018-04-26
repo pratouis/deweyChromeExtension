@@ -1,20 +1,38 @@
-
+/** adds pop-down to all reddit links that have more than one article returned from NewsAPI
+* @param {Object} element - div element holding all HTML related to one link
+* @param {string} title - title passed from content.js to run query
+*/
 const addDeweyRedditFunctionality = async (element,title) => {
   const buttonClone = redditDeweyButton.cloneNode(true);
   buttonClone.setAttribute('style', 'background: none; border: none;');
   buttonClone.classList.add('dewey');
   try{
-    const articles = await createModalBodyHTML(title);
-    buttonClone.addEventListener('mouseover', () => {
-      buttonClone.style.top = '-20px';
-      buttonClone.style.right = '20px';
-      const dialogBody = document.getElementById('dialogModalBody');
-      while(dialogBody.firstChild) {
-        dialogBody.removeChild(dialogBody.firstChild);
-      }
-      dialogBody.append(articles);
-      document.getElementById('dialogModal').classList.remove('modalHide');
-    })
+    let articles = await queryTitle(title);
+    let articlesList = articles.map(article => (
+      `<a href="${article.url}" class="list-group-item list-group-item-action flex-column align-items-start" target="_blank">
+        <p style="color: #8899A6; font-size: 10px; margin-top: 5px;">${new Date(article.publishedAt).toDateString().substring(3)}</p>
+        <p style="font-weight: bold; color: #8899A6; font-size: 12px;">${article.source}</p>
+        <img src="${article.urlToImage}" style="height: 60px; padding-bottom: 5px;" ${!article.urlToImage?"hidden":""}>
+        <p class="mb-1" style="font-weight: bold;">${article.title}</p>
+        <p style="color: #8899A6; font-size: 12px; margin-bottom: -4px;" ${!article.author?"hidden":""}>By ${article.author}</p>
+        <hr/>
+        <p class="mb-1" style="font-size: 12px; padding-top: 10px;" ${!article.description?"hidden":""}>${article.description}</p>
+    </a>`)).join('\n');
+    const md = document.createElement('div');
+    md.innerHTML = `<div class="modalHide usertext-body may-blank-within md-container">
+        <div class="md">
+          <ul class="list-group">
+            ${articlesList}
+          </ul>
+        </div>
+      </div>`;
+
+    element.querySelector('.top-matter').append(md);
+
+    buttonClone.addEventListener('click', () => {
+      element.querySelector('.usertext-body').classList.toggle('modalHide');
+    });
+
     const listButton = document.createElement('li');
     listButton.classList.add('DeweyAdded');
     listButton.appendChild(buttonClone);
@@ -24,6 +42,20 @@ const addDeweyRedditFunctionality = async (element,title) => {
   }
 }
 
+/** function to resolve articles from backend
+* @param {string} title  - title passed from content.js to run query
+*/
+const queryTitle = (title) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let response = await fetch("//glacial-peak-84659.herokuapp.com/associated-articles/byTitle?title="+encodeURIComponent(title));
+      let { success, error, data } = await response.json();
+      if(!success) reject(error);
+      if(!data || !!!data.length) reject(`data is empty or null`);
+      resolve(data);
+    } catch(e){ reject(e); }
+  })
+}
 
 const redditDeweyButton = document.createElement('div');
 redditDeweyButton.innerHTML = `<button style="background: none; border: none;"

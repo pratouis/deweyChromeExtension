@@ -9,6 +9,8 @@ window.onload = () => {
           let ol = document.getElementById('stream-items-id'); //Tracking the position of the OL to track the scroll.
           const pc = document.getElementById('page-container'); //Tracking page container to track changes in React page.
           init();
+          setModalPosition();
+
           window.addEventListener('resize', setModalPosition);
           document.getElementById('modalCloseButton').addEventListener('click', ()=> {
             document.getElementById('dialogModal').classList.add('modalHide');
@@ -49,20 +51,14 @@ window.onload = () => {
 
         } else if (result.options.RedditOn &&
           (result.options.Subreddits.map((subreddit) => `/${subreddit}/`).concat("/").includes(window.location.pathname)) ){ //If the Reddit button is checked, will run on Reddit.
-          document.getElementById('siteTable').prepend(dialogTry2);
-          (() => {
-            const modal = document.getElementById('dialogModal');
-            modal.style.maxWidth = '400px';
-            modal.addEventListener('mouseleave', () => {
-              modal.classList.add('modalHide');
-            })
-          })();
 
+          // fetch links depending on whether user is lookign at old or new reddit
           let links = !!document.querySelector('.link:not(.promoted)') ?
                       document.querySelectorAll('.link:not(.promoted)') :
                       document.querySelectorAll('.scrollerItem:not(.promoted)');
           links.forEach((redditLink) => {
             const title = redditLink.querySelector('a.title').textContent;
+            // only check articles tagged with users selected reddits 
             if(window.location.pathname === "/"){
               const subreddit = redditLink.querySelector('.subreddit').textContent.toLowerCase();
               if(result.options.Subreddits.includes(subreddit)) {
