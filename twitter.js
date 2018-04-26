@@ -50,6 +50,10 @@ if(RegExp(/(twitter.com)/g).test(window.location.host)){
   document.getElementById('timeline').prepend(dialogTry2);
   deweyButton.classList.add('ProfileTweet-action','ProfileTweet-action--stp');
 }
+
+if(RegExp(/(reddit.com)/g).test(window.location.host)){
+  document.getElementById('siteTable').prepend(dialogTry2);
+}
 // Set Injections
 const handleNewItems =  () => {
   const tweetActionLists = document.querySelectorAll('.tweet:not(.DeweyAdded)')

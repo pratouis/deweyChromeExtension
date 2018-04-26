@@ -1,8 +1,8 @@
 window.onload = () => {
+  const modal = document.getElementById('dialogModal');
   if(window.location.host === 'twitter.com'){
 
     console.log('being logged inside twitter_faux_bootstrap');
-    const modal = document.getElementById('dialogModal');
     const timeline = document.getElementById('timeline');
 
     const setModalPosition = () => {
@@ -25,6 +25,13 @@ window.onload = () => {
       if(e.key === 'Escape' || e.code === 'Escape'){
         modal.classList.toggle('modalHide');
       }
+    })
+  } else {
+    (() => {
+      modal.style.maxWidth = '400px';
+    })();
+    modal.addEventListener('mouseleave', () => {
+      modal.classList.add('modalHide');
     })
   }
 

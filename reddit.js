@@ -1,19 +1,28 @@
-const addDeweyRedditFunctionality = (element, title) => {
-  element.querySelector('.flat-list').append(createRedditDeweyButton());
-  console.log('did I find a dewey button? ', element.querySelector('.dewey'));
+
+const addDeweyRedditFunctionality = async (element,title) => {
+  const buttonClone = redditDeweyButton.cloneNode(true);
+  buttonClone.setAttribute('style', 'background: none; border: none;');
+  buttonClone.classList.add('dewey');
+  console.log('different title?', title);
+  try{
+    const articles = await createModalBodyHTML(title);
+    buttonClone.addEventListener('mouseover', () => {
+      const dialogBody = document.getElementById('dialogModalBody');
+      while(dialogBody.firstChild) {
+        dialogBody.removeChild(dialogBody.firstChild);
+      }
+      dialogBody.append(articles);
+      document.getElementById('dialogModal').classList.remove('modalHide');
+    })
+    const listButton = document.createElement('li');
+    listButton.classList.add('DeweyAdded');
+    listButton.appendChild(buttonClone);
+    element.querySelector('.flat-list').append(listButton);
+  }catch(e){
+    console.log('ERROR from addDeweyRedditFunctionality\n',e);
+  }
 }
 
-const createRedditDeweyButton = () => {
-  const buttonClone = redditDeweyButton.cloneNode(true);
-  buttonClone.dataset.dataTarget = "#";
-  buttonClone.setAttribute('style', 'background: none; border: none;');
-  console.log('buttonStyle? ',buttonClone.style);
-  buttonClone.classList.add('dewey');
-  const listButton = document.createElement('li');
-  listButton.classList.add('DeweyAdded');
-  listButton.appendChild(buttonClone);
-  return listButton;
-}
 
 const redditDeweyButton = document.createElement('div');
 redditDeweyButton.innerHTML = `<button style="background: none; border: none;"
