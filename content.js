@@ -4,6 +4,7 @@ chrome.storage.sync.get(['options'], (result) => { //Checks the options popup.
     if (!result.options) { //If there are no options checked, app will do nothing.
         return
     } else if (result.options.TwitterOn && window.location.host==='twitter.com') { //If the Twitter button is on, will run the app on Twitter's site.
+        console.log('is this extension still running on twitter');
         const MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
         const myiFrames = {};
         let ol = document.getElementById('stream-items-id'); //Tracking the position of the OL to track the scroll.
@@ -34,7 +35,11 @@ chrome.storage.sync.get(['options'], (result) => { //Checks the options popup.
               iframe.onload = iframeOnLoad(iframe);
             })
         }
-        const init = () => processiFrameContainers(Array.from(ol.getElementsByClassName('js-macaw-cards-iframe-container'))) //Checks for initial iFrames when a new page is loaded.
+        const init = () => {
+            if (RegExp(/(twitter.com)/g).test(window.location.host)){ //Checks if the page is Twitter.
+              document.getElementById('timeline').prepend(dialogTry2);
+            }
+            processiFrameContainers(Array.from(ol.getElementsByClassName('js-macaw-cards-iframe-container')))} //Checks for initial iFrames when a new page is loaded.
         init();
 
         const observer = new MutationObserver((mutations, observer) => { //Observes mutations in HTML while scrolling.
@@ -66,6 +71,7 @@ chrome.storage.sync.get(['options'], (result) => { //Checks the options popup.
 
       } else if (result.options.RedditOn &&
         (result.options.Subreddits.map((subreddit) => `/${subreddit}/`).concat("/").includes(window.location.pathname)) ){ //If the Reddit button is checked, will run on Reddit.
+        document.getElementById('siteTable').prepend(dialogTry2);
         let links = !!document.querySelector('.thing:not(.promoted)') ?
                     document.querySelectorAll('.thing:not(.promoted)') :
                     document.querySelectorAll('.scrollerItem:not(.promoted)');

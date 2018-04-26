@@ -40,20 +40,12 @@ dialogTry2.innerHTML = `<div class="modalHide" id="dialogModal" tabindex="-1" ro
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
-    <div class="modal-body" style="overflow: scroll;" id='dialogModalBody'>
+    <div class="modal-body" style="overflow: scroll; overflow-x: hidden;" id='dialogModalBody'>
     </div>
   </div>
   </div>
   </div>`;
 
-if(RegExp(/(twitter.com)/g).test(window.location.host)){
-  document.getElementById('timeline').prepend(dialogTry2);
-  deweyButton.classList.add('ProfileTweet-action','ProfileTweet-action--stp');
-}
-
-if(RegExp(/(reddit.com)/g).test(window.location.host)){
-  document.getElementById('siteTable').prepend(dialogTry2);
-}
 // Set Injections
 const handleNewItems =  () => {
   const tweetActionLists = document.querySelectorAll('.tweet:not(.DeweyAdded)')
@@ -78,12 +70,13 @@ const createModalBodyHTML = (title) => {
       articlesList.classList.add('list-group');
       articlesList.innerHTML = data.map(article => (
         `<a href="${article.url}" class="list-group-item list-group-item-action flex-column align-items-start" target="_blank">
-        <div class="d-flex w-100 justify-content-between">
-          <h4 class="mb-1">${article.title}</h4>
-          <small>${new Date(article.publishedAt).toDateString()}</small>
-        </div>
-        <p class="mb-1">${article.description}</p>
-        <small>from ${article.source}</small>
+          <p style="color: #8899A6; font-size: 10px; margin-top: 5px;">${new Date(article.publishedAt).toDateString().substring(3)}</p>
+          <p style="font-weight: bold; color: #8899A6; font-size: 12px;">${article.source}</p>
+          <img src="${article.urlToImage}" style="height: 60px; padding-bottom: 5px;" ${!article.urlToImage?"hidden":""}>
+          <p class="mb-1" style="font-weight: bold;">${article.title}</p>
+          <p style="color: #8899A6; font-size: 12px; margin-bottom: -4px;" ${!article.author?"hidden":""}>By ${article.author}</p>
+          <hr/>
+          <p class="mb-1" style="font-size: 12px; padding-top: 10px;" ${!article.description?"hidden":""}>${article.description}</p>
       </a>`)).join('\n');
 
       resolve(articlesList);
@@ -116,7 +109,7 @@ const addDeweyFunctionality = async (element, title) => {
     const permaLink = element.getAttribute('data-permalink-path')
     const elementId = element.getAttribute('data-item-id')
 
-    const articleTitle = createModalHeaderHTML(title);
+    // const articleTitle = createModalHeaderHTML(title);
     const articles = await createModalBodyHTML(title);
 
     // on click the button will populate the modal
@@ -124,13 +117,14 @@ const addDeweyFunctionality = async (element, title) => {
       // TODO this is cutting off right now
       // document.getElementById('dialogModalHeader').textContent = title;
       const dialogBody = document.getElementById('dialogModalBody');
-
+      console.log("dialogBody: ", dialogBody)
       // remove children of dialogModalBody
       while (dialogBody.firstChild) {
         dialogBody.removeChild(dialogBody.firstChild);
       }
-      dialogBody.append(articleTitle, articles);
+      dialogBody.append(articles);
       document.getElementById('dialogModal').classList.remove('modalHide');
+      dialogBody.scrollTop = 0
     })
 
     // TODO: what are the next lines doing?
