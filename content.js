@@ -34,7 +34,11 @@ chrome.storage.sync.get(['options'], (result) => { //Checks the options popup.
               iframe.onload = iframeOnLoad(iframe);
             })
         }
-        const init = () => processiFrameContainers(Array.from(ol.getElementsByClassName('js-macaw-cards-iframe-container'))) //Checks for initial iFrames when a new page is loaded.
+        const init = () => {
+            if (RegExp(/(twitter.com)/g).test(window.location.host)){ //Checks if the page is Twitter. 
+              document.getElementById('timeline').prepend(dialogTry2);
+            }
+            processiFrameContainers(Array.from(ol.getElementsByClassName('js-macaw-cards-iframe-container')))} //Checks for initial iFrames when a new page is loaded.
         init();
 
         const observer = new MutationObserver((mutations, observer) => { //Observes mutations in HTML while scrolling.
