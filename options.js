@@ -4,7 +4,7 @@ const subreddits = document.getElementById('subreddit');
 const remove = document.getElementsByClassName('remove');
 const exit = document.getElementById('exit')
 
-let options
+let options;
 chrome.storage.sync.get(['options'], (result) => { //Shows default of Twitter and Reddit options on.
     options = result.options;
     twitterCheckbox.checked = options.TwitterOn;

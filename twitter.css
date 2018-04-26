@@ -15,7 +15,7 @@
 }*/
 
 #dialogModal {
-  z-index: 1000;
+  z-index: 10000;
   position: fixed;
   top: 30px;
   min-width: 290px;

@@ -16,8 +16,8 @@ const appObserver = new MutationObserver((mutationList) => {
 // Code for the info button. Svg is the path to the file containing the icon. Path retrieved from internet.
 
 // Creates a div in HTML containing the info button.
-const deweyButton = document.createElement('div')
-
+const deweyButton = document.createElement('div');
+deweyButton.classList.add('ProfileTweet-action','ProfileTweet-action--stp');
 deweyButton.innerHTML = `<button class="ProfileTweet-actionButton"
     type="button" data-toggle="modal" data-target="#dialogModal">
     <div class="IconContainer js-tooltip" data-original-title="Just Dew It.">
@@ -86,6 +86,53 @@ const createModalBodyHTML = (title) => {
   })
 }
 
+const init = () => {
+    if (RegExp(/(twitter.com)/g).test(window.location.host)){ //Checks if the page is Twitter.
+      document.getElementById('timeline').prepend(dialogTry2);
+    }
+    setModalPosition();
+    processiFrameContainers(
+      Array.from(document.getElementById('stream-items-id')
+                          .getElementsByClassName('js-macaw-cards-iframe-container')))
+} //Checks for initial iFrames when a new page is loaded.
+
+
+const setModalPosition = () => {
+  const right = document.getElementById('timeline').getBoundingClientRect().right;
+  const modal = document.getElementById('dialogModal');
+  modal.style.maxWidth = `${window.innerWidth-right-15}px`;
+  document.getElementById('dialogModalBody').style.maxHeight = `${window.innerHeight - 130}px`;
+  modal.style.left = `${right+8}px`;
+}
+
+const myiFrames = {};
+const iframeOnLoad = (iframe) => () => { //Waits for iFrames to load. Targets correct iFrame.
+    const title = iframe.contentDocument.getElementsByTagName('h2')[0].innerHTML; //To grab title.
+    if(!myiFrames[iframe.id]) {
+      myiFrames[iframe.id] = iframe;
+      // console.log(title);
+      const parentTweet = iframe.closest('[data-tweet-id]');
+      addDeweyFunctionality(parentTweet, title);
+    }
+}
+
+function processiFrameContainers(listOfiFrameContainers) {
+    listOfiFrameContainers.forEach(element => {
+      const iframe = element.getElementsByTagName('iframe')[0]; //Looks for iFrames.
+      if (!iframe) {
+          const iframeObserver = new MutationObserver(([mutation]) => {
+              const iframe = mutation.addedNodes[0];
+              iframe.onload = iframeOnLoad(iframe);
+              iframeObserver.disconnect(); //Disconnects for speed.
+          })
+          iframeObserver.observe(element, { childList: true });
+          return;
+      }
+      iframe.onload = iframeOnLoad(iframe);
+    })
+}
+
+
 /** Returns h3-tag for header of modal
 * @param {string} title - title of article queried
 */
@@ -117,14 +164,13 @@ const addDeweyFunctionality = async (element, title) => {
       // TODO this is cutting off right now
       // document.getElementById('dialogModalHeader').textContent = title;
       const dialogBody = document.getElementById('dialogModalBody');
-      console.log("dialogBody: ", dialogBody)
       // remove children of dialogModalBody
       while (dialogBody.firstChild) {
         dialogBody.removeChild(dialogBody.firstChild);
       }
       dialogBody.append(articles);
       document.getElementById('dialogModal').classList.remove('modalHide');
-      dialogBody.scrollTop = 0
+      dialogBody.scrollTop = 0;
     })
 
     // TODO: what are the next lines doing?
