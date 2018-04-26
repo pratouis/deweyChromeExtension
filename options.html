@@ -10,14 +10,37 @@
 <body>
     <span>
       <button class="exit" id="exit" style="border: none; box-shadow: none; background: none; float: right; margin-top: 3px; margin-right: -5px; cursor: pointer;">
-              <svg style="stroke: #ccc; width: 10px; height: 10px;" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15.642 15.642" xmlns:xlink="http://www.w3.org/1999/xlink" enable-background="new 0 0 15.642 15.642">
+              <svg style="stroke: #ccc; width: 10px; height: 10px;" version="1.1" xmlns="http://www.w3.org/1000/svg" viewBox="0 0 15.642 15.642" xmlns:xlink="http://www.w3.org/1999/xlink" enable-background="new 0 0 15.642 15.642">
                 <path fill-rule="evenodd" d="M8.882,7.821l6.541-6.541c0.293-0.293,0.293-0.768,0-1.061  c-0.293-0.293-0.768-0.293-1.061,0L7.821,6.76L1.28,0.22c-0.293-0.293-0.768-0.293-1.061,0c-0.293,0.293-0.293,0.768,0,1.061  l6.541,6.541L0.22,14.362c-0.293,0.293-0.293,0.768,0,1.061c0.147,0.146,0.338,0.22,0.53,0.22s0.384-0.073,0.53-0.22l6.541-6.541  l6.541,6.541c0.147,0.146,0.338,0.22,0.53,0.22c0.192,0,0.384-0.073,0.53-0.22c0.293-0.293,0.293-0.768,0-1.061L8.882,7.821z"/>
               </svg>
       </button>
-      <h5 class="options">Options</h5>
+      <div id="title">
+          <h5 class="title">Options</h5>
+          <p style="margin-left: 20px; margin-right: 10px; font-size: 13px; color: #6c757d;" >Please refresh your page to save changes.</p>
+      </div>
     </span>
   <hr/>
   <div class="flex">
+      <div id="david">Hi</div>
+      <div class="container" id="container">
+      <p class="instructions" style="font-size: 12px; padding-left: 5px; padding-right: 5px;">You need a unique username and a News API key to use Dewey. Get yours <a href="https://newsapi.org/" target="_blank">here</a>.</p>
+          <form id="usernameKey">
+            <div class="form-group">
+              <input style="margin-left: 5px;" type="username" class="form-control" id="username" placeholder="Username">
+            </div>
+            <div class="form-group">
+              <input style="margin-left: 5px; padding: .375rem .75rem; border-radius: .25rem;" type="password" class="form-control" id="password" placeholder="Password">
+            </div>
+            <div class="form-group">
+              <input style="margin-left: 5px;" type="apikey" class="form-control" id="apikey" placeholder="API key">
+            </div>
+            <button style="margin-left: 5px;" type="submit" class="btn btn-outline-secondary">Submit</button>
+          </form>
+    </div>
+  </div>
+  <hr/>
+  <div class="options">
+  <div class="flex" id="allowTwitter">
       <span class="allow">Allow Twitter</span>
           <label class="switch">
           <input type="checkbox" id="twitter">
@@ -25,7 +48,7 @@
           </lable>
   </div>
   <hr/>
-  <div class="flex">
+  <div class="flex" id="allowReddit">
         <span class="allow" style="padding-right: 2px;">Allow Reddit</span>
             <label class="switch">
             <input type="checkbox" id="reddit">
@@ -34,7 +57,7 @@
 
         <div id="accordion">
             <button style="border: none; box-shadow: none; background: none; margin-top: -8px;" class="collapsed" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/1000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
                 	 viewBox="0 0 185.344 185.344" style="enable-background:new 0 0 185.344 185.344;" xml:space="preserve">
                 <g><g><path d="M92.672,144.373c-2.752,0-5.493-1.044-7.593-3.138L3.145,59.301c-4.194-4.199-4.194-10.992,0-15.18
                 			c4.194-4.199,10.987-4.199,15.18,0l74.347,74.341l74.347-74.341c4.194-4.199,10.987-4.199,15.18,0
@@ -60,6 +83,7 @@
           </div>
           <span class="error" id="error">Subreddit already on list.</span>
         </div>
+    </div>
   <script src="options.js"></script>
 </body>
 </html>

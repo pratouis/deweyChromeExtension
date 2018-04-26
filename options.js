@@ -2,7 +2,12 @@ const twitterCheckbox = document.getElementById('twitter');
 const redditCheckbox = document.getElementById('reddit');
 const subreddits = document.getElementById('subreddit');
 const remove = document.getElementsByClassName('remove');
-const exit = document.getElementById('exit')
+const exit = document.getElementById('exit');
+const username = document.getElementById('username');
+const apikey = document.getElementById('apikey');
+
+console.log("apikey:", apikey)
+console.log("username: ", username)
 
 let options;
 chrome.storage.sync.get(['options'], (result) => { //Shows default of Twitter and Reddit options on.
@@ -74,3 +79,24 @@ subreddits.addEventListener('change', e => { //Handles adding subreddits.
 $("#exit").on('click', function () {
     window.close();
 })
+
+$("#usernameKey").submit(function (event) {
+    event.preventDefault();
+    chrome.storage.sync.set({options: {...options, Username: username.value}}, () => {
+        console.log("Username set to: ", username.value);
+    })
+
+    chrome.storage.sync.set({options: {...options, Password: password.value}}, () => {
+    })
+
+    chrome.storage.sync.set({options: {...options, APIKey: apikey.value}}, () => {
+        console.log("API Key set to: ", apikey.value);
+    })
+
+    $("#container").hide();
+    $("#david").show();
+    $(".options").show();
+})
+$("#david").hide();
+$(".options").hide();
+$("#title").hide();

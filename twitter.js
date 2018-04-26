@@ -30,10 +30,10 @@ deweyButton.innerHTML = `<button class="ProfileTweet-actionButton"
 const dialogTry2 = document.createElement('div');
 dialogTry2.classList.add('d-flex','justify-content-center');
 
-dialogTry2.innerHTML = `<div class="modalHide" id="dialogModal" tabindex="-1" role="dialog" aria-labelledby="deweyModal" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-  <div class="modal-content">
-    <div class="modal-header">
+dialogTry2.innerHTML = `<div class="modalHide" id="dialogModal" tabindex="-1" role="dialog" aria-labelledby="deweyModal" aria-hidden="true" style="border-radius: 0px;">
+  <div class="modal-dialog" role="document" style="border-radius: 0px;">
+  <div class="modal-content" style="border-radius: 0px;">
+    <div class="modal-header" style="border-radius: 0px;">
       <button type="button" class="close"
         id="modalCloseButton"
         data-dismiss="modal" aria-label="Close">
@@ -69,15 +69,16 @@ const createModalBodyHTML = (title) => {
       const articlesList = document.createElement('div');
       articlesList.classList.add('list-group');
       articlesList.innerHTML = data.map(article => (
-        `<a href="${article.url}" class="list-group-item list-group-item-action flex-column align-items-start" target="_blank">
+        `<a href="${article.url}" style="border-radius: 0px;" class="list-group-item list-group-item-action flex-column align-items-start" target="_blank">
           <p style="color: #8899A6; font-size: 10px; margin-top: 5px;">${new Date(article.publishedAt).toDateString().substring(3)}</p>
           <p style="font-weight: bold; color: #8899A6; font-size: 12px;">${article.source}</p>
-          <img src="${article.urlToImage}" style="height: 60px; padding-bottom: 5px;" ${!article.urlToImage?"hidden":""}>
+          <img src="${article.urlToImage}" style="max-height: 70px; padding-bottom: 5px;" ${!article.urlToImage?"hidden":""}>
           <p class="mb-1" style="font-weight: bold;">${article.title}</p>
-          <p style="color: #8899A6; font-size: 12px; margin-bottom: -4px;" ${!article.author?"hidden":""}>By ${article.author}</p>
+          <p style="color: #8899A6; font-size: 12px; margin-bottom: -4px;" ${!article.author?"hidden":""}>By ${article.author}</p> 
           <hr/>
           <p class="mb-1" style="font-size: 12px; padding-top: 10px;" ${!article.description?"hidden":""}>${article.description}</p>
-      </a>`)).join('\n');
+      </a>
+      <br/>`)).join('\n');
 
       resolve(articlesList);
     } catch(e) {
