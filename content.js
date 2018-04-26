@@ -58,8 +58,8 @@ window.onload = () => {
             })
           })();
 
-          let links = !!document.querySelector('.thing:not(.promoted)') ?
-                      document.querySelectorAll('.thing:not(.promoted)') :
+          let links = !!document.querySelector('.link:not(.promoted)') ?
+                      document.querySelectorAll('.link:not(.promoted)') :
                       document.querySelectorAll('.scrollerItem:not(.promoted)');
           links.forEach((redditLink) => {
             const title = redditLink.querySelector('a.title').textContent;
