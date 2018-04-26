@@ -1,22 +1,14 @@
 import express from 'express';
 const router = new express.Router();
 
+const _ = require('underscore');
+
 import redis from 'redis';
 import bluebird from 'bluebird';
 bluebird.promisifyAll(redis.RedisClient.prototype);
 bluebird.promisifyAll(redis.Multi.prototype);
-const db = redis.createClient(process.env.REDIS_URL);
-
-const _ = require('underscore');
-
-const handleRequests = (request) => {
-  return new Promise((resolve, reject) => {
-    request.on('response', (response) => resolve(response));
-    request.on('error', (error) => reject(error));
-    request.end();
-  });
-}
-
+// const db = redis.createClient(process.env.REDIS_URL);
+const db = redis.createClient();
 const retext = require('retext');
 const retext_keywords = require('retext-keywords');
 const nlcstToString = require('nlcst-to-string');
