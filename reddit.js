@@ -3,10 +3,11 @@ const addDeweyRedditFunctionality = async (element,title) => {
   const buttonClone = redditDeweyButton.cloneNode(true);
   buttonClone.setAttribute('style', 'background: none; border: none;');
   buttonClone.classList.add('dewey');
-  console.log('different title?', title);
   try{
     const articles = await createModalBodyHTML(title);
     buttonClone.addEventListener('mouseover', () => {
+      buttonClone.style.top = '-20px';
+      buttonClone.style.right = '20px';
       const dialogBody = document.getElementById('dialogModalBody');
       while(dialogBody.firstChild) {
         dialogBody.removeChild(dialogBody.firstChild);
@@ -33,3 +34,4 @@ redditDeweyButton.innerHTML = `<button style="background: none; border: none;"
         </span>
     </div>
 </button>`;
+redditDeweyButton.style.position = 'relative';
