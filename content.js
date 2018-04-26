@@ -17,7 +17,7 @@ window.onload = () => {
           });
           window.addEventListener('keyup', (e) => {
             if(e.key === 'Escape' || e.code === 'Escape'){
-              document.getElementById('dialogModal').classList.toggle('modalHide');
+              document.getElementById('dialogModal').classList.add('modalHide');
             }
           })
 
@@ -58,7 +58,7 @@ window.onload = () => {
                       document.querySelectorAll('.scrollerItem:not(.promoted)');
           links.forEach((redditLink) => {
             const title = redditLink.querySelector('a.title').textContent;
-            // only check articles tagged with users selected reddits 
+            // only check articles tagged with users selected reddits
             if(window.location.pathname === "/"){
               const subreddit = redditLink.querySelector('.subreddit').textContent.toLowerCase();
               if(result.options.Subreddits.includes(subreddit)) {

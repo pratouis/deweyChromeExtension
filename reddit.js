@@ -15,7 +15,6 @@ const addDeweyRedditFunctionality = async (element,title) => {
         <img src="${article.urlToImage}" style="height: 60px; padding-bottom: 5px;" ${!article.urlToImage?"hidden":""}>
         <p class="mb-1" style="font-weight: bold;">${article.title}</p>
         <p style="color: #8899A6; font-size: 12px; margin-bottom: -4px;" ${!article.author?"hidden":""}>By ${article.author}</p>
-        <hr/>
         <p class="mb-1" style="font-size: 12px; padding-top: 10px;" ${!article.description?"hidden":""}>${article.description}</p>
     </a>`)).join('\n');
     const md = document.createElement('div');

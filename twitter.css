@@ -24,3 +24,7 @@
 .modalHide {
   display: none;
 }
+
+#global-tweet-dialog-dialog, #retweet-tweet-dialog-dialog {
+  display: block;
+}
