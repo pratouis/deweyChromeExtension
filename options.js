@@ -2,16 +2,30 @@ const twitterCheckbox = document.getElementById('twitter');
 const redditCheckbox = document.getElementById('reddit');
 const subreddits = document.getElementById('subreddit');
 const remove = document.getElementsByClassName('remove');
-const exit = document.getElementById('exit')
+const exit = document.getElementById('exit');
+const username = document.getElementById('username');
+const password = document.getElementById('password');
+const apikey = document.getElementById('apikey');
 
 let options;
 chrome.storage.sync.get(['options'], (result) => { //Shows default of Twitter and Reddit options on.
     options = result.options;
     twitterCheckbox.checked = options.TwitterOn;
     redditCheckbox.checked = options.RedditOn;
-    // console.log('Results: ', options);
+    if (options.Username && options.Password && options.APIKey) {
+        $("#container").hide();
+        $("#options").show();
+        $("#title").show();
+        $("#register").hide();
+        $("#changeKey").hide();
+    }
     listUpdate();
+    console.log(options);
 })
+
+//Hides initially.
+$("#title").hide();
+$("#options").hide();
 
 twitterCheckbox.addEventListener('change', e => { //Twitter checkbox on off.
     chrome.storage.sync.set({options: {...options, TwitterOn: e.target.checked}}, () => {
@@ -74,3 +88,49 @@ subreddits.addEventListener('change', e => { //Handles adding subreddits.
 $("#exit").on('click', function () {
     window.close();
 })
+
+
+$("#registration").submit(function (event) {
+    event.preventDefault();
+    console.log("Here 2")
+
+    if (username.value && password.value && apikey.value) {
+        chrome.storage.sync.set({options: {...options, Username: username.value, Password: password.value, APIKey: apikey.value}}, () => {
+            console.log("Username set to: ", username.value);
+            console.log("Password set to: ", password.value);
+            console.log("API Key set to: ", apikey.value);
+        });
+    fetch(`https://glacial-peak-84659.herokuapp.com/register/${username.value}/${password.value}/${apikey.value}`, { method: "GET" })
+  	.then((response) => response.json())
+  	.then((res) => {
+      if(res.success){
+        console.log('res.hashedUser: ', res.hashedUser);
+    		localStorage.setItem('token', res.hashedUser);
+        $("#container").hide();
+        $("#options").show();
+        $("#title").show();
+        $("#register").hide();
+    	} else {
+  	    console.log(res.error);
+  	  }
+    })
+
+
+    }
+})
+
+$(".btn-sm").on('click', function () {
+    $("#container").show();
+    $("#options").hide();
+    $("#title").hide();
+    $("#register").show();
+    $("#changeKey").hide();
+    chrome.storage.sync.set({options: {...options, Username: "", Password:"", APIKey: ""}}, () => {
+        $("#username").val("")
+        $("#password").val("")
+        $("#apikey").val("")
+        console.log("Username set to: ", username.value);
+        console.log("Password set to: ", password.value);
+        console.log("API Key set to: ", apikey.value);
+    })
+});

@@ -12,7 +12,7 @@ const addDeweyRedditFunctionality = async (element,title) => {
       `<a href="${article.url}" class="list-group-item list-group-item-action flex-column align-items-start" target="_blank" style="display: flex;">
         <p style="color: #8899A6; font-size: 10px; margin-top: 5px;">${new Date(article.publishedAt).toDateString().substring(3)}</p>
         <p style="font-weight: bold; color: #8899A6; font-size: 12px;">${article.source}</p>
-        <img src="${article.urlToImage}" style="color: rgb(0, 0, 255); height: 60px; padding-bottom: 4px; padding-top: 3px; margin-bottom: -10px;" ${!article.urlToImage?"hidden":""}>
+        <img src="${article.urlToImage}" style="color: rgb(0, 0, 255); height: 60px; padding-bottom: 6px; padding-top: 3px; margin-bottom: -10px;" ${!article.urlToImage?"hidden":""}>
         <p class="mb-1" style="font-weight: bold;">${article.title}</p>
         <p style="color: #8899A6; font-size: 12px; margin-bottom: -3px; margin-top: 5px;" ${!article.author?"hidden":""}>By ${article.author}</p>
         <p class="mb-1" style="font-size: 12px; padding-top: 5px; color: #000000;" ${!article.description?"hidden":""}>${article.description}</p>
@@ -45,14 +45,16 @@ const addDeweyRedditFunctionality = async (element,title) => {
 * @param {string} title  - title passed from content.js to run query
 */
 const queryTitle = (title) => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      let response = await fetch("//glacial-peak-84659.herokuapp.com/associated-articles/byTitle?title="+encodeURIComponent(title));
-      let { success, error, data } = await response.json();
-      if(!success) reject(error);
-      if(!data || !!!data.length) reject(`data is empty or null`);
-      resolve(data);
-    } catch(e){ reject(e); }
+  return new Promise((resolve, reject) => {
+    chrome.storage.sync.get(['options'], async (result) => {
+      try {
+        let response = await fetch("//glacial-peak-84659.herokuapp.com/associated-articles/byTitle?title="+encodeURIComponent(title)+"&user="+encodeURIComponent(result.options.Token));
+        let { success, error, data } = await response.json();
+        if(!success) reject(error);
+        if(!data || !!!data.length) reject(`data is empty or null`);
+        resolve(data);
+      } catch(e){ reject(e); }
+    })
   })
 }
 

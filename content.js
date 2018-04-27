@@ -1,4 +1,5 @@
 'use strict';
+
 window.onload = () => {
   chrome.storage.sync.get(['options'], (result) => { //Checks the options popup.
       if (!result.options) { //If there are no options checked, app will do nothing.
@@ -74,10 +75,10 @@ window.onload = () => {
 // fetch("//glacial-peak-84659.herokuapp.com/register/foo/bar/b4cff8cfe5b847d1b1d6b9460d48341e", {
 // method: "GET"
 // }).then((response) => response.json()).then(console.log)
-fetch("https://glacial-peak-84659.herokuapp.com/updateNewsApi/889e1b52b3e6fd951d9e04f2f61f0fff/b4cff8cfe5b847d1b1d6b9460d48341e", {
-method: "GET"
-}).then((response) => response.json()).then(console.log)
-
-fetch("https://glacial-peak-84659.herokuapp.com/login/foo/bar", {
-method: "GET"
-}).then((response) => response.json()).then(console.log)
+// fetch("https://glacial-peak-84659.herokuapp.com/updateNewsApi/889e1b52b3e6fd951d9e04f2f61f0fff/b4cff8cfe5b847d1b1d6b9460d48341e", {
+// method: "GET"
+// }).then((response) => response.json()).then(console.log)
+//
+// fetch("https://glacial-peak-84659.herokuapp.com/login/foo/bar", {
+// method: "GET"
+// }).then((response) => response.json()).then(console.log)

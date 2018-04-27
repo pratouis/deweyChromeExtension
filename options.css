@@ -119,12 +119,12 @@ i {
     padding-left: 90px;
 }
 
-.options {
+.title {
     padding-top: 15px;
     padding-left: 20px;
 }
 
-.card-body {
+#card-body {
     font-size: 15px;
     font-weight: bold;
 }
@@ -152,4 +152,16 @@ i {
 
 .exit:hover svg {
     stroke: #2196F3 !important;
+}
+
+#logout {
+    display: block;
+    width: 115px;
+    height: 25px;
+    background: #4E9CAF;
+    padding: 10px;
+    text-align: center;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
 }
