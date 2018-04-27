@@ -12,7 +12,7 @@ chrome.storage.sync.get(['options'], (result) => { //Shows default of Twitter an
     options = result.options;
     twitterCheckbox.checked = options.TwitterOn;
     redditCheckbox.checked = options.RedditOn;
-    if (options.Username && options.Password && options.APIKey) {
+    if (options.Username && options.Password) {
         $("#registerContainer").hide();
         $("#options").show();
         $("#title").show();
