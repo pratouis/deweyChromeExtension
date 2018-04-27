@@ -45,14 +45,16 @@ const addDeweyRedditFunctionality = async (element,title) => {
 * @param {string} title  - title passed from content.js to run query
 */
 const queryTitle = (title) => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      let response = await fetch("//glacial-peak-84659.herokuapp.com/associated-articles/byTitle?title="+encodeURIComponent(title));
-      let { success, error, data } = await response.json();
-      if(!success) reject(error);
-      if(!data || !!!data.length) reject(`data is empty or null`);
-      resolve(data);
-    } catch(e){ reject(e); }
+  return new Promise((resolve, reject) => {
+    chrome.storage.sync.get(['options'], async (result) => {
+      try {
+        let response = await fetch("//glacial-peak-84659.herokuapp.com/associated-articles/byTitle?title="+encodeURIComponent(title)+"&user="+encodeURIComponent(result.options.Token));
+        let { success, error, data } = await response.json();
+        if(!success) reject(error);
+        if(!data || !!!data.length) reject(`data is empty or null`);
+        resolve(data);
+      } catch(e){ reject(e); }
+    })
   })
 }
 

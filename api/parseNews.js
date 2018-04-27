@@ -9,14 +9,6 @@ const db = redis.createClient();
 
 const _ = require('underscore');
 
-const handleRequests = (request) => {
-  return new Promise((resolve, reject) => {
-    request.on('response', (response) => resolve(response));
-    request.on('error', (error) => reject(error));
-    request.end();
-  });
-}
-
 const retext = require('retext');
 const retext_keywords = require('retext-keywords');
 const nlcstToString = require('nlcst-to-string');
