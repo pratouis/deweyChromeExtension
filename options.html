@@ -18,28 +18,31 @@
           <h5 class="title">Options</h5>
           <p style="margin-left: 20px; margin-right: 10px; font-size: 13px; color: #6c757d;" >Please refresh your page to save changes.</p>
       </div>
+      <div id="register">
+          <h5 class="title">Register</h5>
+      </div>
     </span>
   <hr/>
   <div class="flex">
-      <div id="david">Hi</div>
       <div class="container" id="container">
-      <p class="instructions" style="font-size: 12px; padding-left: 5px; padding-right: 5px;">You need a unique username and a News API key to use Dewey. Get yours <a href="https://newsapi.org/" target="_blank">here</a>.</p>
-          <form id="usernameKey">
-            <div class="form-group">
-              <input style="margin-left: 5px;" type="username" class="form-control" id="username" placeholder="Username">
-            </div>
-            <div class="form-group">
-              <input style="margin-left: 5px; padding: .375rem .75rem; border-radius: .25rem;" type="password" class="form-control" id="password" placeholder="Password">
-            </div>
-            <div class="form-group">
-              <input style="margin-left: 5px;" type="apikey" class="form-control" id="apikey" placeholder="API key">
-            </div>
-            <button style="margin-left: 5px;" type="submit" class="btn btn-outline-secondary">Submit</button>
-          </form>
+          <p class="instructions" style="font-size: 12px; padding-left: 5px; padding-right: 5px;">You need a unique username and a News API key to use Dewey. Get yours <a href="https://newsapi.org/" target="_blank">here</a>.</p>
+              <form id="registration">
+                <div class="form-group">
+                  <input style="margin-left: 5px;" type="username" class="form-control" id="username" placeholder="Username">
+                </div>
+                <div class="form-group">
+                  <input style="margin-left: 5px; padding: .375rem .75rem; border-radius: .25rem;" type="password" class="form-control" id="password" placeholder="Password">
+                </div>
+                <div class="form-group">
+                  <input style="margin-left: 5px;" type="apikey" class="form-control" id="apikey" placeholder="API key">
+                </div>
+                <button style="margin-left: 5px;" type="submit" class="btn btn-outline-secondary">Submit</button>
+                <br/>
+                <br/>
+              </form>
     </div>
   </div>
-  <hr/>
-  <div class="options">
+  <div id="options">
   <div class="flex" id="allowTwitter">
       <span class="allow">Allow Twitter</span>
           <label class="switch">
@@ -68,7 +71,7 @@
   </div>
         <hr/>
         <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion" style="margin-top:-25px; padding-left: 4px;">
-          <div class="card-body">
+          <div class="card-body" id="card-body">
             <p>Checked Subreddits</p>
               <ul class="list" id="list" style="padding: 0px; list-style-type: none;"></ul>
           </div>
@@ -82,7 +85,36 @@
               </div>
           </div>
           <span class="error" id="error">Subreddit already on list.</span>
+          <hr/>
         </div>
+        <div class="flex">
+              <span class="allow" style="padding-right: 20px; white-space: nowrap;">Change News API Key
+              <div id="accordion">
+                  <button style="border: none; box-shadow: none; background: none; margin-left: -38px;" class="collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseOne">
+                      <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/1000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                      	 viewBox="0 0 185.344 185.344" style="enable-background:new 0 0 185.344 185.344;" xml:space="preserve">
+                      <g><g><path d="M92.672,144.373c-2.752,0-5.493-1.044-7.593-3.138L3.145,59.301c-4.194-4.199-4.194-10.992,0-15.18
+                      			c4.194-4.199,10.987-4.199,15.18,0l74.347,74.341l74.347-74.341c4.194-4.199,10.987-4.199,15.18,0
+                      			c4.194,4.194,4.194,10.981,0,15.18l-81.939,81.934C98.166,143.329,95.419,144.373,92.672,144.373z"/>
+                      </g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g></svg>
+                  </button>
+              </div>
+              </span>
+        </div>
+        <hr/>
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingOne" data-parent="#accordion" style="margin-top:-25px; padding-left: 4px;">
+          <div class="card-body">
+            <p style="font-size: 13px; margin-left: -5px;">Click <a href="https://newsapi.org/" target="_blank">here</a> to get a News API Key.</p>
+          </div>
+          <div class="input-group mb-3" style="padding-left: 10px; padding-right: 10px; margin-top: -25px;">
+              <input type="text" class="form-control" placeholder="News API Key" aria-label="Username" aria-describedby="basic-addon1" id="subreddit">
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button">Submit</button>
+              </div>
+          </div>
+          <hr/>
+        </div>
+        <button type="button" class="btn btn-outline-secondary btn-sm" style="margin-left: 228px; margin-bottom: 10px; margin-top: -4px;">Logout</button>
     </div>
   <script src="options.js"></script>
 </body>

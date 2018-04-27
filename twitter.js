@@ -50,54 +50,23 @@ dialogTry2.innerHTML = `<div class="modalHide" id="dialogModal" tabindex="-1" ro
 const handleNewItems =  () => {
   const tweetActionLists = document.querySelectorAll('.tweet:not(.DeweyAdded)')
   if (!tweetActionLists.length) return;
-  Array.from(tweetActionLists, addDeweyFunctionality)
+  Array.from(tweetActionLists, addTwitterDeweyFunctionality)
 }
 
-/** Returns bootstrap a-tag list of articlesList
-* @param {string} title - title passed from content.js to run query
+/** initalizes twitter dewey modal and processing of iframes when twitter feed changes
+*     - this is necessary because Twitter is a SPA
 */
-const createModalBodyHTML = (title) => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      // query backend for associated articles
-      let response = await fetch("//glacial-peak-84659.herokuapp.com/associated-articles/byTitle?title="+encodeURIComponent(title))
-      let { success, error, data } = await response.json();
-      if(!success) reject(error);
-      if(!data || !!!data.length) reject(`data is empty or null`);
-
-      /* create div bootsrap list-group */
-      const articlesList = document.createElement('div');
-      articlesList.classList.add('list-group');
-      articlesList.innerHTML = data.map(article => (
-        `<a href="${article.url}" style="border-radius: 0px;" class="list-group-item list-group-item-action flex-column align-items-start" target="_blank">
-          <p style="color: #8899A6; font-size: 10px; margin-top: 5px;">${new Date(article.publishedAt).toDateString().substring(3)}</p>
-          <p style="font-weight: bold; color: #8899A6; font-size: 12px;">${article.source}</p>
-          <img src="${article.urlToImage}" style="max-height: 70px; padding-bottom: 5px;" ${!article.urlToImage?"hidden":""}>
-          <p class="mb-1" style="font-weight: bold;">${article.title}</p>
-          <p style="color: #8899A6; font-size: 12px; margin-bottom: -4px;" ${!article.author?"hidden":""}>By ${article.author}</p> 
-          <hr/>
-          <p class="mb-1" style="font-size: 12px; padding-top: 10px;" ${!article.description?"hidden":""}>${article.description}</p>
-      </a>
-      <br/>`)).join('\n');
-
-      resolve(articlesList);
-    } catch(e) {
-      reject(e);
-    }
-  })
-}
-
 const init = () => {
     if (RegExp(/(twitter.com)/g).test(window.location.host)){ //Checks if the page is Twitter.
       document.getElementById('timeline').prepend(dialogTry2);
     }
-    setModalPosition();
     processiFrameContainers(
       Array.from(document.getElementById('stream-items-id')
                           .getElementsByClassName('js-macaw-cards-iframe-container')))
 } //Checks for initial iFrames when a new page is loaded.
 
-
+/** configure twitter dewey modal depending on position of timeline div and window dimensions
+*/
 const setModalPosition = () => {
   const right = document.getElementById('timeline').getBoundingClientRect().right;
   const modal = document.getElementById('dialogModal');
@@ -107,19 +76,28 @@ const setModalPosition = () => {
 }
 
 const myiFrames = {};
+/** check to add dewey button to tweet
+* @param {Object} iframe - HTML iframe element
+* uses helper function addTwitterDeweyFunctionality
+*/
 const iframeOnLoad = (iframe) => () => { //Waits for iFrames to load. Targets correct iFrame.
     const title = iframe.contentDocument.getElementsByTagName('h2')[0].innerHTML; //To grab title.
     if(!myiFrames[iframe.id]) {
       myiFrames[iframe.id] = iframe;
       // console.log(title);
       const parentTweet = iframe.closest('[data-tweet-id]');
-      addDeweyFunctionality(parentTweet, title);
+      addTwitterDeweyFunctionality(parentTweet, title);
     }
 }
 
-function processiFrameContainers(listOfiFrameContainers) {
+/** loop through array of iframe elements from twitter page
+* @param {Object[]} listOfiFrameContainers - array of iFrame elements
+*/
+const processiFrameContainers = (listOfiFrameContainers) => {
     listOfiFrameContainers.forEach(element => {
       const iframe = element.getElementsByTagName('iframe')[0]; //Looks for iFrames.
+      // TODO go over with AMBY
+      // WHAT DOES THIS DO
       if (!iframe) {
           const iframeObserver = new MutationObserver(([mutation]) => {
               const iframe = mutation.addedNodes[0];
@@ -134,22 +112,12 @@ function processiFrameContainers(listOfiFrameContainers) {
 }
 
 
-/** Returns h3-tag for header of modal
-* @param {string} title - title of article queried
-*/
-const createModalHeaderHTML = (title) => {
-  const articleTitle = document.createElement('h3');
-  articleTitle.style.paddingBottom = '10px';
-  articleTitle.textContent = title;
-  return articleTitle;
-}
-
 // Function called in content.js. Finds each element (iframe) to add info button to. Binds to each unique tweet containing iframe.
 /** Creates button w eventListener for each iFrame
 * @param {Object} element - TODO check this HTML element containing iFrame
 * @param {string} title - title passed from content.js to run query
 */
-const addDeweyFunctionality = async (element, title) => {
+const addTwitterDeweyFunctionality = async (element, title) => {
   // clone button HTML
   const buttonClone = deweyButton.cloneNode(true);
   try {
@@ -157,8 +125,21 @@ const addDeweyFunctionality = async (element, title) => {
     const permaLink = element.getAttribute('data-permalink-path')
     const elementId = element.getAttribute('data-item-id')
 
-    // const articleTitle = createModalHeaderHTML(title);
-    const articles = await createModalBodyHTML(title);
+    const articles = await queryTitle(title);
+
+    const articlesList = document.createElement('div');
+    articlesList.classList.add('list-group');
+    articlesList.innerHTML = articles.map(article => (
+        `<a href="${article.url}" style="border-radius: 0px;" class="list-group-item list-group-item-action flex-column align-items-start" target="_blank">
+          <p style="color: #8899A6; font-size: 10px; margin-top: 5px;">${new Date(article.publishedAt).toDateString().substring(3)}</p>
+          <p style="font-weight: bold; color: #8899A6; font-size: 12px;">${article.source}</p>
+          <img src="${article.urlToImage}" style="max-height: 70px; padding-bottom: 5px;" ${!article.urlToImage?"hidden":""}>
+          <p class="mb-1" style="font-weight: bold;">${article.title}</p>
+          <p style="color: #8899A6; font-size: 12px; margin-bottom: -4px;" ${!article.author?"hidden":""}>By ${article.author}</p>
+          <hr/>
+          <p class="mb-1" style="font-size: 12px; padding-top: 10px;" ${!article.description?"hidden":""}>${article.description}</p>
+      </a>
+      <br/>`)).join('\n');
 
     // on click the button will populate the modal
     buttonClone.addEventListener('click', () => {
@@ -169,7 +150,7 @@ const addDeweyFunctionality = async (element, title) => {
       while (dialogBody.firstChild) {
         dialogBody.removeChild(dialogBody.firstChild);
       }
-      dialogBody.append(articles);
+      dialogBody.append(articlesList);
       document.getElementById('dialogModal').classList.remove('modalHide');
       dialogBody.scrollTop = 0;
     })
@@ -187,7 +168,7 @@ const addDeweyFunctionality = async (element, title) => {
     }
 
   } catch(e) {
-    console.log(`ERROR in addDeweyFunctionality on '${title}': `, e);
+    console.log(`ERROR in addTwitterDeweyFunctionality on '${title}': `, e);
     // NOTE on logic: if there is an error, then we shouldn't be able to open dialog
     buttonClone.setAttribute('disabled', true);
   }

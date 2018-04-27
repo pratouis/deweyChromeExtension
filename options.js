@@ -4,19 +4,28 @@ const subreddits = document.getElementById('subreddit');
 const remove = document.getElementsByClassName('remove');
 const exit = document.getElementById('exit');
 const username = document.getElementById('username');
+const password = document.getElementById('password');
 const apikey = document.getElementById('apikey');
-
-console.log("apikey:", apikey)
-console.log("username: ", username)
 
 let options;
 chrome.storage.sync.get(['options'], (result) => { //Shows default of Twitter and Reddit options on.
     options = result.options;
     twitterCheckbox.checked = options.TwitterOn;
     redditCheckbox.checked = options.RedditOn;
-    // console.log('Results: ', options);
+    if (options.Username && options.Password && options.APIKey) {
+        $("#container").hide();
+        $("#options").show();
+        $("#title").show();
+        $("#register").hide();
+        $("#changeKey").hide();
+    }
     listUpdate();
+    console.log(options);
 })
+
+//Hides initially.
+$("#title").hide();
+$("#options").hide();
 
 twitterCheckbox.addEventListener('change', e => { //Twitter checkbox on off.
     chrome.storage.sync.set({options: {...options, TwitterOn: e.target.checked}}, () => {
@@ -80,23 +89,33 @@ $("#exit").on('click', function () {
     window.close();
 })
 
-$("#usernameKey").submit(function (event) {
+
+$("#registration").submit(function (event) {
     event.preventDefault();
-    chrome.storage.sync.set({options: {...options, Username: username.value}}, () => {
+    console.log("Here 2")
+
+    if (username.value && password.value && apikey.value) {
+        chrome.storage.sync.set({options: {...options, Username: username.value, Password: password.value, APIKey: apikey.value}}, () => {
+            console.log("Username set to: ", username.value);
+            console.log("Password set to: ", password.value);
+            console.log("API Key set to: ", apikey.value);
+        })
+        $("#container").hide();
+        $("#options").show();
+        $("#title").show();
+        $("#register").hide();
+    }
+})
+
+$(".btn-sm").on('click', function () {
+    $("#container").show();
+    $("#options").hide();
+    $("#title").hide();
+    $("#register").show();
+    $("#changeKey").hide();
+    chrome.storage.sync.set({options: {...options, Username: "", Password:"", APIKey: ""}}, () => {
         console.log("Username set to: ", username.value);
-    })
-
-    chrome.storage.sync.set({options: {...options, Password: password.value}}, () => {
-    })
-
-    chrome.storage.sync.set({options: {...options, APIKey: apikey.value}}, () => {
+        console.log("Password set to: ", password.value);
         console.log("API Key set to: ", apikey.value);
     })
-
-    $("#container").hide();
-    $("#david").show();
-    $(".options").show();
-})
-$("#david").hide();
-$(".options").hide();
-$("#title").hide();
+});
