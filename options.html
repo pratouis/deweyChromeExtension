@@ -21,27 +21,49 @@
       <div id="register">
           <h5 class="title">Register</h5>
       </div>
+      <div id="loginTitle">
+          <h5 class="title">Login</h5>
+      </div>
     </span>
   <hr/>
-  <div class="flex">
-      <div class="container" id="container">
+  <div style="width: 260px; margin-left: 15px;">
+      <div class="registerContainer" id="registerContainer">
           <p class="instructions" style="font-size: 12px; padding-left: 5px; padding-right: 5px;">You need a unique username and a News API key to use Dewey. Get yours <a href="https://newsapi.org/" target="_blank">here</a>.</p>
               <form id="registration">
                 <div class="form-group">
-                  <input style="margin-left: 5px;" type="username" class="form-control" id="username" placeholder="Username">
+                  <input style="margin-left: 5px; margin-right: 5px;" type="username" class="form-control" id="username" placeholder="Username">
                 </div>
                 <div class="form-group">
-                  <input style="margin-left: 5px; padding: .375rem .75rem; border-radius: .25rem;" type="password" class="form-control" id="password" placeholder="Password">
+                  <input style="margin-right: 5px; margin-left: 5px; padding: .375rem .75rem; border-radius: .25rem;" type="password" class="form-control" id="password" placeholder="Password">
                 </div>
                 <div class="form-group">
-                  <input style="margin-left: 5px;" type="apikey" class="form-control" id="apikey" placeholder="API key">
+                  <input style="margin-left: 5px; margin-right: 5px;" type="apikey" class="form-control" id="apikey" placeholder="API key">
                 </div>
-                <button style="margin-left: 5px;" type="submit" class="btn btn-outline-secondary">Submit</button>
+                <button style="margin-left: 5px;" type="submit" class="btn btn-outline-secondary">Register</button>
                 <br/>
-                <br/>
+                <hr/>
+                <button style="margin-left: 5px; margin-bottom: 12px;" type="loginRedirect" class="btn btn-outline-secondary btn-sm l">Login</button>
               </form>
     </div>
   </div>
+
+  <div style="width: 260px; margin-left: 15px;">
+      <div class="loginContainer" id="loginContainer">
+              <form id="login">
+                <div class="form-group">
+                  <input style="margin-left: 5px;" type="username" class="form-control" id="login_username" placeholder="Username">
+                </div>
+                <div class="form-group">
+                  <input style="margin-left: 5px; padding: .375rem .75rem; border-radius: .25rem;" type="password" class="form-control" id="login_password" placeholder="Password">
+                </div>
+                <button style="margin-left: 5px;" type="submit" class="btn btn-outline-secondary c">Login</button>
+                <br/>
+              </form>
+              <hr/>
+              <button style="margin-left: 5px; margin-bottom: 12px;" type="registerRedirect" class="btn btn-outline-secondary btn-sm r">Register</button>
+    </div>
+  </div>
+
   <div id="options">
   <div class="flex" id="allowTwitter">
       <span class="allow">Allow Twitter</span>
@@ -114,7 +136,7 @@
           </div>
           <hr/>
         </div>
-        <button type="button" class="btn btn-outline-secondary btn-sm" style="margin-left: 228px; margin-bottom: 10px; margin-top: -4px;">Logout</button>
+        <button type="button" class="btn btn-outline-secondary btn-sm lo" style="margin-left: 228px; margin-bottom: 10px; margin-top: -4px;">Logout</button>
     </div>
     <!-- Change -->
   <script src="options.js"></script>
