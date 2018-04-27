@@ -1,14 +1,15 @@
 import express from 'express';
 const router = new express.Router();
+import NewsAPI from 'newsapi';
 
 const _ = require('underscore');
 
-import redis from 'redis';
-import bluebird from 'bluebird';
-bluebird.promisifyAll(redis.RedisClient.prototype);
-bluebird.promisifyAll(redis.Multi.prototype);
-// const db = redis.createClient(process.env.REDIS_URL);
-const db = redis.createClient();
+// import redis from 'redis';
+// import bluebird from 'bluebird';
+// bluebird.promisifyAll(redis.RedisClient.prototype);
+// bluebird.promisifyAll(redis.Multi.prototype);
+// // const db = redis.createClient(process.env.REDIS_URL);
+// const db = redis.createClient();
 const retext = require('retext');
 const retext_keywords = require('retext-keywords');
 const nlcstToString = require('nlcst-to-string');
@@ -19,7 +20,7 @@ const nlcstToString = require('nlcst-to-string');
 *
 */
 module.exports = {
-  articleRouter: function (newsapi) {
+  articleRouter: function (db) {
     /* middleware parsing keywords */
     router.use('/associated-articles', async (req, res, next) => {
       /* if no title is specified return 400 (user error)*/
@@ -41,12 +42,8 @@ module.exports = {
       }
     });
 
-    router.get('/associated-articles/redditTexts', async (req,res) => {
 
-      res.json({title: req.query.title, keywords: req.body.keywords});
-    });
-
-    router.get('/associated-articles/byTitle', async (req, res) => {
+    router.get('/associated-articles/byTitle/:user', async (req, res) => {
       try {
         // console.log(`title: ${req.query.title}\nkeywords: ${req.body.keywords}`);
         const query = req.body.keywords.reduce((acc, term) => (acc ? `${acc} "${term}"` : `"${term}"`), "");
@@ -54,10 +51,11 @@ module.exports = {
         // console.log('key: ', key);
         let data = JSON.parse(await db.getAsync(`${key}`)); // check if search already exists
         if(!data){
+          const newsapi = new NewsAPI(await db.getAsync(req.params.user));
           const query = req.body.keywords.reduce((acc, term) => (acc ? `${acc} "${term}"` : `"${term}"`), "");
-          let { articles } = await newsapi.v2.everything({ q: query, language: 'en', sortBy: 'relevancy' });
-          // console.log('status: ', status);
-          if(!!!articles.length) res.status(200).json({ success: false, error: "0 articles returned from newsapi" });
+          let { status, code, message, articles } = await newsapi.v2.everything({ q: query, language: 'en', sortBy: 'relevancy' });
+          if(status !== 'ok') { return res.status(code).json({ success: false, error: message }); }
+          if(!!!articles.length) { return res.status(200).json({ success: false, error: "0 articles returned from newsapi" });}
           data = Object.values(
             _.mapObject( _.groupBy(articles, (article) => article.title.toLowerCase()), // group articles by title (not case-sensitive)
               (articles, title) => ({
