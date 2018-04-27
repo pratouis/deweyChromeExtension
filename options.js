@@ -114,6 +114,9 @@ $(".btn-sm").on('click', function () {
     $("#register").show();
     $("#changeKey").hide();
     chrome.storage.sync.set({options: {...options, Username: "", Password:"", APIKey: ""}}, () => {
+        $("#username").val("")
+        $("#password").val("")
+        $("#apikey").val("")
         console.log("Username set to: ", username.value);
         console.log("Password set to: ", password.value);
         console.log("API Key set to: ", apikey.value);
