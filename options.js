@@ -13,11 +13,13 @@ chrome.storage.sync.get(['options'], (result) => { //Shows default of Twitter an
     twitterCheckbox.checked = options.TwitterOn;
     redditCheckbox.checked = options.RedditOn;
     if (options.Username && options.Password && options.APIKey) {
-        $("#container").hide();
+        $("#registerContainer").hide();
         $("#options").show();
         $("#title").show();
         $("#register").hide();
         $("#changeKey").hide();
+        $("#loginTitle").hide();
+        $("#loginContainer").hide();
     }
     listUpdate();
     console.log(options);
@@ -26,6 +28,8 @@ chrome.storage.sync.get(['options'], (result) => { //Shows default of Twitter an
 //Hides initially.
 $("#title").hide();
 $("#options").hide();
+$("#loginTitle").hide();
+$("#loginContainer").hide();
 
 twitterCheckbox.addEventListener('change', e => { //Twitter checkbox on off.
     chrome.storage.sync.set({options: {...options, TwitterOn: e.target.checked}}, () => {
@@ -100,19 +104,23 @@ $("#registration").submit(function (event) {
             console.log("Password set to: ", password.value);
             console.log("API Key set to: ", apikey.value);
         })
-        $("#container").hide();
+        $("#registerContainer").hide();
         $("#options").show();
         $("#title").show();
         $("#register").hide();
+        $("#loginTitle").hide();
+        $("#loginContainer").hide();
     }
 })
 
-$(".btn-sm").on('click', function () {
-    $("#container").show();
+$(".lo").on('click', function () {
+    $("#registerContainer").show();
     $("#options").hide();
     $("#title").hide();
     $("#register").show();
     $("#changeKey").hide();
+    $("#loginTitle").hide();
+    $("#loginContainer").hide();
     chrome.storage.sync.set({options: {...options, Username: "", Password:"", APIKey: ""}}, () => {
         $("#username").val("")
         $("#password").val("")
@@ -122,3 +130,40 @@ $(".btn-sm").on('click', function () {
         console.log("API Key set to: ", apikey.value);
     })
 });
+
+$(".l").on('click', function () {
+    $("#registerContainer").hide();
+    $("#options").hide();
+    $("#title").hide();
+    $("#register").hide();
+    $("#changeKey").hide();
+    $("#loginTitle").show();
+    $("#loginContainer").show();
+})
+
+$(".r").on('click', function () {
+    $("#registerContainer").show();
+    $("#options").hide();
+    $("#title").hide();
+    $("#register").show();
+    $("#changeKey").hide();
+    $("#loginTitle").hide();
+    $("#loginContainer").hide();
+})
+
+$("#login").submit(function (event) {
+    event.preventDefault();
+
+    // if (username.value && password.value) {
+        chrome.storage.sync.set({options: {...options, Username: username.value, Password: password.value}}, () => {
+            console.log("Username set to: ", username.value);
+            console.log("Password set to: ", password.value);
+        })
+        $("#registerContainer").hide();
+        $("#options").show();
+        $("#title").show();
+        $("#register").hide();
+        $("#loginTitle").hide();
+        $("#loginContainer").hide();
+    // }
+})
