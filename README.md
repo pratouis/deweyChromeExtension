@@ -1,4 +1,10 @@
-## Chrome Extension
+## Dewey
+### How to install
+1 Clone the repo. Otherwise download the .zip and unzip it.
+2. Go to [chrome://extensions](chrome://extensions). 
+3. On the top right of the page, enable developer mode. 
+![Developer Mode](https://imgur.com/fXsf9EY)
+4. Click load unpacked. In the prompt, navigate to where you installed the repo folder. 
 ### How to run backend
 - go to api folder, run env.sh (make sure you create an API key with newsapi.org)
 - do npm test (or npm start)
