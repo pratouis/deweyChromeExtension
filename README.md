@@ -5,7 +5,7 @@
 ![redditgeneral](/readmeimages/redditgeneral.gif)
 
 ### How to install
-1. Clone the repo. Otherwise download the .zip and unzip it.
+1. Clone the repo. Otherwise download the .zip and unzip it. Also make sure your Google Chrome browser is up to date. 
 
 2. Go to ```chrome://extensions```. 
 
