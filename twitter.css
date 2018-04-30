@@ -1,17 +1,21 @@
 .deweyIcon {
     display: inline-block;
-    fill: #666;
+    fill: #666 !important;
     height: 16px;
     vertical-align: bottom;
     width: 16px;
 }
 
-.deweyIcon:hover .saved {
-        fill: #ef4056;
+.deweyIcon:hover {
+  fill: #2196F3 !important;
 }
 
+/*.deweyIcon:hover {
+  fill: #2196F3 !important;
+}*/
+
 #dialogModal {
-  z-index: 1000;
+  z-index: 10000;
   position: fixed;
   top: 30px;
   min-width: 290px;
@@ -19,4 +23,8 @@
 
 .modalHide {
   display: none;
+}
+
+#global-tweet-dialog-dialog, #retweet-tweet-dialog-dialog {
+  display: block;
 }
