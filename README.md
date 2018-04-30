@@ -1,6 +1,6 @@
 ## Dewey
 ### How to install
-1 Clone the repo. Otherwise download the .zip and unzip it.
+1. Clone the repo. Otherwise download the .zip and unzip it.
 
 2. Go to ```chrome://extensions```. 
 
