@@ -5,6 +5,7 @@
 2. Go to ```chrome://extensions```. 
 
 3. On the top right of the page, enable developer mode. 
+![enabledeveloper](/readmeimages/developermode.jpg)
 
 4. Click load unpacked. In the prompt, navigate to where you installed the repo folder. 
 
