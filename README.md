@@ -11,15 +11,15 @@
 
 3. On the top right of the page, enable developer mode. 
 
-![enabledeveloper|50%](/readmeimages/developermode.jpg)
+![enabledeveloper](/readmeimages/developermode.jpg)
 
 4. Click load unpacked. In the prompt, navigate to where you installed the repo folder. 
 
-![loadunpacked|50%](/readmeimages/loadunpacked.jpg)
+![loadunpacked](/readmeimages/loadunpacked.jpg)
 
 5. If successful, you should see this on your page:
 
-![success|50%](/readmeimages/success.jpg)
+![success](/readmeimages/success.jpg)
 
    If you see this, your installation is complete! 
 
