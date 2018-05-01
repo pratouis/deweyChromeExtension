@@ -1,10 +1,10 @@
 {
-  "name": "Twitter Chrome Link Extension",
+  "name": "Dewey",
   "permissions": [
           "storage"
   ],
   "version": "1.0",
-  "description": "Twitter Chrome Link Extension",
+  "description": "A simple tool for better media research.",
   "content_scripts": [{
     "matches": [
       "https://*.twitter.com/**",
@@ -25,7 +25,7 @@
     "chrome_style": true
     },
     "browser_action": {
-   "default_title": "Chrome Extension",
+   "default_title": "Dewey",
    "default_popup": "options.html"
  },
   "manifest_version": 2
