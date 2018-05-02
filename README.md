@@ -10,7 +10,7 @@
 
 3. On the top right of the page, enable developer mode. 
 
-<img src="/readmeimages/developermode.jpg" width="50%">
+<img src="/readmeimages/developermode.jpg" width="108px">
 
 4. Click load unpacked. In the prompt, navigate to where you installed the repo folder. 
 
