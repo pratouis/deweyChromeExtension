@@ -1,8 +1,7 @@
 ## Dewey
+<img src="/readmeimages/twittergeneral.gif">
 
-![twittergeneral](/readmeimages/twittergeneral.gif)
-
-![redditgeneral](/readmeimages/redditgeneral.gif)
+<img src="/readmeimages/redditgeneral.gif">
 
 ### How to install
 1. Clone the repo. Otherwise download the .zip and unzip it. Also make sure your Google Chrome browser is up to date. 
@@ -11,15 +10,15 @@
 
 3. On the top right of the page, enable developer mode. 
 
-![enabledeveloper](/readmeimages/developermode.jpg)
+<img src="/readmeimages/developermode.jpg" width="50%">
 
 4. Click load unpacked. In the prompt, navigate to where you installed the repo folder. 
 
-![loadunpacked](/readmeimages/loadunpacked.jpg)
+<img src="/readmeimages/loadunpacked.jpg" width="50%">
 
 5. If successful, you should see this on your page:
 
-![success](/readmeimages/success.jpg)
+<img src="/readmeimages/success.jpg" width="50%">
 
    If you see this, your installation is complete! 
 
@@ -32,6 +31,8 @@
 and password along with your new API Key. Click register. 
 
 ![register](/readmeimages/register.jpg)
+
+   If you cannot register, try using another username password combination. 
 
 3. Now you should see the options. For 'Allow Twitter' and 'Allow Reddit', we will go over that in the Features.
 Here you can change your News API key and log out. 
