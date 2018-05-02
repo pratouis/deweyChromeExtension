@@ -10,34 +10,35 @@
 
 3. On the top right of the page, enable developer mode. 
 
-<img src="/readmeimages/developermode.jpg" width="216px">
+<img src="/readmeimages/developermode.jpg" width="108px">
 
 4. Click load unpacked. In the prompt, navigate to where you installed the repo folder. 
 
-<img src="/readmeimages/loadunpacked.jpg" width="50%">
+<img src="/readmeimages/loadunpacked.jpg" width="260px">
 
 5. If successful, you should see this on your page:
 
-<img src="/readmeimages/success.jpg" width="50%">
+<img src="/readmeimages/success.jpg" width="257px">
 
    If you see this, your installation is complete! 
 
 ### How to set up
 1. Click on the Dewey icon on your Chrome toolbar. 
 
-![toolbar](/readmeimages/toolbar.jpg)
+<img src="/readmeimages/toolbar.jpg" width="87px">
 
 2. You should see a register page. First thing you should do is getting a [News API](https://newsapi.org/) key. Put in any username
 and password along with your new API Key. Click register. 
 
-![register](/readmeimages/register.jpg)
+<img src="/readmeimages/register.jpg" width="187px">
+
 
    If you cannot register, try using another username password combination. 
 
 3. Now you should see the options. For 'Allow Twitter' and 'Allow Reddit', we will go over that in the Features.
 Here you can change your News API key and log out. 
 
-![options](/readmeimages/options.jpg)
+<img src="/readmeimages/options.jpg" width="186px">
 
 ### Features
 
@@ -46,12 +47,12 @@ Here you can change your News API key and log out.
 
 2. Upon visiting your Twitter page, you should see an icon like this on some of your posts. 
 
-![twittericon](/readmeimages/twittericon.jpg)
+<img src="/readmeimages/twittericon.jpg" width="405px">
 
 3. Clicking on this icon will create a modal on the right-hand side with articles and information that pertain to the same story,
    but from different sources. Up to five articles will be returned, and you can scroll around in the modal to view them. 
-   
-![twittermodal](/readmeimages/twittermodal.jpg)
+
+<img src="/readmeimages/twittermodal.jpg" width="260px">
    
 4. To close the modal, click the x on the top right corner of the modal or press the esc key. 
 
@@ -61,27 +62,27 @@ Here you can change your News API key and log out.
 2. Clicking the chevron to the right of the slider pulls up the list of subreddits on which the app will run. 
    r/news, r/worldnews, and r/politics are added by default. 
    
-![checkedsubreddits](/readmeimages/checkedsubreddits.jpg)
+<img src="/readmeimages/checkedsubreddits.jpg" width="185px">   
    
    Type in the name of any subreddit and the app will run on that subreddit while adding it to the list. 
    
 3. To remove the subreddit, just click the x next to its name. 
 
-![checkedsubredditscancel](/readmeimages/checkedsubredditscancel.jpg)
+<img src="/readmeimages/checkedsubredditscancel.jpg" width="185px">
 
 4. This app works two ways on Reddit.
 
 -- On the Reddit front page, it will look for links posted on a subreddit that you allowed. 
 
-![redditfrontpage](/readmeimages/redditfrontpage.jpg)
+<img src="/readmeimages/redditfrontpage.jpg" width="578px">
 
 -- On a page of a subreddit you enabled, it will look at all of the page's links.
 
-![subreddit](/readmeimages/subreddit.jpg)
+<img src="/readmeimages/subreddit.jpg" width="544px">
 
-5. In both instances, licking on the Dewey icon will drop down a list of articles that you can click to find out more information about    the relevant news story. Up to five articles will be returned. 
+5. In both instances, licking on the Dewey icon will drop down a list of articles that you can click to find out more information about    the relevant news story. Up to five articles will be returned.
 
-![subredditdropdown](/readmeimages/subredditdropdown.jpg)   
+<img src="/readmeimages/subredditdropdown.jpg" width="516px">
    
 6. To close the modal, click the Dewey icon again. 
 
