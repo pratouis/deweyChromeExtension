@@ -119,4 +119,5 @@ Here you can change your News API key and log out.
 2. Only stash user's token on the chrome storage. 
 3. Find more modular solution to NPL package. 
 4. Fix issue with login info not persisting. 
+5. Have the options/register pop-up pop up upon first-time installation. 
 
