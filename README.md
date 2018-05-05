@@ -4,6 +4,9 @@
 
 <img src="/readmeimages/redditgeneral.gif">
 
+### Why Dewey?
+In the past two years, we've experienced two shifts in peoples' relationship with media. The first is that more and more people are getting their information from social media platforms. The second is that media institutions have been systematically de-legimitized, pushing the conceptions of reality and truth. The goal of the application is to create a simple to use educational tool that helps users contextualize the information they see every day. We seek to promote critical thinking, media literacy, and basic research, all without having to leave the platform browser. By shifting the responsibility of truth to the reader, the social media platform no longer needs to divert resources into censoring their own platform and the media institutions can shift their journalism to be more in-depth instead of having to waste time defending their legitimacy. 
+
 ### How to install
 1. Clone the repo. Otherwise download the .zip and unzip it. Also make sure your Google Chrome browser is up to date. 
 
@@ -88,6 +91,28 @@ Here you can change your News API key and log out.
 6. To close the modal, click the Dewey icon again. 
 
 ### The Technology
+1. First, the user is required to sign up for a News API key. The pop-up was created with Bootstrap and JQuery. The user must register for a News API key which will be used later and is stored in the Google Chrome Extension storage, encrypted by a salt token created by the username and password. The user's information is held in a postgres database. 
+
+2. The options to enable/disable the application on Twitter and/or Reddit (with subreddits) are also saved on the chrome storage. These enable or disable the javascript to run on the respective pages. 
+
+3. You can modify whether or not Dewey will work with Twitter or Reddit/subreddits. Eventually we might implement any changes to the options without requiring a refresh of the respective page. 
+
+-- If Twitter is enabled, we scrape the DOM for all h2 headers inside iFrame containers to get all article headlines. Most articles that are shared on Twitter are posted in the iFrame format. This was the method we found to most consistently find article titles on Twitter. Although effective, this method has two flaws. First, it often picks up advertisements which sometimes uses iFrames. Second, it misses some articles posted that do not use iFrames. As Twitter's desktop page is a single-page application, we have mutation obervers to check for new headlines upon each scroll as well as page redirections. The headlines are then sent back to the backend. 
+
+--If Reddit is enabled, it will have two functionalities. The first is scraping the Reddit front page (no subreddit) to look for posts posted in enabled subreddits. It will take headlines from the same div element and send them to the backend. If you are on a subreddit page, it will take all headlines and send them to the backend. 
+
+4. The headlines are first read through a natural language processing package called Retext in close conjunction with retext-keywords and nlcst-to-string packages to pull keywords from article headlines. These keywords are then stored in our postgres database. We want to create our own NLP eventually to have more modularity and objectivity in reading through headlines. 
+
+5. If the database entry has only keywords and no article link associated, then we input the keywords into the News API to return 5 articles with their title, publisher, author, description, and image link. If any of these are not present, then we do not display them. If there are no articles returned from the keywords, we do not display the Dewey button. Otherwise we send the all the information back to the front end.
+
+6. For scalability, if someone else has seen the exact article as you have before, the database is already populated so we do not need to expend a News API call to look up the articles again. This speeds up the process the more users Dewey has and relieves News API from a bombardment of calls. Each entry lasts for 24 hours in the database. 
+
+7. We wanted to create as seamless and native of an experience possible using Dewey on the two platforms it works on.
+
+-- On Twitter, we created a modal that displays on the right of the main feed that pops up when the Dewey button is pressed. As it takes up negative space inherent in Twitter's display, it does not block other posts or advertisements. The modal was created through Bootstrap. It can be scrolled through to see the articles that were returned from the database. Each entry is a link. 
+
+-- On Reddit, we decided to mimic the button that opens up images and text posts within the same page. This is a recognizable feature with Reddit users and again does not block other posts or advertisements. When the Dewey button is clicked, an element expands below the post that provides the information returned from the database. 
+
 
 ### Todos
 1. Fix the bug that starts Twitter with a black screen. If that's the case, press the esc key to close it. 
