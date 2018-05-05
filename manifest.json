@@ -25,7 +25,7 @@
     "chrome_style": true
     },
     "browser_action": {
-   "default_title": "Chrome Extension",
+   "default_title": "Dewey",
    "default_popup": "options.html"
  },
   "manifest_version": 2
