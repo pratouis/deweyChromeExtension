@@ -8,6 +8,8 @@
 In the past few years, we've experienced two shifts in peoples' relationship with media. The first is that more and more people are getting their information from social media platforms. The second is that media institutions have been systematically de-legimitized, pushing the conceptions of reality and truth. The goal of the application is to create a simple to use educational tool that helps users contextualize the information they see every day. We seek to promote critical thinking, media literacy, and basic research, all without having to leave the platform browser. By shifting the responsibility of truth to the reader, the social media platform no longer needs to divert resources into censoring their own platform and the media institutions can shift focus from defending their organization to more in-depth journalism. 
 
 ### How to install
+You can install Dewey from the Chrome Web Store [here](https://chrome.google.com/webstore/detail/dewey/facgfdefdeodealpjfljjencfbfhbndl). Otherwise follow these instructions. 
+
 1. Clone the repo. Otherwise download the .zip and unzip it. Also make sure your Google Chrome browser is up to date. 
 
 2. Go to ```chrome://extensions```. 
