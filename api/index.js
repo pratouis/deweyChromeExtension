@@ -4,10 +4,7 @@ import bodyParser from 'body-parser';
 import { articleRouter } from './parseNews';
 import cors from 'cors';
 
-if(!process.env.NEWS_API){
-  console.error('no NEWS_API token found.  Did you source env.sh?');
-  process.exit(1);
-}
+if (!process.env.NEWS_API) process.exit(1);
 
 const newsapi = new NewsAPI(process.env.NEWS_API);
 const app = express();

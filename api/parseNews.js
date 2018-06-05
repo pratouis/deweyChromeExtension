@@ -21,7 +21,7 @@ module.exports = {
       if (!req.query.title && !req.body.title) return res.status(400).json({success: false, error: 'no title provided'});
       let title = req.query.title.split('|')[0].trim();
       try {
-        const { data } = await retext().use(retext_keywords).process(title)
+        const { data } = await retext().use(retext_keywords).process(title);
         req.body.keywords = data.keyphrases.length ?
           data.keyphrases.map( (phrase) => phrase.matches[0].nodes.map(nlcstToString).join('') ) :
           data.keywords.map( (keyword) => nlcstToString(keyword.matches[0].node) );
@@ -59,12 +59,7 @@ module.exports = {
           ).slice(0,5);  // take first five articles, TODO: make it so users can adjust the number of articles returned
           // set key-value to have 60*60*24 seconds to live where key is a string of space separated keywords in quotes
           const saved = await db.setexAsync(key, 86400, JSON.stringify(data));
-          if (saved !== 'OK') {
-            return res.status(500).json({
-              success: false,
-              error: `from REDIS got: ${saved}`
-            });
-          }
+          if (saved !== 'OK') return res.status(500).json({ success: false, error: `from REDIS got: ${saved}` });
         }
         res.status(200).json({ success: true, data });
       } catch(error) {
