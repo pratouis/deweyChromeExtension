@@ -43,7 +43,6 @@ module.exports = {
         if(!data){
           const query = req.body.keywords.reduce((acc, term) => (acc ? `${acc} "${term}"` : `"${term}"`), "");
           let { articles } = await newsapi.v2.everything({ q: query, language: 'en', sortBy: 'relevancy'});
-          // console.log('status: ', status);
           if(!!!articles.length) throw "0 articles returned from newsapi";
           data = Object.values(
             _.mapObject( _.groupBy(articles, (article) => article.title.toLowerCase()), // group articles by title (not case-sensitive)
@@ -53,13 +52,11 @@ module.exports = {
                 url: articles[0].url,
                 publishedAt: articles[0].publishedAt,
                 description: articles[0].description })))
-                .slice(0,5);  // take first five articles
-          /* set key-value to have 60*60*24 seconds to live where key is
-              a string of space separated keywords in quotes */
+                .slice(0,5);  // take first five articles, TODO: make it so users can adjust the number of articles returned
+          // set key-value to have 60*60*24 seconds to live where key is a string of space separated keywords in quotes
           const saved = await db.setexAsync(key, 86400, JSON.stringify(data));
           if(saved !== 'OK'){ return res.status(500).json({ success: false, error: `from REDIS got: ${saved}`}); }
         }
-        // console.log('articles: ', data);
         res.status(200).json({ success: true, data });
       } catch(error) {
         console.error('error from GET /associated-articles/byTite: ', error);
