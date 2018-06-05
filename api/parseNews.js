@@ -39,7 +39,6 @@ module.exports = {
       try {
         const query = req.body.keywords.reduce((acc, term) => (acc ? `${acc} "${term}"` : `"${term}"`), "");
         const key = req.body.keywords.join('_');
-        // console.log('key: ', key);
         let data = JSON.parse(await db.getAsync(`${key}`)); // check if search already exists
         if(!data){
           const query = req.body.keywords.reduce((acc, term) => (acc ? `${acc} "${term}"` : `"${term}"`), "");
