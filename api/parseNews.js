@@ -18,7 +18,6 @@ module.exports = {
   articleRouter: function (newsapi) {
     /* middleware parsing keywords */
     router.use('/associated-articles', async (req, res, next) => {
-      /* if no title is specified return 400 (user error)*/
       if (!req.query.title && !req.body.title) return res.status(400).json({success: false, error: 'no title provided'});
       let title = req.query.title.split('|')[0].trim();
       try {
@@ -69,7 +68,6 @@ module.exports = {
         }
         res.status(200).json({ success: true, data });
       } catch(error) {
-        console.error('error from GET /associated-articles/byTite: ', error);
         res.status(500).json({ success: false, error });
       }
     });
