@@ -50,45 +50,26 @@ var stdin = process.openStdin();
 //   console.log('keyword_extractor produced: \n', keywords);
 //   console.log('------------------------------------------');
 // });
-
 var retext = require('retext');
 var retext_kw = require('retext-keywords');
 // var retext_simplify = require('retext-simplify');
 var nlcstToString = require('nlcst-to-string');
 
-console.log('------------------------------------------');
-
 var craftQuery = (words) => {
   return words.reduce((acc, word) => {
-      console.log('acc: ', acc);
-      console.log('word: ', word);
       var test = acc ? `${acc} "${word}"` : `"${word}"`;
       console.log('test: ', test);
       return test;
   });
 }
 
-stdin.addListener("data", function(d) {
-    var userString = d.toString().split('|')[0].trim();
-    console.log("user entered: [" + userString + "]");
-    retext().use(retext_kw).process(userString, function(err, file){
-      if(err){
-        console.error(err);
-        return;
-      }
-
-      var keywords = file.data.keywords.map( (keyword) => nlcstToString(keyword.matches[0].node) );
-
-      console.log(`keywords (${file.data.keywords.length}): `, keywords);
-
-      console.log();
-      var keyphrases = file.data.keyphrases.map((phrase) => phrase.matches[0].nodes.map(nlcstToString).join('').split(' '));
-
-      console.log(`Key-phrases (${file.data.keyphrases.length}): `, keyphrases);
-
-      var query = file.data.keyphrases.length ? craftQuery(keyphrases) : craftQuery(keywords);
-      console.log(`query: ${query}`);
-
+stdin.addListener("data", d => {
+    let userString = d.toString().split('|')[0].trim();
+    retext().use(retext_kw).process(userString, (err, file) => {
+      if (err) return;
+      let keywords = file.data.keywords.map(keyword => nlcstToString(keyword.matches[0].node));
+      let keyphrases = file.data.keyphrases.map((phrase) => phrase.matches[0].nodes.map(nlcstToString).join('').split(' '));
+      let query = file.data.keyphrases.length ? craftQuery(keyphrases) : craftQuery(keywords);
     });
 
     // console.log('sentiment analysis on userString: ', sentiment(userString));
