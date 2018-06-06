@@ -2,20 +2,28 @@
 * @param {Object} element - div element holding all HTML related to one link
 * @param {string} title - title passed from content.js to run query
 */
-const addDeweyRedditFunctionality = async (element,title) => {
+const addDeweyRedditFunctionality = async (element, title) => {
   const buttonClone = redditDeweyButton.cloneNode(true);
   buttonClone.setAttribute('style', 'background: none; border: none;');
   buttonClone.classList.add('dewey');
-  try{
+  try {
     let articles = await queryTitle(title);
     let articlesList = articles.map(article => (
       `<a href="${article.url}" class="list-group-item list-group-item-action flex-column align-items-start" target="_blank" style="display: flex;">
-        <p style="color: #8899A6; font-size: 10px; margin-top: 5px;">${new Date(article.publishedAt).toDateString().substring(3)}</p>
+        <p style="color: #8899A6; font-size: 10px; margin-top: 5px;">
+          ${new Date(article.publishedAt).toDateString().substring(3)}
+        </p>
         <p style="font-weight: bold; color: #8899A6; font-size: 12px;">${article.source}</p>
-        <img src="${article.urlToImage}" style="color: rgb(0, 0, 255); height: 60px; padding-bottom: 6px; padding-top: 3px; margin-bottom: -10px;" ${!article.urlToImage?"hidden":""}>
-        <p class="mb-1" style="font-weight: bold;">${article.title}</p>
-        <p style="color: #8899A6; font-size: 12px; margin-bottom: -3px; margin-top: 5px;" ${!article.author?"hidden":""}>By ${article.author}</p>
-        <p class="mb-1" style="font-size: 12px; padding-top: 5px; color: #000000;" ${!article.description?"hidden":""}>${article.description}</p>
+        <img src="${article.urlToImage}" style="color: rgb(0, 0, 255); height: 60px; padding-bottom: 6px; padding-top: 3px; margin-bottom: -10px;" ${!article.urlToImage ? "hidden" : ""}>
+        <p class="mb-1" style="font-weight: bold;">
+          ${article.title}
+        </p>
+        <p style="color: #8899A6; font-size: 12px; margin-bottom: -3px; margin-top: 5px;" ${!article.author ? "hidden" : ""}>
+          By ${article.author}
+        </p>
+        <p class="mb-1" style="font-size: 12px; padding-top: 5px; color: #000000;" ${!article.description ? "hidden" : ""}>
+          ${article.description}
+        </p>
     </a>`)).join('\n');
     const md = document.createElement('div');
     md.innerHTML = `<div class="modalHide usertext-body may-blank-within md-container">
@@ -28,15 +36,13 @@ const addDeweyRedditFunctionality = async (element,title) => {
 
     element.querySelector('.top-matter').append(md);
 
-    buttonClone.addEventListener('click', () => {
-      element.querySelector('.usertext-body').classList.toggle('modalHide');
-    });
+    buttonClone.addEventListener('click', () => element.querySelector('.usertext-body').classList.toggle('modalHide'));
 
     const listButton = document.createElement('li');
     listButton.classList.add('DeweyAdded');
     listButton.appendChild(buttonClone);
     element.querySelector('.flat-list').append(listButton);
-  }catch(e){
+  } catch(e) {
     console.log('ERROR from addDeweyRedditFunctionality\n',e);
   }
 }
