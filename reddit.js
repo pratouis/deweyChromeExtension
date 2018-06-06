@@ -42,9 +42,7 @@ const addDeweyRedditFunctionality = async (element, title) => {
     listButton.classList.add('DeweyAdded');
     listButton.appendChild(buttonClone);
     element.querySelector('.flat-list').append(listButton);
-  } catch(e) {
-    console.log('ERROR from addDeweyRedditFunctionality\n',e);
-  }
+  } catch(e) { console.log('ERROR from addDeweyRedditFunctionality\n',e) }
 }
 
 /** function to resolve articles from backend
@@ -56,8 +54,8 @@ const queryTitle = (title) => {
       try {
         let response = await fetch("//glacial-peak-84659.herokuapp.com/associated-articles/byTitle?title="+encodeURIComponent(title)+"&user="+encodeURIComponent(result.options.Token));
         let { success, error, data } = await response.json();
-        if(!success) reject(error);
-        if(!data || !!!data.length) reject(`data is empty or null`);
+        if (!success) reject(error);
+        if (!data || !!!data.length) reject(`data is empty or null`);
         resolve(data);
       } catch(e){ reject(e); }
     })
