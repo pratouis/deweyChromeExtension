@@ -11,24 +11,18 @@ let options;
 chrome.storage.sync.get(['options'], (result) => { //Shows default of Twitter and Reddit options on.
   options = result.options;
   console.timeStamp();
-  console.log('options: ', options);
-
-  // if (!options) {
-  //   options = {TwitterOn: true, RedditOn: true, Subreddits: ["r/news", "r/worldnews", "r/politics"], Username: "", Password: "", APIKey: "", Token: ""}
-  // }
-    twitterCheckbox.checked = options.TwitterOn;
-    redditCheckbox.checked = options.RedditOn;
-    if (options.Username && options.Password) {
-        $("#registerContainer").hide();
-        $("#options").show();
-        $("#title").show();
-        $("#register").hide();
-        $("#changeKey").hide();
-        $("#loginTitle").hide();
-        $("#loginContainer").hide();
-    }
-    listUpdate();
-    console.log(options);
+  twitterCheckbox.checked = options.TwitterOn;
+  redditCheckbox.checked = options.RedditOn;
+  if (options.Username && options.Password) {
+      $("#registerContainer").hide();
+      $("#options").show();
+      $("#title").show();
+      $("#register").hide();
+      $("#changeKey").hide();
+      $("#loginTitle").hide();
+      $("#loginContainer").hide();
+  }
+  listUpdate();
 })
 
 //Hides initially.
@@ -77,32 +71,24 @@ subreddits.addEventListener('change', e => { //Handles adding subreddits.
     for (let i = 0; i < options.Subreddits.length; i++) {
         if (r == options.Subreddits[i]) {
             found = true;
-            // console.log("Already done it, bro.");
-            // console.log("All subreddits: ", options.Subreddits);
             break;
         }
     }
     if (!found) {
-            options.Subreddits.push(r);
-            listUpdate(); //Updates the list after the subreddit has been pushed to the array of subreddits.
-            chrome.storage.sync.set({options: options}, () => {
-            });
-            document.getElementById("error").classList.remove("hasError"); //Removes error message if there is one.
-    } else {
-        document.getElementById("error").classList.add("hasError"); //Provides error message if subreddit is already in the array.
-    }
+      options.Subreddits.push(r);
+      listUpdate(); //Updates the list after the subreddit has been pushed to the array of subreddits.
+      chrome.storage.sync.set({options: options}, () => {
+      });
+      document.getElementById("error").classList.remove("hasError"); //Removes error message if there is one.
+    } else { document.getElementById("error").classList.add("hasError"); /*Provides error message if subreddit is already in the array.*/ }
     e.target.value = ""; //Resets field to empty.
-    console.log("All subreddits: ", options.Subreddits);
 })
 
-$("#exit").on('click', function () {
-    window.close();
-})
+$("#exit").on('click', function () { window.close() });
 
 
 $("#registration").submit(function (event) {
     event.preventDefault();
-    console.log("Here 2")
 
     if (username.value && password.value && apikey.value) {
         // chrome.storage.sync.set({options: {...options, }}, () => {
