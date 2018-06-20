@@ -22,16 +22,21 @@ module.exports = {
       let title = req.query.title.split('|')[0].trim();
       try {
         const { data } = await retext().use(retext_keywords).process(title);
-        req.body.keywords = data.keyphrases.length ?
-          data.keyphrases.map( (phrase) => phrase.matches[0].nodes.map(nlcstToString).join('') ) :
-          data.keywords.map( (keyword) => nlcstToString(keyword.matches[0].node) );
+        if (req.body.keywords = data.keyphrases.length) {
+          data.keyphrases.map(phrase => phrase.matches[0].nodes.map(nlcstToString).join(''))
+        } else {
+          data.keywords.map(keyword => nlcstToString(keyword.matches[0].node));
+        }
         next();
       } catch(err) {
         return res.status(500).send(err);
       }
     });
 
-    router.get('/associated-articles/redditTexts', async (req,res) => res.json({title: req.query.title, keywords: req.body.keywords}));
+    router.get('/associated-articles/redditTexts', async (req,res) => res.json({
+      title: req.query.title,
+      keywords: req.body.keywords
+    }));
 
     router.get('/associated-articles/byTitle', async (req, res) => {
       try {
@@ -56,7 +61,9 @@ module.exports = {
                 description: articles[0].description
               })
             )
-          ).slice(0,5);  // take first five articles, TODO: make it so users can adjust the number of articles returned
+          ).slice(0,5);  // take first five articles, TODO: make it so users
+                         // can adjust the number of articles returned, maybe
+                         // include a button
           // set key-value to have 60*60*24 seconds to live where key is a string of space separated keywords in quotes
           const saved = await db.setexAsync(key, 86400, JSON.stringify(data));
           if (saved !== 'OK') return res.status(500).json({ success: false, error: `from REDIS got: ${saved}` });
