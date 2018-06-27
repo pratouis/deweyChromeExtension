@@ -91,17 +91,10 @@ $("#registration").submit(function (event) {
     event.preventDefault();
 
     if (username.value && password.value && apikey.value) {
-        // chrome.storage.sync.set({options: {...options, }}, () => {
-        //     console.log("Username set to: ", username.value);
-        //     console.log("Password set to: ", password.value);
-        //     console.log("API Key set to: ", apikey.value);
-        // });
       fetch(`https://glacial-peak-84659.herokuapp.com/register/${username.value}/${password.value}/${apikey.value}`, { method: "GET" })
-    	.then((response) => response.json())
-    	.then((res) => {
-        if(res.success){
-          console.log('res.hashedUser: ', res.hashedUser);
-          console.log('inside registration, options: ', options);
+    	.then(response => response.json())
+    	.then(res => {
+        if(res.success) {
           options = {...options, Token: res.hashedUser, Username: username.value, Password: password.value, APIKey: apikey.value };
           chrome.storage.sync.set({ options });
           $("#registerContainer").hide();
@@ -158,33 +151,25 @@ $(".r").on('click', function () {
 
 $("#login").submit(function (event) {
     event.preventDefault();
-        let user = document.getElementById("login_username").value;
-        let pwd = document.getElementById("login_password").value;
+      let user = document.getElementById("login_username").value, pwd = document.getElementById("login_password").value;
     if (user && pwd) {
-        // chrome.storage.sync.set({options: {...options, Username: user, Password: pwd}}, () => {
-        //     console.log("Username set to: ", user);
-        //     console.log("Password set to: ", pwd);
-        // })
         const URL = `https://glacial-peak-84659.herokuapp.com/login/${user}/${pwd}`;
         console.log(URL);
         fetch(URL, { method: "GET" })
-        .then((response) => response.json())
-        .then((res) => {
-          if(res.success){
-            console.log('res.hashedUser: ', res.hashedUser);
-            console.log('inside login, options: ', options);
-            options = { ...options, Token: res.hashedUser, Username: user, Password: pwd };
-            chrome.storage.sync.set({ options });
-            $("#registerContainer").hide();
-            $("#options").show();
-            $("#title").show();
-            $("#register").hide();
-            $("#loginTitle").hide();
-            $("#loginContainer").hide();
-          } else {
-            console.log(res.error);
-          }
-        })
-
+          .then((response) => response.json())
+          .then((res) => {
+            if (res.success) {
+              options = { ...options, Token: res.hashedUser, Username: user, Password: pwd };
+              chrome.storage.sync.set({ options });
+              $("#registerContainer").hide();
+              $("#options").show();
+              $("#title").show();
+              $("#register").hide();
+              $("#loginTitle").hide();
+              $("#loginContainer").hide();
+            } else {
+              console.log(res.error);
+            }
+          })
     }
 })

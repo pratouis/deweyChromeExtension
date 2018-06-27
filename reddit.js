@@ -35,14 +35,14 @@ const addDeweyRedditFunctionality = async (element, title) => {
       </div>`;
 
     element.querySelector('.top-matter').append(md);
-
     buttonClone.addEventListener('click', () => element.querySelector('.usertext-body').classList.toggle('modalHide'));
-
     const listButton = document.createElement('li');
     listButton.classList.add('DeweyAdded');
     listButton.appendChild(buttonClone);
     element.querySelector('.flat-list').append(listButton);
-  } catch(e) { console.log('ERROR from addDeweyRedditFunctionality\n',e) }
+  } catch(e) {
+    console.log('ERROR from addDeweyRedditFunctionality\n',e);
+  }
 }
 
 /** function to resolve articles from backend
@@ -53,7 +53,11 @@ const queryTitle = (title) => {
     chrome.storage.sync.get(['options'], async (result) => {
       try {
         let response = await fetch("//glacial-peak-84659.herokuapp.com/associated-articles/byTitle?title="+encodeURIComponent(title)+"&user="+encodeURIComponent(result.options.Token));
-        let { success, error, data } = await response.json();
+        let {
+          success,
+          error,
+          data
+        } = await response.json();
         if (!success) reject(error);
         if (!data || !!!data.length) reject(`data is empty or null`);
         resolve(data);
