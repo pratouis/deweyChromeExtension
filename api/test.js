@@ -64,18 +64,11 @@ var craftQuery = (words) => {
 }
 
 stdin.addListener("data", d => {
-    let userString = d.toString().split('|')[0].trim();
-    retext().use(retext_kw).process(userString, (err, file) => {
-      if (err) return;
-      let keywords = file.data.keywords.map(keyword => nlcstToString(keyword.matches[0].node));
-      let keyphrases = file.data.keyphrases.map((phrase) => phrase.matches[0].nodes.map(nlcstToString).join('').split(' '));
-      let query = file.data.keyphrases.length ? craftQuery(keyphrases) : craftQuery(keywords);
-    });
-
-    // console.log('sentiment analysis on userString: ', sentiment(userString));
-    // var keywords = rake.generate(userString, stopwords);
-    // console.log('rake produced: \n', keywords);
-    // keywords = keyword_extractor.extract(userString, { language:"english", remove_digits: true, return_changed_case:true, remove_duplicates: false });
-    // console.log('keyword_extractor produced: \n', keywords);
-    // console.log('------------------------------------------');
+  let userString = d.toString().split('|')[0].trim();
+  retext().use(retext_kw).process(userString, (err, file) => {
+    if (err) return;
+    let keywords = file.data.keywords.map(keyword => nlcstToString(keyword.matches[0].node));
+    let keyphrases = file.data.keyphrases.map((phrase) => phrase.matches[0].nodes.map(nlcstToString).join('').split(' '));
+    let query = file.data.keyphrases.length ? craftQuery(keyphrases) : craftQuery(keywords);
+  });
 })

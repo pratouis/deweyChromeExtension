@@ -11,7 +11,13 @@ const app = express();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cors({ origin: "*", methods: ['GET', 'POST'] }));
+app.use(cors({
+  origin: "*",
+  methods: [
+    'GET',
+    'POST'
+  ]
+}));
 app.use('/', articleRouter(newsapi));
 
 const port = process.env.PORT ? parseInt(process.env.PORT) : 3000;

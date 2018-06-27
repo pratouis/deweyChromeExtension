@@ -18,7 +18,10 @@ module.exports = {
   articleRouter: function (newsapi) {
     /* middleware parsing keywords */
     router.use('/associated-articles', async (req, res, next) => {
-      if (!req.query.title && !req.body.title) return res.status(400).json({success: false, error: 'no title provided'});
+      if (!req.query.title && !req.body.title) return res.status(400).json({
+        success: false,
+        error: 'no title provided'
+      });
       let title = req.query.title.split('|')[0].trim();
       try {
         const { data } = await retext().use(retext_keywords).process(title);
