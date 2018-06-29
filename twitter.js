@@ -57,12 +57,8 @@ const handleNewItems =  () => {
 *     - this is necessary because Twitter is a SPA
 */
 const init = () => {
-    if (RegExp(/(twitter.com)/g).test(window.location.host)){ //Checks if the page is Twitter.
-      document.getElementById('timeline').prepend(dialogTry2);
-    }
-    processiFrameContainers(
-      Array.from(document.getElementById('stream-items-id')
-                          .getElementsByClassName('js-macaw-cards-iframe-container')))
+    if (RegExp(/(twitter.com)/g).test(window.location.host)) document.getElementById('timeline').prepend(dialogTry2); //Checks if the page is Twitter.
+    processiFrameContainers(Array.from(document.getElementById('stream-items-id').getElementsByClassName('js-macaw-cards-iframe-container')));
 } //Checks for initial iFrames when a new page is loaded.
 
 /** configure twitter dewey modal depending on position of timeline div and window dimensions
@@ -82,9 +78,8 @@ const myiFrames = {};
 */
 const iframeOnLoad = (iframe) => () => { //Waits for iFrames to load. Targets correct iFrame.
     const title = iframe.contentDocument.getElementsByTagName('h2')[0].innerHTML; //To grab title.
-    if(!myiFrames[iframe.id]) {
+    if (!myiFrames[iframe.id]) {
       myiFrames[iframe.id] = iframe;
-      // console.log(title);
       const parentTweet = iframe.closest('[data-tweet-id]');
       addTwitterDeweyFunctionality(parentTweet, title);
     }
@@ -96,14 +91,13 @@ const iframeOnLoad = (iframe) => () => { //Waits for iFrames to load. Targets co
 const processiFrameContainers = (listOfiFrameContainers) => {
     listOfiFrameContainers.forEach(element => {
       const iframe = element.getElementsByTagName('iframe')[0]; //Looks for iFrames.
-      // TODO go over with AMBY
       // WHAT DOES THIS DO
       if (!iframe) {
           const iframeObserver = new MutationObserver(([mutation]) => {
               const iframe = mutation.addedNodes[0];
               iframe.onload = iframeOnLoad(iframe);
               iframeObserver.disconnect(); //Disconnects for speed.
-          })
+          });
           iframeObserver.observe(element, { childList: true });
           return;
       }
@@ -156,19 +150,17 @@ const addTwitterDeweyFunctionality = async (element, title) => {
     })
 
     // TODO: what are the next lines doing?
-    buttonClone.setAttribute('data-permalink-path', permaLink)
-    buttonClone.setAttribute('data-item-id', elementId)
+    buttonClone.setAttribute('data-permalink-path', permaLink);
+    buttonClone.setAttribute('data-item-id', elementId);
     buttonClone.setAttribute('disabled', false);
 
     // TODO: what is this doing
     const actionList = element.querySelector('.ProfileTweet-actionList')
     if (actionList) {
-      actionList.appendChild(buttonClone)
-      element.classList.add('DeweyAdded')
+      actionList.appendChild(buttonClone);
+      element.classList.add('DeweyAdded');
     }
-
   } catch(e) {
-    console.log(`ERROR in addTwitterDeweyFunctionality on '${title}': `, e);
     // NOTE on logic: if there is an error, then we shouldn't be able to open dialog
     buttonClone.setAttribute('disabled', true);
   }

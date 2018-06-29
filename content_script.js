@@ -6,12 +6,10 @@ const dialog = document.createElement("dialog")
 const button = document.createElement("button")
 	button.textContent = "Close"
 
-dialog.appendChild(button)
+dialog.appendChild(button);
 
-button.addEventListener("click", function() {
-  dialog.close()
-})
+button.addEventListener("click", () => dialog.close());
 
-document.body.appendChild(dialog)
+document.body.appendChild(dialog);
 
 dialog.showModal();

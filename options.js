@@ -11,24 +11,18 @@ let options;
 chrome.storage.sync.get(['options'], (result) => { //Shows default of Twitter and Reddit options on.
   options = result.options;
   console.timeStamp();
-  console.log('options: ', options);
-
-  // if (!options) {
-  //   options = {TwitterOn: true, RedditOn: true, Subreddits: ["r/news", "r/worldnews", "r/politics"], Username: "", Password: "", APIKey: "", Token: ""}
-  // }
-    twitterCheckbox.checked = options.TwitterOn;
-    redditCheckbox.checked = options.RedditOn;
-    if (options.Username && options.Password) {
-        $("#registerContainer").hide();
-        $("#options").show();
-        $("#title").show();
-        $("#register").hide();
-        $("#changeKey").hide();
-        $("#loginTitle").hide();
-        $("#loginContainer").hide();
-    }
-    listUpdate();
-    console.log(options);
+  twitterCheckbox.checked = options.TwitterOn;
+  redditCheckbox.checked = options.RedditOn;
+  if (options.Username && options.Password) {
+      $("#registerContainer").hide();
+      $("#options").show();
+      $("#title").show();
+      $("#register").hide();
+      $("#changeKey").hide();
+      $("#loginTitle").hide();
+      $("#loginContainer").hide();
+  }
+  listUpdate();
 })
 
 //Hides initially.
@@ -77,45 +71,30 @@ subreddits.addEventListener('change', e => { //Handles adding subreddits.
     for (let i = 0; i < options.Subreddits.length; i++) {
         if (r == options.Subreddits[i]) {
             found = true;
-            // console.log("Already done it, bro.");
-            // console.log("All subreddits: ", options.Subreddits);
             break;
         }
     }
     if (!found) {
-            options.Subreddits.push(r);
-            listUpdate(); //Updates the list after the subreddit has been pushed to the array of subreddits.
-            chrome.storage.sync.set({options: options}, () => {
-            });
-            document.getElementById("error").classList.remove("hasError"); //Removes error message if there is one.
-    } else {
-        document.getElementById("error").classList.add("hasError"); //Provides error message if subreddit is already in the array.
-    }
+      options.Subreddits.push(r);
+      listUpdate(); //Updates the list after the subreddit has been pushed to the array of subreddits.
+      chrome.storage.sync.set({options: options}, () => {
+      });
+      document.getElementById("error").classList.remove("hasError"); //Removes error message if there is one.
+    } else { document.getElementById("error").classList.add("hasError"); /*Provides error message if subreddit is already in the array.*/ }
     e.target.value = ""; //Resets field to empty.
-    console.log("All subreddits: ", options.Subreddits);
 })
 
-$("#exit").on('click', function () {
-    window.close();
-})
+$("#exit").on('click', function () { window.close() });
 
 
 $("#registration").submit(function (event) {
     event.preventDefault();
-    console.log("Here 2")
 
     if (username.value && password.value && apikey.value) {
-        // chrome.storage.sync.set({options: {...options, }}, () => {
-        //     console.log("Username set to: ", username.value);
-        //     console.log("Password set to: ", password.value);
-        //     console.log("API Key set to: ", apikey.value);
-        // });
       fetch(`https://glacial-peak-84659.herokuapp.com/register/${username.value}/${password.value}/${apikey.value}`, { method: "GET" })
-    	.then((response) => response.json())
-    	.then((res) => {
-        if(res.success){
-          console.log('res.hashedUser: ', res.hashedUser);
-          console.log('inside registration, options: ', options);
+    	.then(response => response.json())
+    	.then(res => {
+        if(res.success) {
           options = {...options, Token: res.hashedUser, Username: username.value, Password: password.value, APIKey: apikey.value };
           chrome.storage.sync.set({ options });
           $("#registerContainer").hide();
@@ -172,33 +151,25 @@ $(".r").on('click', function () {
 
 $("#login").submit(function (event) {
     event.preventDefault();
-        let user = document.getElementById("login_username").value;
-        let pwd = document.getElementById("login_password").value;
+      let user = document.getElementById("login_username").value, pwd = document.getElementById("login_password").value;
     if (user && pwd) {
-        // chrome.storage.sync.set({options: {...options, Username: user, Password: pwd}}, () => {
-        //     console.log("Username set to: ", user);
-        //     console.log("Password set to: ", pwd);
-        // })
         const URL = `https://glacial-peak-84659.herokuapp.com/login/${user}/${pwd}`;
         console.log(URL);
         fetch(URL, { method: "GET" })
-        .then((response) => response.json())
-        .then((res) => {
-          if(res.success){
-            console.log('res.hashedUser: ', res.hashedUser);
-            console.log('inside login, options: ', options);
-            options = { ...options, Token: res.hashedUser, Username: user, Password: pwd };
-            chrome.storage.sync.set({ options });
-            $("#registerContainer").hide();
-            $("#options").show();
-            $("#title").show();
-            $("#register").hide();
-            $("#loginTitle").hide();
-            $("#loginContainer").hide();
-          } else {
-            console.log(res.error);
-          }
-        })
-
+          .then((response) => response.json())
+          .then((res) => {
+            if (res.success) {
+              options = { ...options, Token: res.hashedUser, Username: user, Password: pwd };
+              chrome.storage.sync.set({ options });
+              $("#registerContainer").hide();
+              $("#options").show();
+              $("#title").show();
+              $("#register").hide();
+              $("#loginTitle").hide();
+              $("#loginContainer").hide();
+            } else {
+              console.log(res.error);
+            }
+          })
     }
 })
