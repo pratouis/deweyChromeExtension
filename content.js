@@ -4,8 +4,11 @@ window.onload = () => {
   chrome.storage.sync.get(['options'], (result) => { //Checks the options popup.
       if (!result.options) { //If there are no options checked, app will do nothing.
           return;
+
+      } else if (window.location.href.indexOf("facebook") != -1) {
+          console.log ('This extension is running on Facebook.');
       } else if (result.options.TwitterOn && window.location.host==='twitter.com') { //If the Twitter button is on, will run the app on Twitter's site.
-          console.log('is this extension still running on twitter');
+          console.log('This extension is running on Twitter.');
           const MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
           let ol = document.getElementById('stream-items-id'); //Tracking the position of the OL to track the scroll.
           const pc = document.getElementById('page-container'); //Tracking page container to track changes in React page.
@@ -52,7 +55,7 @@ window.onload = () => {
 
         } else if (result.options.RedditOn &&
           (result.options.Subreddits.map((subreddit) => `/${subreddit}/`).concat("/").includes(window.location.pathname)) ){ //If the Reddit button is checked, will run on Reddit.
-
+          console.log('This extension is running on Reddit.')
           // fetch links depending on whether user is lookign at old or new reddit
           let links = !!document.querySelector('.link:not(.promoted)') ?
                       document.querySelectorAll('.link:not(.promoted)') :
