@@ -1,8 +1,6 @@
 {
   "name": "Dewey Chrome Extension",
-  "permissions": [
-          "storage"
-  ],
+  "permissions": ["storage"],
   "version": "1.0",
   "description": "A simple tool for better media research.",
   "content_scripts": [{
@@ -10,23 +8,33 @@
       "https://*.twitter.com/**",
       "https://*.reddit.com/**"
     ],
-    "css": ["bootstrap.min.css","content.css","twitter.css"],
-    "js": ["reddit.js", "content.js","twitter.js"],
+    "css": [
+      "bootstrap.min.css",
+      "content.css",
+      "twitter.css"
+    ],
+    "js": [
+      "reddit.js",
+      "content.js",
+      "twitter.js"
+    ],
     "run_at": "document_end"
-  }],
-  "icons": { "48": "icon48.png",
-          "128": "icon128.png" },
-  "background": {
-    "scripts": ["eventPage.js"],
-    "persistent": false
-  },
-  "options_ui": {
-    "page": "options.html",
-    "chrome_style": true
+    }],
+    "icons": {
+      "48": "icon48.png",
+      "128": "icon128.png"
+    },
+    "background": {
+      "scripts": ["eventPage.js"],
+      "persistent": false
+    },
+    "options_ui": {
+      "page": "options.html",
+      "chrome_style": true
     },
     "browser_action": {
-   "default_title": "Dewey",
-   "default_popup": "options.html"
- },
-  "manifest_version": 2
+      "default_title": "Dewey",
+      "default_popup": "options.html"
+    },
+    "manifest_version": 2
 }

@@ -10,10 +10,6 @@
   fill: #2196F3 !important;
 }
 
-/*.deweyIcon:hover {
-  fill: #2196F3 !important;
-}*/
-
 #dialogModal {
   z-index: 10000;
   position: fixed;
